@@ -14,7 +14,7 @@ to learn and test Julius' low-code graph computing platform.
 Please, follow [this](https://backendgraph.com/user/signup) link. If you are already logged
 in with your Google account, you will be prompted with the following auto-populated fields:
 
-![Sign up with auto-populated fields.](assets/singup_1.png)
+![Sign up with auto-populated fields.](assets/signup_1.png)
 
 Complete the missing information and hit *Request access*. You can also change your account
 if wanted. On the other hand, you will be asked to log into your Google account if you are

@@ -4,15 +4,28 @@ At Julius Technologies we are a group of researchers and engineers passionate ab
 computing. We believe that this technology can tackle the most computational challenging
 problems out there.
 
+In this repository we provide guidelines to access our tutorials to learn and test Julius'
+low-code graph computing platform.
+
 Julius Technologies Inc. (email: info@juliustech.co)
+
+## Tutorials
+
+Our tutorials are available in two formats:
+
+- As jupyter notebooks running on a server machine allowing an interactive learning
+  experience. Please, refer to
+  [this](https://github.com/JuliusTechCo/JuliusGraph#request-developer-access) section for
+  further details.
+
+- As HTML pages, allowing a rapid access into the material without the need of any setup.
+  Click [here](https://JuliusTechCo.github.io/JuliusGraph/dev/) to access the pre-compiled
+  learning material.
 
 ### Request Developer Access
 
-The following simple steps must be performed to gain access to our development environment
-to learn and test Julius' low-code graph computing platform.
-
 Please, follow [this](https://backendgraph.com/user/signup) link. If you are already logged
-in with your Google account, you will be prompted with the following auto-populated fields:
+in with your Google account, you will be prompted with some auto-populated fields:
 
 ![Sign up with auto-populated fields.](assets/signup_1.png)
 
@@ -22,7 +35,7 @@ not currently logged in:
 
 ![Sign up before logged in to Google.](assets/signup_2.png)
 
-Once you requested access, you will be prompted to the following landing page:
+Once you requested access, you will be prompted to the following page:
 
 ![Welcome page with proceed to Lab.](assets/landingpage.png)
 

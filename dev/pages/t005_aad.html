@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>5 Adjoint Algorithmic Differentiation (AAD) · Julius GraphEngine Tutorials</title><link href="https://fonts.googleapis.com/css?family=Lato|Roboto+Mono" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL=".."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="../assets/documenter.js"></script><script src="../siteinfo.js"></script><script src="../../versions.js"></script><link href="../assets/theme.css" rel="stylesheet" type="text/css"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/documenter-dark.css" data-theme-name="documenter-dark"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="../assets/themeswap.js"></script></head><body><div id="documenter"><nav class="docs-sidebar"><div class="docs-package-name"><span class="docs-autofit">Julius GraphEngine Tutorials</span></div><form class="docs-search" action="../search.html"><input class="docs-search-query" id="documenter-search-query" name="q" type="text" placeholder="Search docs"/></form><ul class="docs-menu"><li><a class="tocitem" href="../index.html">Introduction</a></li><li><a class="tocitem" href="t001_quickstart.html">1 Quick Start</a></li><li><a class="tocitem" href="t002_titanic.html">2 Machine Learning</a></li><li><a class="tocitem" href="t003_mapreduce.html">3 MapReduce</a></li><li><a class="tocitem" href="t004_bagging.html">4 Distributed Machine Learning Pipeline</a></li><li class="is-active"><a class="tocitem" href="t005_aad.html">5 Adjoint Algorithmic Differentiation (AAD)</a><ul class="internal"><li><a class="tocitem" href="#How-to-use-this-tutorial-1"><span>How to use this tutorial</span></a></li><li><a class="tocitem" href="#Introduction-1"><span>Introduction</span></a></li><li><a class="tocitem" href="#Quantom-1"><span>Quantom</span></a></li><li><a class="tocitem" href="#Caching-1"><span>Caching</span></a></li><li><a class="tocitem" href="#Namespace-Clone-and-Override-1"><span>Namespace Clone and Override</span></a></li><li><a class="tocitem" href="#Distributed-AAD-1"><span>Distributed AAD</span></a></li></ul></li><li><a class="tocitem" href="t006_advanced.html">6 Advanced Features</a></li><li><a class="tocitem" href="t007_persist.html">7 MLOps: ML Experiment Tracking and Persiting</a></li></ul><div class="docs-version-selector field has-addons"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><nav class="breadcrumb"><ul class="is-hidden-mobile"><li class="is-active"><a href="t005_aad.html">5 Adjoint Algorithmic Differentiation (AAD)</a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href="t005_aad.html">5 Adjoint Algorithmic Differentiation (AAD)</a></li></ul></nav><div class="docs-right"><a class="docs-edit-link" href="https://github.com/JuliusTechCo/Tutorials/blob/main/src/aad.jl" title="Edit on GitHub"><span class="docs-icon fab"></span><span class="docs-label is-hidden-touch">Edit on GitHub</span></a><a class="docs-settings-button fas fa-cog" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-sidebar-button fa fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a></div></header><article class="content" id="documenter-page"><h1 id="Tutorial-5:-Adjoint-Algorithmic-Differentiation-(AAD)-1"><a class="docs-heading-anchor" href="#Tutorial-5:-Adjoint-Algorithmic-Differentiation-(AAD)-1">Tutorial 5: Adjoint Algorithmic Differentiation (AAD)</a><a class="docs-heading-anchor-permalink" href="#Tutorial-5:-Adjoint-Algorithmic-Differentiation-(AAD)-1" title="Permalink"></a></h1><h2 id="How-to-use-this-tutorial-1"><a class="docs-heading-anchor" href="#How-to-use-this-tutorial-1">How to use this tutorial</a><a class="docs-heading-anchor-permalink" href="#How-to-use-this-tutorial-1" title="Permalink"></a></h2><ul><li>Select &quot;run all cells&quot; on this notebook from the Run menu in Jupyter notebook or Jupyter</li></ul><p>lab. This step will produce intermediate data output and charts.</p><ul><li>Some cells print out a url, which you can click on and bring up an interactive web UI to visualize the graph data.</li><li>In the unlikely event that the notebook becomes irresponsive, you can try &quot;Restart Kernel&quot; from the Kernel menu, then run individual cells one by one using <code>Shift+Enter</code>.</li><li>Some tutorials use local clusters consisting of multiple processes to mimic the effects</li></ul><p>of graph distribution over a remote clusters. By default, these local clusters   automatically stop after idling for 15min to conserve CPU and memory resources. You will   need to rerun the entire notebook if your local cluster stopped due to inactivity.</p><ul><li>Additional resources (video demos &amp; blogs) are available at http://juliustech.co</li><li>To report any issues, get help or request features, please raise an issue at:</li></ul><p>https://github.com/JuliusTechCo/JuliusGraph/issues</p><h2 id="Introduction-1"><a class="docs-heading-anchor" href="#Introduction-1">Introduction</a><a class="docs-heading-anchor-permalink" href="#Introduction-1" title="Permalink"></a></h2><p>The main topic of this tutorial is adjoint algorithmic differentiation (AAD), it is a powerful technique to compute 1st order derivative quickly and exactly using chain rules. AAD offers a significant performance gain, sometime thousands of times, comparing to the traditional finite difference method (i.e. bump and recalculation) for computing first order derivatives. AAD is particularly relevant for quantitative finance applications, as the 1st order derivatives are widely used for hedging and risk management.</p><p>The traditional approach to implementing AAD requires a tape to record the forward calculations, then the tape is run in reverse for the backward AD. This approach is memory intensive and does not scale well to large applications or systems. A large system consists of many software components running concurently on multiple computers, it is not feasible to record a consistent tape across multiple computers.</p><p>Julius offers an easy and efficient way to implement AAD for large distributed systems. Julius use the computational DAG to cache the value and keep track of the dependency of the primal calculations, then the entire DAG is run in reverse for the AAD calculation. Both primal and backward AD run can be fully distributed by Julius Graph Engine for high performance and scalability, all of this is achieved without using the memory intensive tape recordings.</p><p>AAD is a rich and complex topic, this tutorial is only a very high level introduction to Julius AAD capabilities. Please reach out to us at (info@juliustech.co) for a more in depth demo if you are interested in learning the full capabilities of Julius AAD.</p><p>Similar to the quickstart, we start with a simple Fibonacci sequence as the example.</p><h2 id="Quantom-1"><a class="docs-heading-anchor" href="#Quantom-1">Quantom</a><a class="docs-heading-anchor-permalink" href="#Quantom-1" title="Permalink"></a></h2><p>We have introduced the type <code>Datom</code> in the quickstart tutorial. <code>Quantom</code> is another important subtype of <code>Atom</code>, it stands for quantitative atom. <code>Quantum</code> is the main work horse for numerical computations with AAD. Unlike Dataom that can take any data types as inputs and output, the inputs and outputs of Quantoms must be vectors or matrices of <code>Float64</code> (double precision floating point numbers). Non-numerical datatypes would not make sense for AAD, which is the primary reason to use a <code>Quantom</code> type.</p><p>In this tutorial, we will not go into the details of the <code>Quantom</code> interface or how to implement new <code>Quantom</code> types. Instead, we will use existing <code>Quantom</code> implementations provied in Julius distribution to illustrate the AAD capabilities.</p><p>Julius provides a rich set of <code>Quantom</code>  libraries for the most common numerical algorithms, including root searching, interpolation, and common stochastic processes etc. All the Julius <code>Quantom</code> implementations come with full AAD support and have been extensively tested.</p><pre><code class="language-julia"># disable the display of information logging
+using Base.CoreLogging
+disable_logging(CoreLogging.Info)
+
+using GraphEngine: RuleDSL, GraphVM
+using GraphEngine.RuleDSL
+using GraphIO
+
+# start data server for web UI
+gss = Dict{String,RuleDSL.AbstractGraphState}()
+port = GraphVM.drawdataport()
+@async GraphVM.startresponder(gss, port);</code></pre><p>The following few rules defines the Fibonacci sequence using the rule syntax. These rules shows the type and value based polymorphism. Multiple rules of different types can be defined for the same rule name, and at run time, the best matching rule is invoked.</p><p>These definitions are very similar to those we have seen in the quick start tutorials. The only difference here is that the <code>RuleDSL.WegithedSum</code> quantum is used.</p><pre><code class="language-julia">@addrules series begin
+    fib(x::Float64) = Alias(fib(Int(floor(x))))
+    fib(n::Int) = RuleDSL.Alias(fib(n, Val(n &lt;= 1)))
+    fib(n::Int, isend::Val{false}) = begin
+        RuleDSL.WeightedSum[[1.0; 1.0]](
+            fib(n - 1, Val(n &lt;= 2)), fib(n - 2, Val(n &lt;= 3))
+        )
+    end
+    fib(n::Int, isend::Val{true}) = RuleDSL.Constant[[fill(Float64(n), 1)]]()
+end
+
+config = RuleDSL.Config();</code></pre><p>The following two functions override the nodelabel function for the customized display of graph nodes. Users can freely override them to customize the text label display of the computation graph.</p><pre><code class="language-julia">import GraphEngine.RuleDSL: nodelabel
+
+# override displays
+function nodelabel(::RuleDSL.AbstractGraphState, r::RuleDSL.RuleNode)
+    hdr = &quot;$(r.ns).$(r.op[1])&quot;
+    typestr(x) = x.args[2]
+    typ = join(typestr.(r.op[2]), &quot;, &quot;)
+
+    return hdr * &quot;($typ)&quot;
+end
+
+function nodelabel(::RuleDSL.AbstractGraphState, ref::RuleDSL.NodeRef)
+    hdr = &quot;$(ref.ns).$(ref.name)&quot;
+    ps = join(simplerepr.(ref.params), &quot;, &quot;)
+
+    return &quot;$hdr($ps)&quot;
+end</code></pre><pre><code class="language-none">nodelabel (generic function with 4 methods)</code></pre><p><code>RuleDSL.NumericalData</code> is a sub type of <code>GraphData</code> type that provides run time support to the adjoint algorithm differentiation (AAD). The second parameter to <code>NumericalData</code> specifies the default <span>$\vec x$</span> in the AAD output of <span>$\frac{\partial{\vec y}}{\partial {\vec x}}$</span>. Here <span>$\vec y$</span> is is specified by the unique has id of <code>hash(fib5)</code>:</p><pre><code class="language-julia">fib5 = @ref series.fib(5.2)
+fib0 = @ref series.fib(0, Val(true))
+fib1 = @ref series.fib(1, Val(true))
+
+cs = RuleDSL.NumericalData(config, Set([fib0, fib1]));
+gs = RuleDSL.createlocalgraph(config, cs);
+
+# primal calculation
+RuleDSL.calcfwd!(gs, Set([fib5]));
+# backward AD calculation
+RuleDSL.calcback!(gs, Set([hash(fib5)]));</code></pre><p>We can retrieve the results of <span>$\vec y$</span> and the 1st order derivatives from AAD.</p><pre><code class="language-julia">y = RuleDSL.getys(gs, hash(fib5))
+dydx0 = RuleDSL.getyds(gs, hash(fib0), hash(fib5))
+dydx1 = RuleDSL.getyds(gs, hash(fib1), hash(fib5))
+
+println(&quot;fib5 =&quot;, y[1])
+println(&quot;dfib5_dfib0 =&quot;, dydx0[1])
+println(&quot;dfib5_dfib1 =&quot;, dydx1[1])</code></pre><pre><code class="language-none">fib5 =[5.0]
+dfib5_dfib0 =[3.0]
+dfib5_dfib1 =[5.0]
+</code></pre><p>The corresponding computation graph is shown below, and you can click the link below to see it in an interactive web UI.</p><pre><code class="language-julia">svg = GraphIO.postlocalgraph(gss, deepcopy(gs), port; key=&quot;fib5&quot;);
+GraphIO.postsvg(svg, &quot;aad_1.svg&quot;)</code></pre><pre><code class="language-none">view graph data at http://127.0.0.1:8080/depgraph.html?dataurl=127.0.0.1:7011_fib5
+</code></pre><p align = "center">
+<img src="../assets/aad_1.svg" alt="" title="Fib 5"/>
+</p>
+<p align = "center">
+Figure 1 - Fibonacci with AAD
+</p><h2 id="Caching-1"><a class="docs-heading-anchor" href="#Caching-1">Caching</a><a class="docs-heading-anchor-permalink" href="#Caching-1" title="Permalink"></a></h2><p>One of the main challenges in AAD implementation is its memory consumption. The reverse AD calculation in AAD requires the primal calculation results to be cached. In the traditional tape based approach, the memory required for caching the primal calculation results can grow beyond the size of available physical memory, causing AAD execution to fail for large problems. Advanced AAD techniques, such as checkpointing, are needed to limit the memory consumption for large problems, but these advanced techniques requires additional coding efforts thus further complicates the AAD implementation.</p><p>Julius Graph Engine automatically caches all the intermediate results in the computational graph. For very large problems, Julius can automatically distribute the computation graph across multiple computers, and leverage all of their physical memories. Therefore, Julius can access practically an unlimited amount of memory when running in distributed mode, therefore it is no longer subjected to the the physical memory limit of any single computer.</p><p>In addition, Julius only caches the primal results at the node level, as opposed to the individual arithmetic operator level as in the traditional AAD taping implementation. As a result, Julius caching is much more memory efficient for complex problems. Julius effectively implemented automatic checkpointing for every individual <code>Quantum</code>.  An <code>Quantom</code> object in each individual node can perform a heavy and complex calculation with AAD, and the primal results within individual quantom dp not need to be cached.</p><p>With Julius automatic caching of all intermediate computation results in the graph, any incremental computation will automatically re-use existing values in the cache, instead of being recomputing them from scatch. The following cells shows that when computing <code>fib(10)</code> all the nodes up to <code>fib(5)</code> from previous step is re-used.</p><pre><code class="language-julia">fib10 = @ref series.fib(10)
+# primal calculation
+GraphVM.calcfwd!(gs, Set([fib10]));
+# backward AD calculation
+RuleDSL.calcback!(gs, Set([hash(fib10)]));
+
+y = RuleDSL.getys(gs, hash(fib10))
+df10df0 = RuleDSL.getyds(gs, hash(fib0), hash(fib10))
+df10df1 = RuleDSL.getyds(gs, hash(fib1), hash(fib10))
+
+println(&quot;fib10 =&quot;, y[1])
+println(&quot;dfib10_dfib0 =&quot;, df10df0[1])
+println(&quot;dfib10_dfib1 =&quot;, df10df1[1])</code></pre><pre><code class="language-none">fib10 =[55.0]
+dfib10_dfib0 =[34.0]
+dfib10_dfib1 =[55.0]
+</code></pre><p>The corresponding computation graph is shown below:</p><pre><code class="language-julia">svg = GraphIO.postlocalgraph(gss, deepcopy(gs), port; key=&quot;fib10&quot;);
+GraphIO.postsvg(svg, &quot;aad_2.svg&quot;)</code></pre><pre><code class="language-none">view graph data at http://127.0.0.1:8080/depgraph.html?dataurl=127.0.0.1:7011_fib10
+</code></pre><p align = "center">
+<img src="../assets/aad_2.svg" alt="" title="Fib 10"/>
+</p>
+<p align = "center">
+Figure 2 - Caching
+</p><h2 id="Namespace-Clone-and-Override-1"><a class="docs-heading-anchor" href="#Namespace-Clone-and-Override-1">Namespace Clone and Override</a><a class="docs-heading-anchor-permalink" href="#Namespace-Clone-and-Override-1" title="Permalink"></a></h2><p>Rules are organized within individual namespaces in Julius RuleDSL, for example the <code>series</code> is a namespace in the rules declaration above. One important feature of Julius is that the rules can be cloned to different namespace and overridden. This facilitates comparisons between the old and new versions of rules, making change management and impact analysis much easier.</p><p>For example, if we update the above Fibonacci sequence definition to take random vectors as fib(0) and fib(1) instead of 0 and 1, we can create a clone of the namespace &quot;series&quot; and override the corresponding rules.</p><pre><code class="language-julia">@clone series =&gt; vecs
+
+@addrules vecs begin
+    fib(n::Int, isend::Val{true}) = RuleDSL.Constant[[randn(10)]]()
+end</code></pre><pre><code class="language-julia">vfib10 = @ref vecs.fib(10)
+# primal calculation
+@time GraphVM.calcfwd!(gs, Set([vfib10]));
+
+y = RuleDSL.getys(gs, hash(vfib10))
+println(&quot;vfib10 =&quot;, y[1])</code></pre><pre><code class="language-none">  0.360310 seconds (626.52 k allocations: 33.190 MiB, 99.65% compilation time)
+vfib10 =[8.914324687980567, -65.52299973588603, -18.367082824015686, -22.743879128382186, -71.39347410591957, -132.12187823944362, 16.932726176947277, -29.683814816612497, 34.41225334844379, -19.147869292190606]
+</code></pre><p>We can see an interactive side by side comparison of the two versions of the calculation, before and after changing the initial values to random vectors, by clicking the URL below to bring up Julius&#39; interactive web UI.</p><pre><code class="language-julia">svg = GraphIO.postlocalgraph(gss, deepcopy(gs), port; key=&quot;vecs&quot;);
+GraphIO.postsvg(svg, &quot;aad_3.svg&quot;)</code></pre><pre><code class="language-none">view graph data at http://127.0.0.1:8080/depgraph.html?dataurl=127.0.0.1:7011_vecs
+</code></pre><p align = "center">
+<img src="../assets/aad_3.svg" alt="" title="Comparisons"/>
+</p>
+<p align = "center">
+Figure 3 - Override & Compare
+</p><p>Julius AAD implementation supoorts multiple sensitivity views from the same primal calculation. A sensitivity view is a Jacobian matrix <span>$\frac{\partial \vec y}{\partial \vec x}$</span> where <span>$\vec y$</span> and <span>$\vec x$</span> can be any connected node in the graph.</p><p>The following few cells shows the computation of different sensitivity views witout repeating the primal calculation. Please note that the AAD output of the vectorized version of Fibonacci sequence is a full Jacobian matrix.</p><pre><code class="language-julia">v10 = @ref vecs.fib(10)
+v0 = @ref vecs.fib(0, Val(true))
+v1 = @ref vecs.fib(1, Val(true))
+
+# backward AD
+RuleDSL.calcback!(gs, Set(hash.([v10])), Set([v0; v1]));
+
+dv10_dv0 = RuleDSL.getyds(gs, hash(v0), hash(v10))
+dv10_dv1 = RuleDSL.getyds(gs, hash(v1), hash(v10))
+
+println(&quot;fib_v10 = &quot;, RuleDSL.getys(gs, hash(v10))[1])
+println(&quot;dv10_dv0 = &quot;, dv10_dv0[1])
+println(&quot;dv10_dv1 = &quot;, dv10_dv1[1])</code></pre><pre><code class="language-none">fib_v10 = [8.914324687980567, -65.52299973588603, -18.367082824015686, -22.743879128382186, -71.39347410591957, -132.12187823944362, 16.932726176947277, -29.683814816612497, 34.41225334844379, -19.147869292190606]
+dv10_dv0 = [34.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0; 0.0 34.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0; 0.0 0.0 34.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0; 0.0 0.0 0.0 34.0 0.0 0.0 0.0 0.0 0.0 0.0; 0.0 0.0 0.0 0.0 34.0 0.0 0.0 0.0 0.0 0.0; 0.0 0.0 0.0 0.0 0.0 34.0 0.0 0.0 0.0 0.0; 0.0 0.0 0.0 0.0 0.0 0.0 34.0 0.0 0.0 0.0; 0.0 0.0 0.0 0.0 0.0 0.0 0.0 34.0 0.0 0.0; 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 34.0 0.0; 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 34.0]
+dv10_dv1 = [55.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0; 0.0 55.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0; 0.0 0.0 55.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0; 0.0 0.0 0.0 55.0 0.0 0.0 0.0 0.0 0.0 0.0; 0.0 0.0 0.0 0.0 55.0 0.0 0.0 0.0 0.0 0.0; 0.0 0.0 0.0 0.0 0.0 55.0 0.0 0.0 0.0 0.0; 0.0 0.0 0.0 0.0 0.0 0.0 55.0 0.0 0.0 0.0; 0.0 0.0 0.0 0.0 0.0 0.0 0.0 55.0 0.0 0.0; 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 55.0 0.0; 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 55.0]
+</code></pre><pre><code class="language-julia">v8 = @ref vecs.fib(8, Val(false))
+v2 = @ref vecs.fib(2, Val(false))
+v3 = @ref vecs.fib(3, Val(false))
+
+# backward AD with a different sensitivity view
+RuleDSL.calcback!(gs, Set(hash.([v8])), Set([v2; v3]));
+
+dv8_dv2 = RuleDSL.getyds(gs, hash(v2), hash(v8))
+dv8_dv3 = RuleDSL.getyds(gs, hash(v3), hash(v8))
+
+println(&quot;fib_v8 =&quot;, RuleDSL.getys(gs, hash(v8))[1])
+println(&quot;dv8_dv0 =&quot;, dv8_dv2[1])
+println(&quot;dv8_dv1 =&quot;, dv8_dv3[1])</code></pre><pre><code class="language-none">fib_v8 =[3.428159597899083, -25.034657507715472, -7.0178285259235675, -8.69560813158948, -27.272525338265226, -50.48574854980008, 6.4814691040201415, -11.33016360060797, 13.139076286292262, -7.311178893241819]
+dv8_dv0 =[5.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0; 0.0 5.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0; 0.0 0.0 5.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0; 0.0 0.0 0.0 5.0 0.0 0.0 0.0 0.0 0.0 0.0; 0.0 0.0 0.0 0.0 5.0 0.0 0.0 0.0 0.0 0.0; 0.0 0.0 0.0 0.0 0.0 5.0 0.0 0.0 0.0 0.0; 0.0 0.0 0.0 0.0 0.0 0.0 5.0 0.0 0.0 0.0; 0.0 0.0 0.0 0.0 0.0 0.0 0.0 5.0 0.0 0.0; 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 5.0 0.0; 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 5.0]
+dv8_dv1 =[8.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0; 0.0 8.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0; 0.0 0.0 8.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0; 0.0 0.0 0.0 8.0 0.0 0.0 0.0 0.0 0.0 0.0; 0.0 0.0 0.0 0.0 8.0 0.0 0.0 0.0 0.0 0.0; 0.0 0.0 0.0 0.0 0.0 8.0 0.0 0.0 0.0 0.0; 0.0 0.0 0.0 0.0 0.0 0.0 8.0 0.0 0.0 0.0; 0.0 0.0 0.0 0.0 0.0 0.0 0.0 8.0 0.0 0.0; 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 8.0 0.0; 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 8.0]
+</code></pre><p>A warning is generated if the <span>$\vec x$</span> specification does not capture the sensitivities to all the factors that affects <span>$\vec y$</span>. In the following example, knowing term fib(2) is not adequate to uniquely determine fib(8), therefore a warning is produced.</p><pre><code class="language-julia">RuleDSL.calcback!(gs, Set(hash.([v8])), Set([v2]))</code></pre><pre><code class="language-none">0</code></pre><h2 id="Distributed-AAD-1"><a class="docs-heading-anchor" href="#Distributed-AAD-1">Distributed AAD</a><a class="docs-heading-anchor-permalink" href="#Distributed-AAD-1" title="Permalink"></a></h2><p>With <code>Quantum</code> and <code>NumericalData</code>, Julius allows AAD to be easily implemented for large and complex problems. In this section, we show a real world AAD use case of pricing a portfolio of derivatives with distributed graph.</p><p>We first start a local cluster consisting of 3 worker processes to mimic a physical cluster.</p><pre><code class="language-julia">using JuliusApps: QFin
+
+# date grid for pricing the portfolio
+dgrid = QFin.dategrid(80; nmonth=3)
+config = RuleDSL.newconfig(QFin.QFinConfig(dgrid), :project=&gt;&quot;PV/AAD&quot;);
+
+# the balancer defines different strategies to distribute the graph computation
+# CopyRVs is the most efficient strategy for AAD
+balancer = GraphVM.CopyRVs();
+my_domain = GraphVM.mydomain()
+
+# draw a port number to start the local cluster esrvice
+clusterport = GraphVM.drawdataport();</code></pre><pre><code class="language-julia"># start a local master service at the given port
+
+gs0 = GraphVM.RemoteGraphProxy(my_domain =&gt; 7225)
+GraphVM.rpccall(gs0, :startlocalmasterservice, clusterport, 3)</code></pre><pre><code class="language-none">0</code></pre><p>We then create a portfolio of 1000 trades, with 10 desks, each consisting of 10 trading book with 10 trades of Swap, Swaptions, CDS or cross currency swaps etc.</p><pre><code class="language-julia">ndesk, nbook, ntrade = 10, 10, 10
+nd = RuleDSL.getconfig(config, :nd)
+asofs = collect(0:4:nd-1)
+nodes, apv, aads = QFin.createbook(config, asofs, ndesk, nbook, ntrade);
+book = apv.params[1];
+
+# risk view, defining the sensitivities to compute, ie, the x in dy/dx
+rvs = Set([RuleDSL.@ref fac.riskview(book)]);</code></pre><pre><code class="language-julia">cs = RuleDSL.NumericalData(config, rvs)
+gs = GraphVM.RemoteGraphProxy(config, my_domain =&gt; clusterport, balancer, cs, true)
+GraphVM.wait4clusterinit(gs)
+GraphVM.rpccall(gs.rpc, :workerstatus)</code></pre><pre><code class="language-none">Dict{UInt64, Pair{Float64, GraphEngine.GraphVM.WorkerStatus}} with 3 entries:
+  0xed937c2d7e40d816 =&gt; 1.64847e9=&gt;Ready
+  0xad4153de7d9d21b5 =&gt; 1.64847e9=&gt;Ready
+  0x6b22fe4479602c22 =&gt; 1.64847e9=&gt;Ready</code></pre><pre><code class="language-julia">GraphVM.@remote_eval gs begin
+    using JuliusApps, GraphIO
+    using GraphEngine: RuleDSL, GraphVM
+end
+
+GraphVM.waitcheckstatus(gs, RuleDSL.getconfig(config, :project));</code></pre><pre><code class="language-julia">jobs = Set{Vector{RuleDSL.NodeRef}}([k.first] for k in nodes);
+GraphVM.createremotegraph(gs, jobs, Set{Symbol}());</code></pre><pre><code class="language-julia">cid = UInt(0)
+eid = hash(apv)
+GraphVM.calcfwd!(gs, cid, Set(eid))
+GraphVM.calcback!(gs, eid, asofs)
+
+GraphVM.waitcheckstatus(gs, RuleDSL.getconfig(config, :project));
+
+# show the stats of resulting graph
+GraphVM.rpccall(gs, GraphIO.graphstats, UInt(1), UInt(1))</code></pre><pre><code class="language-none">Dict{Symbol, Any} with 6 entries:
+  :errcnt =&gt; 0
+  :errids =&gt; String[]
+  :aadeids =&gt; Dict(&quot;13515166291778932265&quot;=&gt;&quot;inst:apv/Bottomup:8065&quot;)
+  :eidcnt =&gt; 1
+  :cnt =&gt; 28448
+  :nworkers =&gt; 3</code></pre><p>The resulting graph has about 29,000 nodes and cannot be displayed on a single chart, we only show the top portion instead. The full AAD results can be visualized by clicking the URL below to enter the interactive web UI, then select the AAD link on the right panel.</p><pre><code class="language-julia">svg = GraphIO.postremotegraph(gs, port, true; maxnode=UInt(120));
+GraphIO.postsvg(svg, &quot;aad_4.svg&quot;)</code></pre><p align = "center">
+<img src="../assets/aad_4.svg" alt="" title="Pricing"/>
+</p>
+<p align = "center">
+Figure 4 - Pricing a Portfolio
+</p><pre><code class="language-julia">GraphVM.rpccall(gs, :endcluster)</code></pre><pre><code class="language-none">0</code></pre><p>The following call shows the computation time for each stage of pricing the 1,000 derivative portfolio. The computational time is reported in seconds for graph creation, primal calculation, AAD calculation and final clean up.</p><p>In this pricing example, there are about 800 different risk factors, and the <span>$\vec y$</span> is an pricing vector for 20 annual time steps under forcasted market evolution for the next 20 years. Each of the risk factor has 80 quarterly sample interval, therefore the total number of individual sensitivities are roughly 800 x 20 x 80 = 1.28MM, all of which are computed via AAD in about 15 seconds (depending on the hardware), which is extremely fast.</p><pre><code class="language-julia">GraphVM.rpccall(gs, :displaychecks)</code></pre><pre><code class="language-none">4-element Vector{Pair}:
+   (:addjobs, 1089) =&gt; 22.91556692123413
+ (:channelrun!, 10) =&gt; 16.82551407814026
+  (:channelrun!, 6) =&gt; 14.563302993774414
+  (:channelrun!, 6) =&gt; 3.2901763916015625e-5</code></pre><hr/><p><em>This page was generated using <a href="https://github.com/fredrikekre/Literate.jl">Literate.jl</a>.</em></p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="t004_bagging.html">« 4 Distributed Machine Learning Pipeline</a><a class="docs-footer-nextpage" href="t006_advanced.html">6 Advanced Features »</a></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> on <span class="colophon-date" title="Monday 28 March 2022 12:31">Monday 28 March 2022</span>. Using Julia version 1.6.3.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>

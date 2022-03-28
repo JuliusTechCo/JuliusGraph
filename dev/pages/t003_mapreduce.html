@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>3 MapReduce · Julius GraphEngine Tutorials</title><link href="https://fonts.googleapis.com/css?family=Lato|Roboto+Mono" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL=".."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="../assets/documenter.js"></script><script src="../siteinfo.js"></script><script src="../../versions.js"></script><link href="../assets/theme.css" rel="stylesheet" type="text/css"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/documenter-dark.css" data-theme-name="documenter-dark"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="../assets/themeswap.js"></script></head><body><div id="documenter"><nav class="docs-sidebar"><div class="docs-package-name"><span class="docs-autofit">Julius GraphEngine Tutorials</span></div><form class="docs-search" action="../search.html"><input class="docs-search-query" id="documenter-search-query" name="q" type="text" placeholder="Search docs"/></form><ul class="docs-menu"><li><a class="tocitem" href="../index.html">Introduction</a></li><li><a class="tocitem" href="t001_quickstart.html">1 Quick Start</a></li><li><a class="tocitem" href="t002_titanic.html">2 Machine Learning</a></li><li class="is-active"><a class="tocitem" href="t003_mapreduce.html">3 MapReduce</a><ul class="internal"><li><a class="tocitem" href="#How-to-use-this-tutorial-1"><span>How to use this tutorial</span></a></li><li><a class="tocitem" href="#.-Introduction-1"><span>0. Introduction</span></a></li><li><a class="tocitem" href="#.-Generic-Map/Reduce-1"><span>2. Generic Map/Reduce</span></a></li><li><a class="tocitem" href="#.-Examples-of-MapReduce-1"><span>3. Examples of MapReduce</span></a></li><li><a class="tocitem" href="#.-Advantages-of-Julius-Graph-1"><span>4. Advantages of Julius Graph</span></a></li><li><a class="tocitem" href="#.-Conclusion-1"><span>5. Conclusion</span></a></li><li><a class="tocitem" href="#Appendix:-Additional-Technical-Tips-and-Notes-1"><span>Appendix: Additional Technical Tips &amp; Notes</span></a></li></ul></li><li><a class="tocitem" href="t004_bagging.html">4 Distributed Machine Learning Pipeline</a></li><li><a class="tocitem" href="t005_aad.html">5 Adjoint Algorithmic Differentiation (AAD)</a></li><li><a class="tocitem" href="t006_advanced.html">6 Advanced Features</a></li><li><a class="tocitem" href="t007_persist.html">7 MLOps: ML Experiment Tracking and Persiting</a></li></ul><div class="docs-version-selector field has-addons"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><nav class="breadcrumb"><ul class="is-hidden-mobile"><li class="is-active"><a href="t003_mapreduce.html">3 MapReduce</a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href="t003_mapreduce.html">3 MapReduce</a></li></ul></nav><div class="docs-right"><a class="docs-edit-link" href="https://github.com/JuliusTechCo/Tutorials/blob/main/src/mapreduce.jl" title="Edit on GitHub"><span class="docs-icon fab"></span><span class="docs-label is-hidden-touch">Edit on GitHub</span></a><a class="docs-settings-button fas fa-cog" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-sidebar-button fa fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a></div></header><article class="content" id="documenter-page"><h1 id="Tutorial-3:-MapReduce-1"><a class="docs-heading-anchor" href="#Tutorial-3:-MapReduce-1">Tutorial 3: MapReduce</a><a class="docs-heading-anchor-permalink" href="#Tutorial-3:-MapReduce-1" title="Permalink"></a></h1><h2 id="How-to-use-this-tutorial-1"><a class="docs-heading-anchor" href="#How-to-use-this-tutorial-1">How to use this tutorial</a><a class="docs-heading-anchor-permalink" href="#How-to-use-this-tutorial-1" title="Permalink"></a></h2><ul><li>Select &quot;run all cells&quot; on this notebook from the Run menu in Jupyter notebook or Jupyter</li></ul><p>lab. This step will produce intermediate data output and charts.</p><ul><li>Some cells print out a url, which you can click on and bring up an interactive web UI to visualize the graph data.</li><li>In the unlikely event that the notebook becomes irresponsive, you can try &quot;Restart Kernel&quot; from the Kernel menu, then run individual cells one by one using <code>Shift+Enter</code>.</li><li>Some tutorials use local clusters consisting of multiple processes to mimic the effects</li></ul><p>of graph distribution over a remote clusters. By default, these local clusters   automatically stop after idling for 15min to conserve CPU and memory resources. You will   need to rerun the entire notebook if your local cluster stopped due to inactivity.</p><ul><li>Additional resources (video demos &amp; blogs) are available at http://juliustech.co</li><li>To report any issues, get help or request features, please raise an issue at:</li></ul><p>https://github.com/JuliusTechCo/JuliusGraph/issues</p><h2 id=".-Introduction-1"><a class="docs-heading-anchor" href="#.-Introduction-1">0. Introduction</a><a class="docs-heading-anchor-permalink" href="#.-Introduction-1" title="Permalink"></a></h2><p>In this tutorial, we use Julius RuleDSL to build a generic MapReduce pipeline, and illustrate the benefits of Julius&#39; high order rules.</p><p><a href="https://en.wikipedia.org/wiki/MapReduce">MapReduce</a> is a common pipeline pattern which is often used for processing big data sets in parallel with multiple computers/workers. The MapReduce pipeline is a defining feature in many popular data platforms, such as <a href="https://hadoop.apache.org/">Hadoop</a>.</p><p>In this tutorial, we explain how to build a generic and re-usable MapReduce pipeline using a few simple rules in Julius&#39; low-code declarative RuleDSL, as oppose to writing tons of code as in traditional programming languages.</p><p>The MapReduce pipeline is composed of three main steps:</p><ul><li><strong>map</strong>: a common <code>map</code> function is applied to every input data batch.</li><li><strong>shuffle</strong>: workers redistribute the <code>map</code> output based on certain key values such that all data with the same key value is shipped to the same worker. After the shuffle, each worker has the complete mapping results for its sub set of keys.</li><li><strong>reduce</strong>: each worker then process all the mapping results for a subset of keys by applying a <code>reduce</code> function. These reduced results are then collated as the final result.</li></ul><p>The following image shows the generic MapReduce steps for the problem of counting the number of occurrences of each word in a large collection of documents, which is given in the original paper of Hadoop. This word count example is often used to illustrate the MapReduce pipeline. We will try to replicate this example while building a generic MapReduce pipeline in Julius RuleDSL from scratch.</p><p><img src="../assets/mapreduce.png" alt/></p><p>The MapReduce input data is a collection of data batches. The creation of the data batches has to be done before the MapReduce pipeline (as in the Splitting stage in the diagram above). For example, if the original data is a single large data file, it has to be split into multiple batches of smaller files before feeding into the MapReduce process.</p><p>The goal of the tutorial is to construct a generic <code>mapreduce</code> rule whose <code>mapper</code>, <code>shuffler</code> and <code>reducer</code> operators can be customized by the user. Even though the word count problem itself is trivial, we will implement the pipeline in a generic fashion so that it can be re-used without change for any MapReduce problems.</p><p>The readers are referred to the quick start tutorial for basic concepts and syntax of <code>RuleDSL</code> and <code>Atom</code>. But for completeness, we give a brief explanations of the rule syntax and graph execution here.</p><p>A rule in <code>RuleDSL</code> has the following syntax:</p><pre><code class="language-julia">RuleDSL.@addrules namespace begin
+    rulename(rulearg1::Type1, rulearg2::Type2, ...) = begin
+        # additional code here transforming ruleargs to atom args and dependent args
+        AtomName[atomarg1, atomarg2...](deprule1(depargs1...), deprule2(depargs2...), ...)
+    end
+end</code></pre><p>The <code>RuleDSL.@addrules</code> is a macro used for processing RuleDSL, it takes a namespace parameter and a set of rule declarations.  The rule namespace helps organize the rules into related groups, and avoid name clashes. A rule in RuleDSL is an instruction to create certain nodes in the computational graph. When Julius GraphEngine process a rule, it creates a node with name <code>rulename</code>in the graph. The <code>AtomName[atomarg1, atomarg2...]</code> syntax defines an <code>Atom</code> object, which is is used to process the data from the node&#39;s dependency. The dependent nodes are captured by the <code>deprules1, deprules</code> etc, they are added recursively to the graph, if they do not already exist.</p><p>As you can appreciate, graph programming is quite different from traditional programming. Instead of writing imperative functions, we declare the logic and dependencies using rules, then let the Graph Engine to create the graph and application for us. The benefit of graph programming will become more aparent when we go through this tutorial.</p><p>The generic <code>mapreduce</code> rule should include three stages, mapper, shuffler and reducer, therefore it should look like:</p><pre><code class="language-julia">RuleDSL.@addrules mr begin
+    mapreduce(
+        batches::Vector{RuleDSL.NodeRef},
+        mapper::RuleDSL.NodeRef,
+        shuffler::RuleDSL.NodeRef,
+        reducer::RuleDSL.NodeRef
+    ) = begin
+        # ... rule definition goes here ...
+    end
+end</code></pre><p>The <code>RuleDSL.NodeRef</code> is a data structure that refers to another rule. A rule with a <code>RuleDSL.NodeRef</code> parameter, like the <code>mapreduce</code> rule above, is called a high order rule, as it defines a generic pattern whose behavior depends on other rules. Each <code>RuleDSL.NodeRef</code> parameter can be a rule that represents a complex graph, thus the high order rule is extremely powerful in defining complex logic and behaviors. Furthermore, a high order rule can be passed as parameter to another rule, creating even higher order rules. The ability to nest high order rules is one of the reasons why the <code>RuleDSL</code> is both low-code and expressive. The high order rule is similar in spirit to the high order functions in functional programming, which we will compare to at the end of this tutorial.</p><p>We now proceed to the implementation of the MapReduce pipeline as depicted in the diagram above using Julius RuleDSL.</p><h2 id=".-Generic-Map/Reduce-1"><a class="docs-heading-anchor" href="#.-Generic-Map/Reduce-1">2. Generic Map/Reduce</a><a class="docs-heading-anchor-permalink" href="#.-Generic-Map/Reduce-1" title="Permalink"></a></h2><h3 id=".1-Mapping-1"><a class="docs-heading-anchor" href="#.1-Mapping-1">2.1 Mapping</a><a class="docs-heading-anchor-permalink" href="#.1-Mapping-1" title="Permalink"></a></h3><p>In the mapping step of the word count example, a batch of data is just a <code>String</code> such as <code>&quot;Mary has a lamb&quot;</code>, which is converted into a <code>Vector</code> of <code>Pairs</code>: <code>[&quot;Mary&quot; =&gt; 1, &quot;has&quot; =&gt; 1, &quot;a&quot; =&gt; 1, &quot;lamb&quot; =&gt; 1]</code>, where each entry represents one occurrence of a given word. At the shuffle stage, the vector is split by a key value, which is the word itself in the above diagram; then all the pairs for the same key word are sent to a single node; where they are concatenated to form a single vector. Finally at the reducer stage, the total occurrence of each key word is deduced by simply counting their occurrences in the vector.</p><p>Given that the logic in the word count example is simple, we use a generic <code>ApplyFn</code> atom that is provided as part of the <code>DataScience</code> package, which can take any Julia function as argument, so that we don&#39;t have to define many Atom types for every stage of the MapReduce process. ApplyFn source code is listed below, which inherits from the abstract base type <code>Datom</code> and implements a generic method <code>fwddata!</code>, which will be called by Julius Graph Engine at run time to process data at individual node.</p><pre><code class="language-Julia">import GraphEngine.RuleDSL: fwddata!
+
+struct ApplyFn &lt;: RuleDSL.Datom
+    fn::Any # can be a function or any object with a callable method defined
+    params::Tuple # the first few arguments of `fn`
+
+    ## this inner constructor captures `params` as a Tuple
+    ApplyFn(fn::Any, params::Any...) = new(fn, params)
+end
+
+fwddata!(self::ApplyFn, xs::Any...) = [self.fn(self.params..., xs...)]</code></pre><p>Using the generic <code>DataScience.ApplyFn</code> Atom, the <code>mapper</code> rule for word count example can be written as:</p><pre><code class="language-julia">using GraphEngine: RuleDSL, GraphVM
+using DataScience: ApplyFn
+using AtomExt
+
+wordmap(words::String) = [k =&gt; 1 for k in split(words)]
+
+RuleDSL.@addrules mr begin
+    mapper(batch::RuleDSL.NodeRef, mapfun::Function) = ApplyFn[mapfun](batch...)
+end</code></pre><p>The <code>GraphEngine.RuleDSL</code> and <code>GraphEngine.GraphVM</code> modules has to be included in order to use the RuleDSL to create and run computational graphs.</p><p>The dependency of this rule is simply given as <code>batch...</code>, which specifies that the node represented by the <code>batch</code> parameter is a dependency. The three dot syntax <code>...</code> is used to signal dynamic dependencies from a <code>NodeRef</code> parameter or variable. At run time, Julius GraphEngine first converts the <code>ApplyFn[mapfun]</code> specification to a call to the constructor of <code>ApplyAtom(mapfun)</code>. Then, the generic <code>fwddata!</code> method of the <code>ApplyFn</code> atom object is used to process the data from its input node specified by the <code>batch</code> parameter.</p><p>The <code>mapper</code> rule above takes a single <code>RuleDSL.NodeRef</code> as input, as it only applies to an individual batch input. However, the <code>mapreduce</code> rule needs to process all the mapper results from all batches. So, how do we make that information available to the <code>mapreduce</code> rule? We could create a collection of mapper rules as <code>Vector{NodeRef}</code> then pass it into the <code>mapreduce</code> rule:</p><pre><code class="language-julia">mappers = RuleDSL.@ref(mr.mapper(batch, mapfun) for batch in batches)
+mr = RuleDSL.@ref mr.mapreduce(batches, mappers, shufflers, reducers)</code></pre><p>where the <code>batches</code> is a <code>Vector{RuleDSL.NodeRef}</code> representing the collection of input batches. However, this approach would require us to also create vectors of <code>shufflers</code> and <code>reducers</code>, thus putting too much burden on the user to ensure their consistencies. By observing that the first argument of the <code>mapper</code> rule is its input data batch, and the same mapper rule should be applied to all batch inputs, we instead choose to drop the first argument in the mapper rule before passing it as an argument to the <code>mapreduce</code> rule, such that:</p><pre><code class="language-julia">mapper = RuleDSL.@ref mr.mapper(mapfun)
+mr = RuleDSL.@ref mr.mapreduce(batches, mapper, shuffler, reducer)</code></pre><p>Inside the <code>mapreduce</code> rule, the first argument is added back for every data batch using the following <code>prepend</code> function, to recover the full form of the <code>mapper</code> rule:</p><pre><code class="language-julia">prepend(ref::RuleDSL.NodeRef, firstarg::Any) = RuleDSL.NodeRef(ref.ns, ref.name, (firstarg, ref.params...), ref.meta)</code></pre><pre><code class="language-none">prepend (generic function with 1 method)</code></pre><p>The advantages of dynamically inserting the first parameter in the <code>mapreduce</code> rule are the following:</p><ul><li>First it is more readable and clear in that we only need the overall rule logic, but not its first argument that specifies its batch input.</li><li>Secondly it is less error prone, as the mappers are created inside the <code>mapreduce</code> rule to be fully consistent with the batches. We will do the same for <code>shuffler</code> and <code>reducer</code> later.</li></ul><p>Let&#39;s test our mapping rule to see how it works. We have to define the input data batches first. For this word count example, we can simply use the <code>ApplyFn</code> atom with the <code>identity</code> function to return a rule argument, such that:</p><pre><code class="language-julia">@addrules mr begin
+    batch(s::Any) = ApplyFn[identity, s]()
+end
+
+# some input data
+_sentences = (&quot;Deer Bear River&quot;, &quot;Car Car River&quot;, &quot;Deer Car Bear&quot;)
+_batches   = RuleDSL.@ref(mr.batch(s) for s in _sentences)
+_mapper    = RuleDSL.@ref mr.mapper(wordmap)
+
+# prepend returns a new `NodeRef` such that `mappers` is of `Vector{NodeRef}` type
+_mappers = [prepend(_mapper, batch) for batch in _batches]
+
+# create a local graph, provide the node references and calculate
+config = RuleDSL.Config()
+gs1 = GraphVM.createlocalgraph(config, RuleDSL.GenericData())
+GraphVM.calcfwd!(gs1, Set(_mappers))</code></pre><pre><code class="language-none">0</code></pre><p>We have now created a computational graph for the mapper and executed it. How do we see the results? Julius provides an easy-to-use web UI for users to navigate and visualize the resulting data and logic in the graph. The following code block starts a local server so that the web UI can retrieve the resulting graph data, it also overrides the <code>RuleDSL.nodelabel</code> method to customize the information displayed on the graph node.</p><pre><code class="language-julia">using GraphIO
+
+# a container of graphs
+gss = Dict{String,RuleDSL.AbstractGraphState}()
+
+# used for WebUI display purposes
+port = GraphVM.drawdataport()
+@async GraphVM.startresponder(gss, port);
+
+# override node label display
+import GraphEngine.RuleDSL: nodelabel
+function nodelabel(gs::RuleDSL.AbstractGraphState, ref::RuleDSL.NodeRef)
+    shortrepr(x::Vector; sep=&quot;, &quot;) = &quot;[&quot;*join(shortrepr.(x), sep)*&quot;]&quot;
+    shortrepr(p::Pair; sep=&quot;=&gt;&quot;) = shortrepr(p.first) * sep * shortrepr(p.second)
+    shortrepr(p::Dict; sep=&quot;, &quot;) = &quot;{&quot; * join(shortrepr.(collect(p)), sep) * &quot;}&quot;
+    shortrepr(x::Any; sep=&quot;&quot;) = repr(x)
+
+    label = haskey(ref.meta, :label) ? ref.meta[:label] : &quot;$(ref.ns).$(ref.name)&quot;
+
+    try
+        data = RuleDSL.getdata(gs, ref)
+        if isone(length(data))
+            data = first(data)
+        end
+        label *= &quot;\n&quot; * shortrepr(data; sep = &quot;\n&quot;)
+    catch
+        label *= &quot;: n/a&quot;
+    end
+
+    return label
+end</code></pre><pre><code class="language-none">nodelabel (generic function with 4 methods)</code></pre><p>User can view the resulting data from exeucting the graph interactively by clicking on the url below to bring up the full web UI. As expected, the output of mapper is a vector of entries like <code>&quot;word&quot; =&gt; 1</code>.</p><pre><code class="language-julia">svg = GraphIO.postlocalgraph(gss, gs1, port; key=&quot;map&quot;);
+GraphIO.postsvg(svg, &quot;mapreduce_1.svg&quot;)</code></pre><pre><code class="language-none">view graph data at http://127.0.0.1:8080/depgraph.html?dataurl=127.0.0.1:7015_map
+</code></pre><p align = "center">
+<img src="../assets/mapreduce_1.svg" alt="" title="mappers"/>
+</p>
+<p align = "center">
+Figure 1 - Mapping step.
+</p><h3 id=".2-Shuffling-1"><a class="docs-heading-anchor" href="#.2-Shuffling-1">2.2 Shuffling</a><a class="docs-heading-anchor-permalink" href="#.2-Shuffling-1" title="Permalink"></a></h3><p>The shuffling step consists of three sub steps:</p><ol><li>take the outputs from the <code>mappers</code> and split them into multiple chunks by certain key values computed from the mapped data.</li><li>move these chunks around so that all data with the same key value is shipped to the same node.</li><li>concatenate all the chunks associated with a given key at the containing node to recover the full collection of data for the key.</li></ol><p>To implement the first sub step of the shuffling, we define a generic split function that takes a key function:</p><p>given a collection of elements <code>xs</code> and a key function that computes the key of each of these elements, return a Dictionary with <code>key =&gt; [element_1, ..., element_n]</code></p><pre><code class="language-julia">function splitbykey(keyfunc::Function, xs::Any)
+    splits = Dict()
+    for x in xs
+        key = keyfunc(x)
+        splits[key] = push!(get(splits, key, []), x)
+    end
+    return splits
+end</code></pre><pre><code class="language-none">splitbykey (generic function with 1 method)</code></pre><p>With this split function, we define three rules that corresponds to the three sub steps of shuffling, then combine them together in the generic shuffler rule:</p><pre><code class="language-julia">@addrules mr begin
+
+    # use `splitbykey` function defined above
+    splitbykey(mapper::RuleDSL.NodeRef, keyfunc::Function) = ApplyFn[splitbykey, keyfunc](mapper...)
+
+    # select an element of a dictionary ir exists or return an empty `Vector{Any}`
+    selectkey(dict::RuleDSL.NodeRef, key::Any; label=&quot;selectby $(key)&quot;) = ApplyFn[dict -&gt; get(dict, key, [])](dict...)
+
+    # merge
+    mergebykey(vecs::Vector{RuleDSL.NodeRef}) = ApplyFn[vcat](vecs...)
+
+
+    shuffler(mappers::Vector{RuleDSL.NodeRef}, keyfunc::Function, keys::Set) = begin
+
+        splits = RuleDSL.@ref(splitbykey(mapper, keyfunc) for mapper in mappers)
+
+        shuffled = Vector{NodeRef}()
+        for key in keys
+            # a `Vector{NodeRef}` that encompasses nodes with a given key
+            selected = RuleDSL.@ref(selectkey(s, key) for s in splits)
+
+            # merge the previously selected nodes outputs
+            merged = RuleDSL.@ref mergebykey(selected; label=&quot;mergeby $key&quot;)
+
+            # add merged element to the shuffled `Vector`
+            push!(shuffled, merged)
+        end
+
+        Alias(shuffled...)
+    end
+end</code></pre><p>These rules are quite self explanatory as all of them use the generic atom <code>ApplyFn</code>. It is worth mentioning that the <code>selectkey</code> rule uses a function closure when constructing the <code>ApplyFn</code> atom; and in the <code>mergebykey</code> rule, the  <code>...</code> follows a <code>Vector{NodeRef}</code> to specify dynamic dependency on multiple rules in the vector. The <code>label</code> keyword in the  <code>selectkey</code> rule is to customize the display information of individual nodes in the graph  web UI, please refer to the <code>nodelabel</code> function defined at the beginning.</p><p>We can test the shuffler using the words in the text as the split key, the <code>first</code> in the shuffler rule is a function that returns the first element of the <code>&quot;word&quot;=&gt;1</code> pair, which is the word itself.</p><pre><code class="language-julia"># _mappers were created before
+_shuffler = RuleDSL.@ref mr.shuffler(_mappers, first, Set([&quot;Bear&quot;, &quot;Car&quot;, &quot;Deer&quot;, &quot;River&quot;]))
+
+gs2 = GraphVM.createlocalgraph(config, RuleDSL.GenericData())
+GraphVM.calcfwd!(gs2, Set([_shuffler]))</code></pre><pre><code class="language-none">0</code></pre><pre><code class="language-julia">svg = GraphIO.postlocalgraph(gss, gs2, port; key=&quot;mappers&quot;);
+GraphIO.postsvg(svg, &quot;mapreduce_2.svg&quot;)</code></pre><pre><code class="language-none">view graph data at http://127.0.0.1:8080/depgraph.html?dataurl=127.0.0.1:7015_mappers
+</code></pre><p align = "center">
+<img src="../assets/mapreduce_2.svg" alt="" title="mappers"/>
+</p>
+<p align = "center">
+Figure 2 - Shuffling step.
+</p><h3 id=".3-Reducing-1"><a class="docs-heading-anchor" href="#.3-Reducing-1">2.3 Reducing</a><a class="docs-heading-anchor-permalink" href="#.3-Reducing-1" title="Permalink"></a></h3><p>Finally, we get to the <em>reduce</em> part of the MapReduce pipeline. In the word count example, the <code>reducer</code> simply counts the occurrences of word. The <code>reducer</code> rule is applied to the result of <code>mergebykey</code>, i.e. a vector of entries like <code>&quot;word&quot; =&gt; 1</code>, which are all associated with the same key value from shuffling stage.</p><pre><code class="language-julia">RuleDSL.@addrules mr begin
+    reducer(shuffled::RuleDSL.NodeRef, reducefun::Function) = ApplyFn[reducefun](shuffled...)
+end
+
+# the reducer function
+function wordreduce(xs::Vector)
+    count = Dict()
+    for (key, _) in xs
+        count[key] = get(count, key, 0) + 1
+    end
+    return count
+end</code></pre><pre><code class="language-none">wordreduce (generic function with 1 method)</code></pre><h3 id=".4-Map/Reduce-Rule-1"><a class="docs-heading-anchor" href="#.4-Map/Reduce-Rule-1">2.4 Map/Reduce Rule</a><a class="docs-heading-anchor-permalink" href="#.4-Map/Reduce-Rule-1" title="Permalink"></a></h3><p>We now put everything together and write a generic <code>mapreduce</code> rule. Note that we will use the same <code>prepend</code> function to dynamically insert the first argument the for <code>shuffler</code> and <code>mapper</code> rules:</p><pre><code class="language-julia">RuleDSL.@addrules mr begin
+    mapreduce(
+        batches::Vector{RuleDSL.NodeRef},
+        mapper::RuleDSL.NodeRef,
+        shuffler::RuleDSL.NodeRef,
+        reducer::RuleDSL.NodeRef
+    ) = begin
+
+        # create one mapper node per batch
+        mappers = [prepend(mapper, batch) for batch in batches]
+
+        # create the shuffler
+        shuffler = prepend(shuffler, mappers)
+
+        # this gives the inputs to the shuffled nodes, which is where reducer must be applied
+        shuffled = RuleDSL.calcdeps(RuleDSL.@config, shuffler)
+        reducers = [prepend(reducer, m) for m in shuffled]
+
+        # finally the results (i.e. a Dict per reducer) are merged to a single Dictionary
+        ApplyFn[merge](reducers...)
+    end
+end</code></pre><p>Let&#39;s test the MapReduce rule using our word count example:</p><pre><code class="language-julia"># no need for the first argument as it will be populated at `mapreduce`
+_shuffler = RuleDSL.@ref mr.shuffler(first, Set([&quot;Bear&quot;, &quot;Car&quot;, &quot;Deer&quot;, &quot;River&quot;]))
+
+_mapper  = RuleDSL.@ref mr.mapper(wordmap)
+_reducer = RuleDSL.@ref mr.reducer(wordreduce)
+
+_mapreduce = RuleDSL.@ref mr.mapreduce(_batches, _mapper, _shuffler, _reducer)
+
+gs3 = GraphVM.createlocalgraph(config, RuleDSL.GenericData())
+GraphVM.calcfwd!(gs3, Set([_mapreduce]))</code></pre><pre><code class="language-none">0</code></pre><pre><code class="language-julia">svg = GraphIO.postlocalgraph(gss, gs3, port; key=&quot;mapred&quot;);
+GraphIO.postsvg(svg, &quot;mapreduce_3.svg&quot;)</code></pre><pre><code class="language-none">view graph data at http://127.0.0.1:8080/depgraph.html?dataurl=127.0.0.1:7015_mapred
+</code></pre><p align = "center">
+<img src="../assets/mapreduce_3.svg" alt="" title="mappers"/>
+</p>
+<p align = "center">
+Figure 3 - MapReduce pipeline.
+</p><p>The resulting diagram from Julius web UI is quite self explanatory, it matches exactly the diagram provided by the Hadoop paper. A side benefit of Julius is that it frees developers from the pain of having to manually draw system diagram or UMLs ever again. The graph diagram above is an output from the Julius Graph Engine, which shows great details of both the data and logic. Julius&#39; convenient Web UI allows users to easily navigate and access the entire graph data and logic, which can be accessed by clicking the link above if you are running this example in Jupyter.</p><h3 id=".5-Split-by-Hashed-Keys-1"><a class="docs-heading-anchor" href="#.5-Split-by-Hashed-Keys-1">2.5 Split by Hashed Keys</a><a class="docs-heading-anchor-permalink" href="#.5-Split-by-Hashed-Keys-1" title="Permalink"></a></h3><p>So far, our MapReduce implementation works as expected. However, there is a serious shortcoming in that we have to specify all the possible words in the shuffler, which is not known before we process all the input batches. In practice, we don&#39;t want to scan all the input batches just to find out all the possible words, which can be very time consuming when the inputs are large. Also, in live streaming applications, such pre-scan is not possible at all.</p><p>It would be much more convenient if we don&#39;t have to specify all the possible words in the shuffler. We can easily achieve this by supplying a different key function whose number of possible outputs are known, for example, by making use of the <code>hash</code> and the remainder <code>%</code> functions:</p><pre><code class="language-julia">_shuffler = RuleDSL.@ref mr.shuffler(x -&gt; Int(hash(first(x)) % 3), Set(collect(0:2)))
+
+# reuse the same _mapper and _reducer declared earlier
+_mapreduce = RuleDSL.@ref mr.mapreduce(_batches, _mapper, _shuffler, _reducer)
+
+gs4 = GraphVM.createlocalgraph(config, RuleDSL.GenericData())
+GraphVM.calcfwd!(gs4, Set([_mapreduce]))</code></pre><pre><code class="language-none">0</code></pre><pre><code class="language-julia">svg = GraphIO.postlocalgraph(gss, gs4, port; key=&quot;hash&quot;);
+GraphIO.postsvg(svg, &quot;mapreduce_4.svg&quot;)</code></pre><pre><code class="language-none">view graph data at http://127.0.0.1:8080/depgraph.html?dataurl=127.0.0.1:7015_hash
+</code></pre><p align = "center">
+<img src="../assets/mapreduce_4.svg" alt="" title="mappers"/>
+</p>
+<p align = "center">
+Figure 4 - MapReduce pipeline with a shuffling step using hashed keys.
+</p><p>Now the shuffler splits the mapper data into 3 pipes, each of which is identified by an index number. In this implementation, multiple words can go to the same pipe. This implementation removes the need of pre-scans for obtaining all the words; it also works for live streaming use cases. Since the splitting by hash key is a much better implementation, we declare a couple convenience rules to encourage its use:</p><pre><code class="language-julia">@addrules mr begin
+
+    splitbykey(mapper::RuleDSL.NodeRef, keyfunc::Function, N::Int) = begin
+        ApplyFn[splitbykey, x -&gt; Int(hash(keyfunc(x)) % N)](mapper...)
+    end
+
+    shuffler(mappers::Vector{RuleDSL.NodeRef}, keyfunc::Function, N::Int) = begin
+
+        splits = RuleDSL.@ref(splitbykey(mapper, keyfunc, N) for mapper in mappers)
+
+        shuffled = Vector{NodeRef}()
+        for key in 0:N-1
+
+            # a `Vector{NodeRef}` that encompasses nodes with a given key
+            selected = RuleDSL.@ref(selectkey(s, key) for s in splits)
+
+            # merge the previously selected nodes outputs
+            merged = RuleDSL.@ref mergebykey(selected; label=&quot;mergeby $key&quot;)
+
+            # add merged element to the shuffled `Vector`
+            push!(shuffled, merged)
+        end
+
+        Alias(shuffled...)
+    end
+end</code></pre><p>Now, the shuffler declaration can be simply given as:</p><pre><code class="language-julia">_shuffler = RuleDSL.@ref mr.shuffler(first, 3)</code></pre><pre><code class="language-none">mr:shuffler/typeof(first):6553</code></pre><p>which becomes much easier to read and define than its equivalent earlier version of <code>_shuffler</code>. Note that since rules support polymorphism, the hash version of <code>splitbykey</code> rule will be used if an interger is supplied as its 3rd argument.</p><p>So far we have demonstrated the MapReduce pipeline can be implemented using RuleDSL by simply declaring a few high order rules. The resulting MapReduce rule is generic, powerful and reusable. Next, we will use it to solve a few common MapReduce problems.</p><h2 id=".-Examples-of-MapReduce-1"><a class="docs-heading-anchor" href="#.-Examples-of-MapReduce-1">3. Examples of MapReduce</a><a class="docs-heading-anchor-permalink" href="#.-Examples-of-MapReduce-1" title="Permalink"></a></h2><h3 id=".1-Finding-Friends-1"><a class="docs-heading-anchor" href="#.1-Finding-Friends-1">3.1 Finding Friends</a><a class="docs-heading-anchor-permalink" href="#.1-Finding-Friends-1" title="Permalink"></a></h3><p>We can use the MapReduce pipeline to compute the common friends among hundred of millions or more users in a social network. This feature can be used to populate the <em>You and Joe have N friends in common</em> displayed in many social networks. Given the list of friends for each user, we proceed to define both a <code>mapper</code> and a <code>reducer</code> functions and make use of our previously defined <code>mapreduce</code> rule to compute common friends for every user pair <span>$\left( u_i, u_j \right)$</span>:</p><pre><code class="language-julia">function friends_mapfun(batch::String)
+    dict = Dict{NTuple{2,Char},Vector}()
+    handler = strip.(split(batch, &quot;=&gt;&quot;))
+
+    # no friends
+    if isone(length(handler))
+        return [dict]
+    elseif length(handler) &gt; 2
+        return error(&quot;Unexpected data format.&quot;)
+    end
+
+    user, friends = handler
+
+    # no friends
+    if isempty(friends)
+        return dict
+    end
+
+    uid = only(user)
+    fids = only.(split(friends, &#39;,&#39;))
+    for fid in fids
+        if isequal(uid, fid)
+            continue
+        end
+
+        key = tuple(sort!([uid, fid])...)
+        push!(dict, key =&gt; fids)
+    end
+
+    return dict
+end
+
+function friends_reducefun(shuffler::Vector)
+    out = Dict{NTuple{2,Char},Vector{Char}}()
+    for (k, v) in shuffler
+        if !haskey(out, k)
+            out[k] = v
+        else
+            out[k] = intersect(out[k], v)
+        end
+    end
+    return out
+end
+
+# each user is represented by a `Char`
+_friends = IOBuffer(&quot;
+    A =&gt; B,C,D
+    B =&gt; A,C,D,E
+    C =&gt; A,B,D,E
+    D =&gt; A,B,C,E
+    E =&gt; B,C,D
+&quot;)
+
+_batches = RuleDSL.@ref(mr.batch(line) for line in eachline(_friends) if !isempty(line))
+
+_mapreduce = RuleDSL.@ref mr.mapreduce(
+    _batches,
+    RuleDSL.@ref(mr.mapper(friends_mapfun)),
+    RuleDSL.@ref(mr.shuffler(first, 4)),
+    RuleDSL.@ref(mr.reducer(friends_reducefun))
+)</code></pre><pre><code class="language-none">mr:mapreduce/NodeRef[5]</code></pre><pre><code class="language-julia">gs5 = GraphVM.createlocalgraph(config, RuleDSL.GenericData())
+GraphVM.calcfwd!(gs5, Set([_mapreduce]))</code></pre><pre><code class="language-none">0</code></pre><pre><code class="language-julia">svg = GraphIO.postlocalgraph(gss, gs5, port; key=&quot;ff&quot;);
+GraphIO.postsvg(svg, &quot;mapreduce_5.svg&quot;)</code></pre><pre><code class="language-none">view graph data at http://127.0.0.1:8080/depgraph.html?dataurl=127.0.0.1:7015_ff
+</code></pre><p align = "center">
+<img src="../assets/mapreduce_5.svg" alt="" title="mappers"/>
+</p>
+<p align = "center">
+Figure 5 - Finding common friends (open image in new tab for full resolution).
+</p><h3 id=".2-GroupBy-1"><a class="docs-heading-anchor" href="#.2-GroupBy-1">3.2 GroupBy</a><a class="docs-heading-anchor-permalink" href="#.2-GroupBy-1" title="Permalink"></a></h3><p>When dealing with large data set, we often need to split it to smaller batches, then apply the MapReduce pipeline to perform certain operations on individual batches then group them together. In this section, we will show how to implement the <code>groupby</code> operation on a large data set using the MapReduce pipeline.</p><p>In order to split the data in multiple batches, we make use of our <code>DDataFrame</code> (which stands for Distributed DataFrames) provided in the <code>DataScience</code> package. The following <code>mapper</code> and <code>reducer</code> rules implements the group by using any number of features within the <code>MapReduce</code> pipeline:</p><pre><code class="language-julia">using DataFrames
+using DataScience: DDataFrame
+
+# `cols` can be anything accepted by `DataFrames.groupby` method
+function groupby_mapfun(batch::AbstractDataFrame, cols)
+    dict = Dict()
+    gdf = groupby(batch, cols)
+    for (key, df) in zip(keys(gdf), gdf)
+        push!(dict, NamedTuple(key) =&gt; DataFrame(df; copycols=false))
+    end
+    return dict
+end
+
+function groupby_reducefun(shuffler::Vector)
+    out = Dict()
+    for (k, v) in shuffler
+        out[k] = append!(get(out, k, DataFrame()), v)
+    end
+    return out
+end
+
+filepath = joinpath(@__DIR__, &quot;../data/iris.csv&quot;)
+ddf = DDataFrame(filepath, nrows=25)
+_batches = ddf.chunks
+
+# use 3 reducing nodes for the reducing step
+_mapreduce = RuleDSL.@ref mr.mapreduce(
+    _batches,
+    RuleDSL.@ref(mr.mapper(x -&gt; groupby_mapfun(x, [:Species]))),
+    RuleDSL.@ref(mr.shuffler(first, 3)),
+    RuleDSL.@ref(mr.reducer(groupby_reducefun))
+)</code></pre><pre><code class="language-none">mr:mapreduce/NodeRef[6]</code></pre><pre><code class="language-julia">gs6 = GraphVM.createlocalgraph(config, RuleDSL.GenericData())
+GraphVM.calcfwd!(gs6, Set([_mapreduce]))</code></pre><pre><code class="language-none">0</code></pre><pre><code class="language-julia">nodelabel(::AbstractGraphState, ref::NodeRef) = haskey(ref.meta, :label) ? ref.meta[:label] : &quot;$(ref.ns).$(ref.name)&quot;
+svg = GraphIO.postlocalgraph(gss, gs6, port; key=&quot;groupby&quot;);
+GraphIO.postsvg(svg, &quot;mapreduce_6.svg&quot;)</code></pre><pre><code class="language-none">view graph data at http://127.0.0.1:8080/depgraph.html?dataurl=127.0.0.1:7015_groupby
+</code></pre><p align = "center">
+<img src="../assets/mapreduce_6.svg" alt="" title="mappers"/>
+</p>
+<p align = "center">
+Figure 6 - GroupBy.
+</p><p>The result is a <code>DataFrame</code> per group, such that, the first 10 rows look like:</p><pre><code class="language-julia">_reducers = calcdeps(config, _mapreduce)
+for reducer in _reducers
+    dict = RuleDSL.getdata(gs6, reducer)[]
+    for (k, v) in dict
+      println(&quot;$k =&gt; $(first(v, 10))&quot;)
+    end
+end</code></pre><pre><code class="language-none">(Species = &quot;Iris-setosa&quot;,) =&gt; 10×5 DataFrame
+ Row │ SepalLength  SepalWidth  PetalLength  PetalWidth  Species
+     │ Float64      Float64     Float64      Float64     String15
+─────┼───────────────────────────────────────────────────────────────
+   1 │         4.3         3.0          1.1         0.1  Iris-setosa
+   2 │         4.4         2.9          1.4         0.2  Iris-setosa
+   3 │         4.4         3.0          1.3         0.2  Iris-setosa
+   4 │         4.4         3.2          1.3         0.2  Iris-setosa
+   5 │         4.5         2.3          1.3         0.3  Iris-setosa
+   6 │         4.6         3.1          1.5         0.2  Iris-setosa
+   7 │         4.6         3.4          1.4         0.3  Iris-setosa
+   8 │         4.6         3.6          1.0         0.2  Iris-setosa
+   9 │         4.6         3.2          1.4         0.2  Iris-setosa
+  10 │         4.7         3.2          1.3         0.2  Iris-setosa
+(Species = &quot;Iris-versicolor&quot;,) =&gt; 10×5 DataFrame
+ Row │ SepalLength  SepalWidth  PetalLength  PetalWidth  Species
+     │ Float64      Float64     Float64      Float64     String15
+─────┼───────────────────────────────────────────────────────────────────
+   1 │         4.9         2.4          3.3         1.0  Iris-versicolor
+   2 │         5.0         2.0          3.5         1.0  Iris-versicolor
+   3 │         5.0         2.3          3.3         1.0  Iris-versicolor
+   4 │         5.1         2.5          3.0         1.1  Iris-versicolor
+   5 │         5.2         2.7          3.9         1.4  Iris-versicolor
+   6 │         5.4         3.0          4.5         1.5  Iris-versicolor
+   7 │         5.5         2.3          4.0         1.3  Iris-versicolor
+   8 │         5.5         2.4          3.8         1.1  Iris-versicolor
+   9 │         5.5         2.4          3.7         1.0  Iris-versicolor
+  10 │         5.5         2.5          4.0         1.3  Iris-versicolor
+(Species = &quot;Iris-virginica&quot;,) =&gt; 10×5 DataFrame
+ Row │ SepalLength  SepalWidth  PetalLength  PetalWidth  Species
+     │ Float64      Float64     Float64      Float64     String15
+─────┼──────────────────────────────────────────────────────────────────
+   1 │         4.9         2.5          4.5         1.7  Iris-virginica
+   2 │         5.6         2.8          4.9         2.0  Iris-virginica
+   3 │         5.7         2.5          5.0         2.0  Iris-virginica
+   4 │         5.8         2.7          5.1         1.9  Iris-virginica
+   5 │         5.8         2.8          5.1         2.4  Iris-virginica
+   6 │         5.8         2.7          5.1         1.9  Iris-virginica
+   7 │         5.9         3.0          5.1         1.8  Iris-virginica
+   8 │         6.0         2.2          5.0         1.5  Iris-virginica
+   9 │         6.0         3.0          4.8         1.8  Iris-virginica
+  10 │         6.1         3.0          4.9         1.8  Iris-virginica
+</code></pre><p>These previous examples are relatively straight forward in their logic. However, the <code>mapper</code> and <code>reducer</code> rules can encapsulate complicated logic, both of them can be an entire graph of great complexity. For example, the mapper can be the training and validation of an entire ML model, and the reducer can be a bagging algorithm that joins multiple models trained on different batches of data. We will show an example of a more complex use case in the next tutorial.</p><h2 id=".-Advantages-of-Julius-Graph-1"><a class="docs-heading-anchor" href="#.-Advantages-of-Julius-Graph-1">4. Advantages of Julius Graph</a><a class="docs-heading-anchor-permalink" href="#.-Advantages-of-Julius-Graph-1" title="Permalink"></a></h2><h3 id=".1-Graph-Composition-vs-Function-Composition-1"><a class="docs-heading-anchor" href="#.1-Graph-Composition-vs-Function-Composition-1">4.1 Graph Composition vs Function Composition</a><a class="docs-heading-anchor-permalink" href="#.1-Graph-Composition-vs-Function-Composition-1" title="Permalink"></a></h3><p>You may find the high level rules in <code>RuleDSL</code> have a lot similarity to high order functions in functional languages like Haskell, where a function can take another function as parameter. So what are the main benefits of high order rule over the high order functions in a functional language?</p><p>The key difference is that high level rules are for composing graphs, while high level functions are for composing functions. The graph composition has a number of advantages over function composition:</p><ol><li>It does not create deep call stacks, the results of graph composition is nothing but another graph. Therefore, it is much easier for a developer to visualize and debug. With function composition, one has to use a debugger to access the intermediate results and call sequences, deep among the call stack of a program&#39;s runtime.</li><li>The resulting graph composition can be automatically distributed without code change. A generic graph distributor can analyze any graph and distribute it effectively to multiple worker computers. In contrast, the traditional functional code is permeated with loops and branches, making their runtime behavior unpredictable, thus cannot be distributed automatically and efficiently.</li><li>The graph composition is much more flexible. Once the graph is constructed, it can run in different mode. For example, the same graph can support both batch and streaming use cases without code changes, which is not possible in traditional functional programming.</li><li>Lastly, graph composition can mimic function composition, but the reverse is not true. The <code>mapreduce</code> rule is a good example how function composition can be replicated using graph composition. However, it is almost impossible to create the equivalent graph composition from function composition in traditional functional languages.</li></ol><p>You have seen some of the benefits graph composition in this and previous tutorials. Next, we will illustrate the 2nd benefit of automatically distributing the MapReduce pipeline to multiple computers.</p><h3 id=".2-Distributed-Map/Reduce-1"><a class="docs-heading-anchor" href="#.2-Distributed-Map/Reduce-1">4.2 Distributed Map/Reduce</a><a class="docs-heading-anchor-permalink" href="#.2-Distributed-Map/Reduce-1" title="Permalink"></a></h3><p>In order to show the automatic distribution, we set up a local cluster with 3 worker processes managed by a master process running at a port of the local computer, which mimic a remote master and worker processes running on multiple physical computers. Please note that the local cluster automatically terminates after 15min of inactivity, so if you noticed the local cluster no longer accessible after 15min, please re-run this entire tutorial notebook.</p><p>The following few lines of code starts the local cluster then connects to the master process, through which we gain control to all the worker processes:</p><pre><code class="language-julia">using GraphEngine: RuleDSL, GraphVM
+
+config = RuleDSL.newconfig(RuleDSL.Config(), :project =&gt; &quot;MapReduce&quot;)
+balancer = GraphVM.GlobalUnique()
+my_domain = GraphVM.mydomain()
+
+# draw a port number to start the local cluster esrvice
+remoteport = GraphVM.drawdataport()</code></pre><pre><code class="language-none">7812</code></pre><pre><code class="language-julia"># start a local master service at the given port
+
+gs0 = GraphVM.RemoteGraphProxy(my_domain =&gt; 7225)
+GraphVM.rpccall(gs0, :startlocalmasterservice, remoteport, 3)
+
+gs = GraphVM.RemoteGraphProxy(config, my_domain =&gt; remoteport, balancer, GraphVM.GenericData())
+GraphVM.wait4clusterinit(gs)</code></pre><pre><code class="language-none">Dict{UInt64, Pair{Float64, GraphEngine.GraphVM.WorkerStatus}} with 3 entries:
+  0x31c0caf4869bdc87 =&gt; 1.64847e9=&gt;Ready
+  0x9922a7c4d55f1e2e =&gt; 1.64847e9=&gt;Ready
+  0xcdfb226bbf108f63 =&gt; 1.64847e9=&gt;Ready</code></pre><p>The following is the complete definition of the generic <code>mapreduce</code> rule and corresponding functions for the word count example. Now we instantiate them in the remote cluster so that we can run the distributed word count with distribution.</p><pre><code class="language-julia">GraphVM.@remote_eval gs begin
+    using GraphEngine: RuleDSL, GraphVM
+    using DataScience: ApplyFn
+    using AtomExt, GraphIO
+end
+
+# wait for the server to complete the task before proceeding
+GraphVM.waitcheckstatus(gs, RuleDSL.getconfig(config, :project));
+
+GraphVM.@addrules gs mr begin
+    echo(x::Any) = ApplyFn[identity, x]()
+
+    mapper(batch::RuleDSL.NodeRef, mapfun::Function) = ApplyFn[mapfun](batch...)
+
+    reducer(shuffled::RuleDSL.NodeRef, reducefun::Function) = ApplyFn[reducefun](shuffled...)
+
+    splitbykey(mapper::RuleDSL.NodeRef, keyfunc::Function) = ApplyFn[splitbykey, keyfunc](mapper...)
+
+    selectkey(dict::RuleDSL.NodeRef, key::Any; label=&quot;selectby $(key)&quot;) = ApplyFn[dict -&gt; get(dict, key, [])](dict...)
+
+    mergebykey(vecs::Vector{RuleDSL.NodeRef}) = ApplyFn[vcat](vecs...)
+
+    shuffler(mappers::Vector{RuleDSL.NodeRef}, keyfunc::Function, keys::Set) = begin
+        merged = Vector{NodeRef}()
+        splits = RuleDSL.@ref(splitbykey(mapper, keyfunc) for mapper in mappers)
+        for key in keys
+            values = RuleDSL.@ref(selectkey(s, key) for s in splits)
+            mergebykey = RuleDSL.@ref mergebykey(values; label=&quot;mergeby $key&quot;)
+            push!(merged, mergebykey)
+        end
+        Alias(merged...)
+    end
+
+    mapreduce(
+        batches::Vector{RuleDSL.NodeRef},
+        mapper::RuleDSL.NodeRef,
+        shuffler::RuleDSL.NodeRef,
+        reducer::RuleDSL.NodeRef
+    ) = begin
+        mappers = [prepend(mapper, batch) for batch in batches]
+        shuffler = prepend(shuffler, mappers)
+        shuffled = RuleDSL.calcdeps(RuleDSL.@config, shuffler)
+        reducers = [prepend(reducer, m) for m in shuffled]
+        ApplyFn[merge](reducers...)
+    end
+
+    splitbykey(mapper::RuleDSL.NodeRef, keyfunc::Function, N::Int) = begin
+        ApplyFn[splitbykey, x -&gt; Int(hash(keyfunc(x)) % N)](mapper...)
+    end
+
+    shuffler(mappers::Vector{RuleDSL.NodeRef}, keyfunc::Function, N::Int) = begin
+        splits = RuleDSL.@ref(splitbykey(mapper, keyfunc, N) for mapper in mappers)
+        shuffled = Vector{NodeRef}()
+        for key in 0:N-1
+            selected = RuleDSL.@ref(selectkey(s, key) for s in splits)
+            merged = RuleDSL.@ref mergebykey(selected; label=&quot;mergeby $key&quot;)
+            push!(shuffled, merged)
+        end
+        Alias(shuffled...)
+    end
+end
+
+GraphVM.@remote_eval gs begin
+    import GraphEngine.RuleDSL: fwddata!
+
+    prepend(ref::RuleDSL.NodeRef, firstarg::Any) = RuleDSL.NodeRef(ref.ns, ref.name, (firstarg, ref.params...), ref.meta)
+
+    function splitbykey(keyfunc::Function, xs::Any)
+        splits = Dict()
+        for x in xs
+            key = keyfunc(x)
+            splits[key] = push!(get(splits, key, []), x)
+        end
+        return splits
+    end
+
+    wordmap(words::String) = [k =&gt; 1 for k in split(words)]
+
+    function wordreduce(xs::Vector)
+        count = Dict()
+        for (key, _) in xs
+            count[key] = get(count, key, 0) + 1
+        end
+        return count
+    end
+
+    import GraphEngine.RuleDSL: nodelabel
+    function nodelabel(gs::RuleDSL.AbstractGraphState, ref::RuleDSL.NodeRef)
+        shortrepr(x::Vector; sep=&quot;, &quot;) = &quot;[&quot;*join(shortrepr.(x), sep)*&quot;]&quot;
+        shortrepr(p::Pair; sep=&quot;=&gt;&quot;) = shortrepr(p.first) * sep * shortrepr(p.second)
+        shortrepr(p::Dict; sep=&quot;, &quot;) = &quot;{&quot; * join(shortrepr.(collect(p)), sep) * &quot;}&quot;
+        shortrepr(x::Any; sep=&quot;&quot;) = repr(x)
+
+        label = haskey(ref.meta, :label) ? ref.meta[:label] : &quot;$(ref.ns).$(ref.name)&quot;
+
+        try
+            data = RuleDSL.getdata(gs, ref)
+            if isone(length(data))
+                data = first(data)
+            end
+            label *= &quot;\n&quot; * shortrepr(data; sep = &quot;\n&quot;)
+        catch
+            label *= &quot;: n/a&quot;
+        end
+
+        return label
+    end
+end</code></pre><pre><code class="language-none">nodelabel (generic function with 4 methods)</code></pre><p>As you can see, there is no change in the RuleDSL and Julia functions at all, we simply sent them to the remote cluster to instantiate. Afterwards, we can execute the MapReduce pipeline with distribution. The distribution API, <code>RuleDSL.jobdeps</code> and <code>GraphVM.dispatchjobs!</code> are explained in more detail in the next tutorial on Distributed ML pipeline, we won&#39;t repeat them here.</p><pre><code class="language-julia">_sentences = (&quot;Deer Bear River&quot;, &quot;Car Car River&quot;, &quot;Deer Car Bear&quot;)
+_batches   = RuleDSL.@ref(mr.echo(s) for s in _sentences)
+
+N = 3
+_mapreduce = RuleDSL.@ref mr.mapreduce(
+    _batches,
+    RuleDSL.@ref(mr.mapper(Main.wordmap)),
+    RuleDSL.@ref(mr.shuffler(first, N)),
+    RuleDSL.@ref(mr.reducer(Main.wordreduce))
+)
+
+alljobs, ds = RuleDSL.jobdeps(config, [_mapreduce], Set([:splitbykey, :reducer]));
+
+GraphVM.waitcheckstatus(gs, RuleDSL.getconfig(config, :project));
+GraphVM.initgraph!(gs)
+GraphVM.dispatchjobs!(gs, alljobs, 1)</code></pre><pre><code class="language-none">0</code></pre><pre><code class="language-julia">GraphVM.waitcheckstatus(gs, RuleDSL.getconfig(config, :project));
+svg = GraphIO.postremotegraph(gs, port);
+
+GraphIO.postsvg(svg, &quot;mapreduce_7.svg&quot;)</code></pre><p align = "center">
+<img src="../assets/mapreduce_7.svg" alt="" title="mappers"/>
+</p>
+<p align = "center">
+Figure 7 - Distributed computation mode, where each node color represents a different worker.
+</p><pre><code class="language-julia">GraphVM.rpccall(gs, :endcluster)
+
+# reverting back nodelabel
+nodelabel(gs::RuleDSL.AbstractGraphState, ref::RuleDSL.NodeRef)=haskey(ref.meta, :label) ? ref.meta[:label] : &quot;$(ref.ns).$(ref.name)&quot;</code></pre><pre><code class="language-none">nodelabel (generic function with 4 methods)</code></pre><p>The resulting graph use different colors to highlight the placement of nodes to individual remote workers. Nodes with the same color are placed and computed on the same worker computer.</p><p>Upon close examination, we observe that the resulting graph distribution is optimal in that the work load is evenly distributed amongst 3 workers, and the only shipment of data happens during the shuffling stage, and the collation of final reducer results, when an arrow connects two nodes with different colors. There is no unnecessary data transfer at all in the resulting graph distribution.</p><p>The ability to automatically and optimally distribute graph without code change is a powerful feature. Julius can handle the distribute of graphs as large as hundreds millions nodes across hundreds of computers. Using Julius, the same code run efficiently on one worker instance or hundreds of worker instances, without the need for any manual tweaking and optimizations. Auto-scaling allows developers to quickly build and test their rules and functions on the local computer, then immediately scale it up to run large jobs and heavy workload in parallel without the need for any code changes. Julius&#39; autoscaling automates away one of the most time-consuming and expensive aspect in enterprise systems, which is the constant needs for manual tweaking and optimization of the system for better performance and scalability.</p><p>In a next toturial Distributed ML pipeline, we will dive into Julius distribution and auto-scaling capability in much more depth, and compare to existing tools like Dask and Dagger.jl.</p><h2 id=".-Conclusion-1"><a class="docs-heading-anchor" href="#.-Conclusion-1">5. Conclusion</a><a class="docs-heading-anchor-permalink" href="#.-Conclusion-1" title="Permalink"></a></h2><p>The result speaks for itself: we built a generic MapReduce pipeline from scratch using 10 rules in RuleDSL and 20 lines of additional Julia code. The resulting MapReduce pipeline implementation is generic, transparent and auto-scaling. Every intermediate calculation result is fully visible to the user in our web UI, it automatically distributes to multiple computers without any code changes for extreme scalability and performance.</p><p>Intrigued? If you are a developer, you should. To hear more about Julius Graph Engine, contact us at <code>info@juliustech.co</code>, or go to our <a href="http://juliustech.co">website</a> to schedule a demo or sign up for free access for developers.</p><h2 id="Appendix:-Additional-Technical-Tips-and-Notes-1"><a class="docs-heading-anchor" href="#Appendix:-Additional-Technical-Tips-and-Notes-1">Appendix: Additional Technical Tips &amp; Notes</a><a class="docs-heading-anchor-permalink" href="#Appendix:-Additional-Technical-Tips-and-Notes-1" title="Permalink"></a></h2><p>Here we explain some additional technical tips and points. We refer to the general structure of a rule in RuleDSL as:</p><pre><code class="language-julia">rulename(ruleargs::Any...) = Atom[atomargs...](dependentrule(depargs...))</code></pre><ul><li>The <code>ApplyFn</code> atom is used extensively in this tutorial. Though it is convenient, it was only intended for simple analytical logic. For complex analytical algorithms, it is better to define individual Atoms for reusability and readability.</li><li>There is an important difference between the <code>ruleargs</code> and <code>atomargs</code> in the rule syntax. The <code>ruleargs</code> is serialized and sent to remote worker during distribution, while atomargs are only created and used locally by individual workers. Therefore to enable distribution, every <code>ruleargs</code> has to be serializable with a stable hash, i.e. same object shall retrieve the same hash regardless which worker runs it. This requirement does not apply to atomargs. Julius use a customized hash function <code>RuleDSL.hashparam</code> for rule parameters, that support stable hashes for a wide variety of object types. However, the following are some instances where the serialization can fail or the hash becomes unstable:<ul><li>If a rule parameter is a function closure with reference to any local variable, the serialization will fail.  A workaround is to move the function closure inside the body of the rule. For example, the first hash key shuffler will fail:</li></ul><pre><code class="language-julia"># fail to serialize: local variable used in function closure
+N = 3
+_shuffler = RuleDSL.@ref mr.shuffler(x -&gt; Int(hash(first(x)) % N), Set(collect(0:N-1)))</code></pre>but the second version of the shuffler will work fine:<pre><code class="language-julia"># closure moved inside the rule declaration
+_shuffler = RuleDSL.@ref mr.shuffle(first, N)</code></pre><ul><li>A complex struct is more likely to have unstable hashes, you can either make it inherit from <code>RuleDSL.ValueType</code> thus using the more stable <code>RuleDSL.hashparam</code>, or you can provide your own stable hash function by overriding the <code>RuleDSL.hashparam</code> method for the type in question. To help detect the potential serialization and hash stability issues in rules, we provide a convenient macro <code>RuleDSL.@isdistributable</code>, which will flag any node in a graph that cannot be safely distributed.</li></ul></li><li>You may be tempted to define a <code>mapreduce</code> rule that takes a mapper function and a reducer function, and create the <code>RuleDSL.@ref mr.mapper(func)</code> and <code>RuleDSL.@ref mr.reducer(func)</code> inside the <code>mapreduce</code> rule. As discussed before, this is less generic as the <code>mapper</code> and <code>reducer</code> rule shall not be restricted to simple wrappers like <code>RuleDSL.@ref mr.mapper(func)</code>. Instead, any rule can be used as the <code>mapper</code> and <code>reducer</code>, for example it could  represent a complex graph with sophisticated logic. As a matter of fact, they could very well be high order rules themselves.</li></ul><hr/><p><em>This page was generated using <a href="https://github.com/fredrikekre/Literate.jl">Literate.jl</a>.</em></p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="t002_titanic.html">« 2 Machine Learning</a><a class="docs-footer-nextpage" href="t004_bagging.html">4 Distributed Machine Learning Pipeline »</a></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> on <span class="colophon-date" title="Monday 28 March 2022 12:31">Monday 28 March 2022</span>. Using Julia version 1.6.3.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>

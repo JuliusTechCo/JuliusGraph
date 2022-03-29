@@ -1,13 +1,18 @@
+|                                         **Rapid Access**                                                 |
+|:--------------------------------------------------------------------------------------------------------- |
+| [![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://JuliusTechCo.github.io/JuliusGraph/dev/) |
+
 # Hey, Welcome 👋
 
-At Julius Technologies we are a group of researchers and engineers passionate about graph
-computing. We believe that this technology can tackle the most computational challenging
-problems out there.
+In this repository you will find guidelines to access [Julius
+Technologies](https://www.juliustech.co/) tutorials to learn and test our low-code graph
+computing platform.
 
-In this repository we provide guidelines to access our tutorials to learn and test Julius'
-low-code graph computing platform.
+We are a group of researchers and engineers passionate about graph computing. We believe
+that this technology can tackle the most computational challenging problems out there. We
+are Julius Technologies.
 
-Julius Technologies Inc. (email: info@juliustech.co)
+For any additional queries or suggestions do not hesitate to email us at info@juliustech.co.
 
 ## Tutorials
 

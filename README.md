@@ -31,20 +31,26 @@ Our tutorials are available in two formats:
 ### Request Developer Access
 
 Requesting developer access is super easy and should not take more than a minute. Please,
-proceed to [this](https://backendgraph.com/user/signup) link. If you are already logged in
+proceed to this [link](https://backendgraph.com/user/signup). If you are already logged in
 with your Google account, you will be prompted with some auto-populated fields:
 
-![Sign up with auto-populated fields.](assets/signup_1.png)
+<p align="center">
+  <img width=50% src="assets/signup_1.png">
+</p>
 
 Complete the missing information and hit *Request access*. You can also change your current
 account if wanted. On the other hand, you will be asked to log into your Google account if
 you are not currently logged in:
 
-![Sign up before logged in to Google.](assets/signup_2.png)
+<p align="center">
+  <img width=50% src="assets/signup_2.png">
+</p>
 
 Once you requested access, you will be prompted to the following page:
 
-![Welcome page with proceed to Lab.](assets/landingpage.png)
+<p align="center">
+  <img width=50% src="assets/landingpage.png">
+</p>
 
 That's it! You have registered as a Julius developer and you are now able to proceed to our
 Lab Environment by clicking *Go to Lab Environment*. That was easy!
@@ -52,7 +58,9 @@ Lab Environment by clicking *Go to Lab Environment*. That was easy!
 The following step is required only once and will ask you to Sign In to our Jupyter Hub
 server:
 
-![Sign In to jupyter hub.](assets/jupyter_signin.png)
+<p align="center">
+  <img width=50% src="assets/jupyter_signin.png">
+</p>
 
 Clicking *Sign in with Google* will land in a well-known Jupyter Hub session:
 

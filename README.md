@@ -9,12 +9,13 @@ graph technology is the future for solving the most challenging problems in comp
 spent the past few years at [Julius Technologies](https://www.juliustech.co/) building 
 a truly innovative graph computing solution, the Julius Graph Engine. 
 
-In this repository, you will find instructions to get access to Julius' free developer 
-environment (currently in beta), and a number of tutorials to help get started with 
-graph computing and graph programming using Julius Graph Engine. 
+In this repository, you will find a number of tutorials that explain the awesomeness of 
+graph computing, and help you get started with graph programming and computing. Once you 
+gone through these tutorials, we promise that you will be enlightened by 
+graph computing, and you will never look at programming the same way again!
 
-Please do not hesitate to email us at info@juliustech.co for any questions or inquiries,
-and please raise an issue in this repo for any problems or feature requests.
+To report issues, request new features or general inquiries, please raise a github issue 
+in this repo, or email us at info@juliustech.co.
 
 ## Tutorials
 

@@ -5,11 +5,11 @@
 # Welcome to Julius Graph Engine! 👋
 
 We are a group of researchers and engineers passionate about graph computing. We believe
-graph technology is the key for solving the most challenging problems in computing. We 
+graph technology is the future for solving the most challenging problems in computing. We 
 spent the past few years at [Julius Technologies](https://www.juliustech.co/) building 
-a truly innovative graph computing solution, the Julius Graph Engine.
+a truly innovative graph computing solution, the Julius Graph Engine. 
 
-In this repository, you will find instructions to request access Julius' free developer 
+In this repository, you will find instructions to get access to Julius' free developer 
 environment (currently in beta), and a number of tutorials to help get started with 
 graph computing and graph programming using Julius Graph Engine. 
 
@@ -21,18 +21,18 @@ and please raise an issue in this repo for any problems or feature requests.
 Our tutorials are available in two formats:
 
 - As interactive jupyter notebooks hosted on a jupyterhub server. It is the best format for 
-you to learn and experiment with Julius Graph Engine. To gain access to these tutorial 
-notebooks, you need to follow the instructions below to [register for free developer
-  access](https://github.com/JuliusTechCo/JuliusGraph#request-developer-access), it only
-  takes a minute to register.
+you to learn and experiment with Julius Graph Engine. To gain access to these online tutorial 
+notebooks, you need to follow the instructions below to [register for developer
+  access](https://github.com/JuliusTechCo/JuliusGraph#register-for-developer-access), it only
+  takes a minute to register and it is free!
 
-- As static HTML pages, which does include the entire source code and results, but they are 
-not interactive. If you want to take a quick tour of Julius Graph Engine and its capabilities 
+- As static HTML pages, which show the entire source code and results, but they are 
+not interactive. If you want to read about Julius Graph Engine and its capabilities 
 without register for developer access, please click [here](https://JuliusTechCo.github.io/JuliusGraph/dev/) 
-to read the tutorial in HTML format. The HTML tutorials are also easier to share with
+to read the tutorials in HTML format. The HTML format is also a good format to share with 
 your colleagues or fellow developers.
 
-### Register Free Developer Access
+### Register for Developer Access
 
 Requesting developer access is super easy and should not take more than a minute. Please,
 proceed to this [link](https://backendgraph.com/user/signup). The web site use Google authentication, 

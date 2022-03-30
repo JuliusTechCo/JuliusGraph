@@ -10,9 +10,10 @@ spent the past few years at [Julius Technologies](https://www.juliustech.co/) bu
 a truly innovative graph computing solution, the Julius Graph Engine. 
 
 In this repository, you will find a number of tutorials that explain the awesomeness of 
-graph computing, and help you get started with graph programming and computing. Once you 
-gone through these tutorials, we promise that you will be enlightened by 
-graph computing, and you will never look at programming the same way again!
+graph computing. These tutorials show how to use graph computing to build real solutions for 
+real world problems, they can help you to quickly get started with graph programming and 
+graph computing. We promise you that you will feel enlighted by graph computing once you 
+go through these tutorials. You will never look at programming the same way again!
 
 To report issues, request new features or general inquiries, please raise a github issue 
 in this repo, or email us at info@juliustech.co.

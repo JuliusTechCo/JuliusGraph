@@ -2,21 +2,25 @@
 |:--------------------------------------------------------------------------------------------------------- |
 | [![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://JuliusTechCo.github.io/JuliusGraph/dev/) |
 
-# Welcome to Graph Computing! 👋
+# Welcome to the New World of Graph Computing! 👋
 
 We are a group of researchers and engineers passionate about graph computing. We believe
 graph technology is the future for solving the most challenging problems in computing. We 
 spent the past few years at [Julius Technologies](https://www.juliustech.co/) building 
-a truly innovative graph computing solution, the Julius Graph Engine. 
+a truly innovative graph computing solution. We are excited to offer free access for 
+developers to our online development environment, where you can learn and test drive graph 
+computing and graph programming.
 
-In this repository, you will find a number of tutorials that explain the awesomeness of 
-graph computing. These tutorials show how to use graph computing to build real solutions for 
-real world problems, they will help you to quickly get started with graph programming and 
-graph computing. We promise that you will feel enlighted by graph computing once you 
-go through these tutorials. You will never look at programming the same way again!
+In this repository, you will find instructions to 
+[register for free access](https://github.com/JuliusTechCo/JuliusGraph#register-for-developer-access) 
+to Julius' development enviornment, and a number of tutorials that can help you get started. 
+These tutorials illustrate how real world problems can be solved effectively 
+using graph computing. Once you go through these tutorials, you will appreciate the power
+and elegance of graph computing and graph programming, and you will never look at programming 
+the same way again!
 
-To report issues, request new features or general inquiries, please raise a github issue 
-in this repo, or email us at info@juliustech.co.
+Please raise a github issue in this repo, or email us at info@juliustech.co if you run into 
+any issues or have any questions or inquiries.
 
 ## Tutorials
 
@@ -34,7 +38,7 @@ without register for developer access, please click [here](https://JuliusTechCo.
 to read the tutorials in HTML format. The HTML is also a good format to share with 
 your colleagues or fellow developers.
 
-### Register for Developer Access
+## Register for Developer Access
 
 Requesting developer access is super easy and should not take more than a minute. Please,
 proceed to this [link](https://backendgraph.com/user/signup). The web site use Google authentication, 

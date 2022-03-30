@@ -11,8 +11,8 @@ a truly innovative graph computing solution, the Julius Graph Engine.
 
 In this repository, you will find a number of tutorials that explain the awesomeness of 
 graph computing. These tutorials show how to use graph computing to build real solutions for 
-real world problems, they can help you to quickly get started with graph programming and 
-graph computing. We promise you that you will feel enlighted by graph computing once you 
+real world problems, they will help you to quickly get started with graph programming and 
+graph computing. We promise that you will feel enlighted by graph computing once you 
 go through these tutorials. You will never look at programming the same way again!
 
 To report issues, request new features or general inquiries, please raise a github issue 
@@ -31,7 +31,7 @@ notebooks, you need to follow the instructions below to [register for developer
 - As static HTML pages, which show the entire source code and results, but they are 
 not interactive. If you want to read about Julius Graph Engine and its capabilities 
 without register for developer access, please click [here](https://JuliusTechCo.github.io/JuliusGraph/dev/) 
-to read the tutorials in HTML format. The HTML format is also a good format to share with 
+to read the tutorials in HTML format. The HTML is also a good format to share with 
 your colleagues or fellow developers.
 
 ### Register for Developer Access

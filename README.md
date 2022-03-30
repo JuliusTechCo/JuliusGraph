@@ -13,9 +13,9 @@ drive graph computing and graph programming on Julius Graph Engine.
 
 In this repository, you will find instructions to 
 [register for free access](https://github.com/JuliusTechCo/JuliusGraph#register-for-developer-access) 
-to Julius' development enviornment, and a number of tutorials that can help you get started. 
-These tutorials illustrate how real world problems can be solved effectively 
-using graph computing. Once you go through these tutorials, you will appreciate the power
+for Julius' development enviornment, and a number of tutorials that can help you get started. 
+These tutorials illustrate how graph computing can solve some of the most challenging 
+real world problems. Once you go through these tutorials, you will appreciate the power
 and elegance of graph computing and graph programming, you will never look at programming 
 the same way again!
 
@@ -28,11 +28,11 @@ Our tutorials are available in two formats:
 
 - As interactive jupyter notebooks hosted in Julius' development environment. It is the best 
 format for you to learn and experiment with graph computing interactively. To gain access to 
-these online tutorials notebooks, please follow the instructions below to [register for developer
+these online tutorials notebooks, please [register for developer
   access](https://github.com/JuliusTechCo/JuliusGraph#register-for-developer-access), it only
-  takes a minute to register and it is free!
+  takes a minute!
 
-- As static HTML pages, which contains the same description, source code and results as the 
+- As static HTML pages, which contains the same descriptions, source code and results as the 
 notebooks, but they are not interactive. If you want to read about Julius Graph Engine 
 and its capabilities without register for developer access, please click [here](https://JuliusTechCo.github.io/JuliusGraph/dev/) 
 to access the tutorials in HTML format. The HTML is also a good format to share with 
@@ -42,33 +42,33 @@ your colleagues or fellow developers.
 
 Register for developer access is super easy and it only takes a minute. Please
 proceed to this [link](https://backendgraph.com/user/signup). The web site uses Google 
-authentication, if you are already logged in with your Google account, you will be prompted 
-with some auto-populated fields:
-
-<p align="center">
-  <img width=50% src="assets/signup_1.png">
-</p>
-
-Complete the missing information and hit *Request access*. You can also change your current
-account if wanted. On the other hand, you will be asked to log into your Google account if
-you are not currently logged in:
+authentication, you will be prompted to log into using your Google account credentials if 
+you are not already logged in via Google:
 
 <p align="center">
   <img width=50% src="assets/signup_2.png">
 </p>
 
-Once you enters some basic information and agreed to the term of service, you will be 
-prompted to the following page:
+Once you are logged in with your Google account, you will be asked to enter some basic
+information about yourself. You can also switch to a different google account using the 
+link on the right upper corner. 
+
+<p align="center">
+  <img width=50% src="assets/signup_1.png">
+</p>
+
+Once you filled the form please hit the *Request access* button, you will be 
+directed to the following page:
 
 <p align="center">
   <img width=50% src="assets/landingpage.png">
 </p>
 
 That's it! You have registered as a Julius developer and you are now able to proceed to our
-Jupyter Lab Environment by clicking *Go to Lab Environment*. That was easy!
+Jupyter Lab Environment by clicking *Go to Lab Environment*. 
 
-The following step is required only once and will ask you to Sign In to our Jupyter Hub
-server:
+Then you will be asked to Sign In to our Jupyter Hub server using the same google credentials 
+you have just regisered:
 
 <p align="center">
   <img width=50% src="assets/jupyter_signin.png">
@@ -78,21 +78,19 @@ Clicking *Sign in with Google* will land in a standard Jupyter Hub/Juypter Lab s
 
 ![Jupyter Hub landing page.](assets/jupyter_landing.png)
 
-Once you have completed all previous steps, you can come back at any time using the lab
-route (try [this](https://backendgraph.com/lab) link).
+Once you have completed all previous steps, you can directly access our developer environment 
+using this [url](https://backendgraph.com/lab).
 
 ### General Layout
 
-In your Jupyter Hub session you should see a couple of folders and a `README.md` file at the
-left panel. Proceed to the `README.md` to checkout some useful suggestions.
-
-On the other hand, each folder description proceeds:
-
-* `assets`: holds images for tutorials,
-* `data`:  holds data files for tutorials,
-* `tutorials`: holds tutorials as jupyter notebooks,
-* `persist`: you should locate your work and progress here to make sure it won't be lost if
-  the server is restarted.
+After logging into Julius development website, you will find a standard Jupyter lab 
+session. On the left panel, there is a `README.md` file with some basic information, and 
+a few pre-created folders:
+* `assets`: contains images for tutorials,
+* `data`:  contains data files for tutorials,
+* `tutorials`: contains tutorials in jupyter notebooks,
+* `persist`: the only folder with persistent storage, you should save your work here to make 
+sure you don't lose them if server restarts.
 
 Ideally, tutorials should be read in order. This is because some tutorials depend on
 concepts explained in previous ones. However, we have you covered even if you are short on
@@ -101,13 +99,13 @@ time!. In that case, we recommend reading (at least):
 * [MapReduce](https://JuliusTechCo.github.io/JuliusGraph/dev/pages/t003_mapreduce.html) and
 * [Distributed Machine Learning Pipeline](https://JuliusTechCo.github.io/JuliusGraph/dev/pages/t004_bagging.html).
 
-Those tutorials should give you the key ideas on the power of graph computing on 
+Those tutorials should give you the key ideas on graph computing and graph programming on 
 Julius' Graph Engine.
 
 ### Running a Tutorial
 
-All tutorials come with a short paragraph explaining how to run them. We reference those
-suggestions below for completeness purposes:
+All tutorials come with a short paragraph explaining how to run them. We reproduce these
+instructions below:
 
 * Select "run all cells" on this notebook from the Run menu in Jupyter notebook or Jupyter
   lab. This step will produce intermediate data output and charts.
@@ -126,14 +124,14 @@ suggestions below for completeness purposes:
 
 ### Web User Interface
 
-Each time a tutorial displays a graph, you will be prompted with an url as well that
-redirects to the Julius WebUI. This great tool is a work in progress with many features
-already included, so enjoy it! The following are some snapshots for your reference:
+Each time a tutorial displays a graph, it will also display an url to the Julius WebUI, which
+is a great tool to navigate and visualize the computational graph and all intermedidate
+results. The following are some snapshots for your reference:
 
 ![WebUI for a non distributed computation case.](assets/webui_1.png)
 
 ![WebUI for a distributed computation case.](assets/webui_2.png)
 
-Thank you for reading up to this point 🙌. If you are interested in our technology, don't
-hesitate to get in touch with us. We would love building incredible solutions with you for 
-real world problems.
+Thank you for reading up to this point 🙌. If you are interested in using graph computing
+for your next project,  please don't hesitate to get in touch with us. We would love building 
+incredible solutions with you for real world problems.

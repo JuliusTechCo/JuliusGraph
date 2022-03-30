@@ -7,16 +7,16 @@
 We are a group of researchers and engineers passionate about graph computing. We believe
 graph technology is the future for solving the most challenging problems in computing. We 
 spent the past few years at [Julius Technologies](https://www.juliustech.co/) building 
-a truly innovative graph computing solution. We are excited to offer free access for 
-developers to our online development environment, where you can learn and test drive graph 
-computing and graph programming.
+a truly innovative graph computing solution: the Julius Graph Engine. We are excited to offer 
+free access for developers to our online development environment, where you can learn and test 
+drive graph computing and graph programming on Julius Graph Engine.
 
 In this repository, you will find instructions to 
 [register for free access](https://github.com/JuliusTechCo/JuliusGraph#register-for-developer-access) 
 to Julius' development enviornment, and a number of tutorials that can help you get started. 
 These tutorials illustrate how real world problems can be solved effectively 
 using graph computing. Once you go through these tutorials, you will appreciate the power
-and elegance of graph computing and graph programming, and you will never look at programming 
+and elegance of graph computing and graph programming, you will never look at programming 
 the same way again!
 
 Please raise a github issue in this repo, or email us at info@juliustech.co if you run into 
@@ -26,24 +26,24 @@ any issues or have any questions or inquiries.
 
 Our tutorials are available in two formats:
 
-- As interactive jupyter notebooks hosted on a jupyterhub server. It is the best format for 
-you to learn and experiment with Julius Graph Engine. To gain access to these online tutorial 
-notebooks, you need to follow the instructions below to [register for developer
+- As interactive jupyter notebooks hosted in our development environment. It is the best format 
+for you to learn and experiment with graph computing interactively. To gain access to these 
+online tutorials notebooks, please follow the instructions below to [register for developer
   access](https://github.com/JuliusTechCo/JuliusGraph#register-for-developer-access), it only
   takes a minute to register and it is free!
 
-- As static HTML pages, which show the entire source code and results, but they are 
-not interactive. If you want to read about Julius Graph Engine and its capabilities 
-without register for developer access, please click [here](https://JuliusTechCo.github.io/JuliusGraph/dev/) 
-to read the tutorials in HTML format. The HTML is also a good format to share with 
+- As static HTML pages, which contains the same description, source code and results as the 
+notebooks, but they are not interactive. If you want to read about Julius Graph Engine 
+and its capabilities without register for developer access, please click [here](https://JuliusTechCo.github.io/JuliusGraph/dev/) 
+to access the tutorials in HTML format. The HTML is also a good format to share with 
 your colleagues or fellow developers.
 
 ## Register for Developer Access
 
-Requesting developer access is super easy and should not take more than a minute. Please,
-proceed to this [link](https://backendgraph.com/user/signup). The web site use Google authentication, 
-if you are already logged in with your Google account, you will be prompted with some auto-populated 
-fields:
+Register for developer access is super easy and it only takes a minute. Please
+proceed to this [link](https://backendgraph.com/user/signup). The web site uses Google 
+authentication, if you are already logged in with your Google account, you will be prompted 
+with some auto-populated fields:
 
 <p align="center">
   <img width=50% src="assets/signup_1.png">
@@ -57,7 +57,8 @@ you are not currently logged in:
   <img width=50% src="assets/signup_2.png">
 </p>
 
-Once you registered and agreed the term of service, you will be prompted to the following page:
+Once you enters some basic information and agreed to the term of service, you will be 
+prompted to the following page:
 
 <p align="center">
   <img width=50% src="assets/landingpage.png">

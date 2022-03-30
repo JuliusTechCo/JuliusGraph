@@ -2,37 +2,42 @@
 |:--------------------------------------------------------------------------------------------------------- |
 | [![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://JuliusTechCo.github.io/JuliusGraph/dev/) |
 
-# Hey, Welcome 👋
-
-In this repository you will find guidelines to access [Julius
-Technologies](https://www.juliustech.co/) tutorials to learn and test our low-code graph
-computing platform.
+# Welcome to Julius Graph Engine! 👋
 
 We are a group of researchers and engineers passionate about graph computing. We believe
-this technology can tackle the most computational challenging problems out there. We are
-Julius Technologies.
+graph technology is the key for solving the most challenging problems in computing. We 
+spent the past few years at [Julius Technologies](https://www.juliustech.co/) building 
+a truly innovative graph computing solution, the Julius Graph Engine.
 
-For any additional queries or suggestions do not hesitate to email us at info@juliustech.co.
+In this repository, you will find instructions to request access Julius' free developer 
+environment (currently in beta), and a number of tutorials to help get started with 
+graph computing and graph programming using Julius Graph Engine. 
+
+Please do not hesitate to email us at info@juliustech.co for any questions or inquiries,
+and please raise an issue in this repo for any problems or feature requests.
 
 ## Tutorials
 
 Our tutorials are available in two formats:
 
-- As jupyter notebooks running on a server machine allowing an interactive learning
-  experience. Please, refer to the [Request Developer
-  Access](https://github.com/JuliusTechCo/JuliusGraph#request-developer-access) section for
-  further details.
+- As interactive jupyter notebooks hosted on a jupyterhub server. It is the best format for 
+you to learn and experiment with Julius Graph Engine. To gain access to these tutorial 
+notebooks, you need to follow the instructions below to [register for free developer
+  access](https://github.com/JuliusTechCo/JuliusGraph#request-developer-access), it only
+  takes a minute to register.
 
-- As HTML pages, allowing a rapid access into the material without the need of any setup.
-  Click [here](https://JuliusTechCo.github.io/JuliusGraph/dev/) to access the pre-compiled
-  learning material. Keep in mind that setting up a developer environment in the following
-  section is a really simple task and provides many more features.
+- As static HTML pages, which does include the entire source code and results, but they are 
+not interactive. If you want to take a quick tour of Julius Graph Engine and its capabilities 
+without register for developer access, please click [here](https://JuliusTechCo.github.io/JuliusGraph/dev/) 
+to read the tutorial in HTML format. The HTML tutorials are also easier to share with
+your colleagues or fellow developers.
 
-### Request Developer Access
+### Register Free Developer Access
 
 Requesting developer access is super easy and should not take more than a minute. Please,
-proceed to this [link](https://backendgraph.com/user/signup). If you are already logged in
-with your Google account, you will be prompted with some auto-populated fields:
+proceed to this [link](https://backendgraph.com/user/signup). The web site use Google authentication, 
+if you are already logged in with your Google account, you will be prompted with some auto-populated 
+fields:
 
 <p align="center">
   <img width=50% src="assets/signup_1.png">
@@ -46,14 +51,14 @@ you are not currently logged in:
   <img width=50% src="assets/signup_2.png">
 </p>
 
-Once you requested access, you will be prompted to the following page:
+Once you registered and agreed the term of service, you will be prompted to the following page:
 
 <p align="center">
   <img width=50% src="assets/landingpage.png">
 </p>
 
 That's it! You have registered as a Julius developer and you are now able to proceed to our
-Lab Environment by clicking *Go to Lab Environment*. That was easy!
+Jupyter Lab Environment by clicking *Go to Lab Environment*. That was easy!
 
 The following step is required only once and will ask you to Sign In to our Jupyter Hub
 server:
@@ -62,7 +67,7 @@ server:
   <img width=50% src="assets/jupyter_signin.png">
 </p>
 
-Clicking *Sign in with Google* will land in a well-known Jupyter Hub session:
+Clicking *Sign in with Google* will land in a standard Jupyter Hub/Juypter Lab session:
 
 ![Jupyter Hub landing page.](assets/jupyter_landing.png)
 
@@ -83,13 +88,14 @@ On the other hand, each folder description proceeds:
   the server is restarted.
 
 Ideally, tutorials should be read in order. This is because some tutorials depend on
-concepts explained in previous ones. However, we have you covered even if you are short in
+concepts explained in previous ones. However, we have you covered even if you are short on
 time!. In that case, we recommend reading (at least):
 * [Quick Start](https://JuliusTechCo.github.io/JuliusGraph/dev/pages/t001_quickstart.html),
 * [MapReduce](https://JuliusTechCo.github.io/JuliusGraph/dev/pages/t003_mapreduce.html) and
 * [Distributed Machine Learning Pipeline](https://JuliusTechCo.github.io/JuliusGraph/dev/pages/t004_bagging.html).
 
-Those tutorials should be enough to checkout some powerful features.
+Those tutorials should give you some good ideas on the power of graph computing on 
+Julius' Graph Engine.
 
 ### Running a Tutorial
 

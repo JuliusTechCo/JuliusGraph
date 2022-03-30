@@ -5,15 +5,15 @@
 # Welcome to the New World of Graph Computing! 👋
 
 We are a group of researchers and engineers passionate about graph computing. We believe
-graph technology is the future for solving the most challenging problems in computing. We 
+graph technology solves some of the most challenging problems in computing. We 
 spent the past few years at [Julius Technologies](https://www.juliustech.co/) building 
 a truly innovative graph computing solution: the Julius Graph Engine. We are excited to offer 
 developers free access to Julius' online development environment, where you can learn and test 
-drive graph computing and graph programming on Julius Graph Engine.
+drive graph computing and graph programming using Julius Graph Engine.
 
 In this repository, you will find instructions to 
-[register for free access](https://github.com/JuliusTechCo/JuliusGraph#register-for-developer-access) 
-for Julius' development enviornment, and a number of tutorials that can help you get started. 
+[register for free developer access](https://github.com/JuliusTechCo/JuliusGraph#register-for-developer-access) 
+to Julius' development enviornment, and a number of tutorials that can help you get started. 
 These tutorials illustrate how graph computing can solve some of the most challenging 
 real world problems. Once you go through these tutorials, you will appreciate the power
 and elegance of graph computing and graph programming, you will never look at programming 
@@ -42,33 +42,31 @@ your colleagues or fellow developers.
 
 Register for developer access is super easy and it only takes a minute. Please
 proceed to this [link](https://backendgraph.com/user/signup). The web site uses Google 
-authentication, you will be prompted to log into using your Google account credentials if 
-you are not already logged in via Google:
+authentication, you will be prompted to log in using your Google account credentials if 
+you are not already signed in with Google:
 
 <p align="center">
   <img width=50% src="assets/signup_2.png">
 </p>
 
-Once you are logged in with your Google account, you will be asked to enter some basic
-information about yourself. You can also switch to a different google account using the 
+Once you are are authenticated with your Google account, you will be asked to enter some basic
+information about yourself. You can switch to a different google account using the 
 link on the right upper corner. 
 
 <p align="center">
   <img width=50% src="assets/signup_1.png">
 </p>
 
-Once you filled the form please hit the *Request access* button, you will be 
+Once you filled in the form and hit the *Request access* button, you will be 
 directed to the following page:
 
 <p align="center">
   <img width=50% src="assets/landingpage.png">
 </p>
 
-That's it! You have registered as a Julius developer and you are now able to proceed to our
-Jupyter Lab Environment by clicking *Go to Lab Environment*. 
-
-Then you will be asked to Sign In to our Jupyter Hub server using the same google credentials 
-you have just regisered:
+That's it! You have now registered as a Julius developer and you can proceed to our
+Jupyter Lab Environment by clicking *Go to Lab Environment*. Then you will be asked to 
+sign in once more using the same google credentials you have just regisered:
 
 <p align="center">
   <img width=50% src="assets/jupyter_signin.png">
@@ -78,22 +76,22 @@ Clicking *Sign in with Google* will land in a standard Jupyter Hub/Juypter Lab s
 
 ![Jupyter Hub landing page.](assets/jupyter_landing.png)
 
-Once you have completed all previous steps, you can directly access our developer environment 
-using this [url](https://backendgraph.com/lab).
+Once you have completed the steps, next time you can directly access our developer 
+environment using this [url](https://backendgraph.com/lab).
 
 ### General Layout
 
 After logging into Julius development website, you will find a standard Jupyter lab 
-session. On the left panel, there is a `README.md` file with some basic information, and 
-a few pre-created folders:
-* `assets`: contains images for tutorials,
-* `data`:  contains data files for tutorials,
-* `tutorials`: contains tutorials in jupyter notebooks,
-* `persist`: the only folder with persistent storage, you should save your work here to make 
-sure you don't lose them if server restarts.
+session. On the left panel, there is a `README.md` file with some useful information, and 
+a few pre-created folders containing:
+* `assets`: static images for tutorials,
+* `data`:  static data files for tutorials,
+* `tutorials`: tutorials in jupyter notebook format,
+* `persist`: the only folder persisted to long term storage, you should save your work here 
+to avoid losing them upon server restarts.
 
 Ideally, tutorials should be read in order. This is because some tutorials depend on
-concepts explained in previous ones. However, we have you covered even if you are short on
+concepts explained in previous tutorials. However, we have you covered even if you are short on
 time!. In that case, we recommend reading (at least):
 * [Quick Start](https://JuliusTechCo.github.io/JuliusGraph/dev/pages/t001_quickstart.html),
 * [MapReduce](https://JuliusTechCo.github.io/JuliusGraph/dev/pages/t003_mapreduce.html) and
@@ -133,5 +131,5 @@ results. The following are some snapshots for your reference:
 ![WebUI for a distributed computation case.](assets/webui_2.png)
 
 Thank you for reading up to this point 🙌. If you are interested in using graph computing
-for your next project,  please don't hesitate to get in touch with us. We would love building 
+for your next project, please don't hesitate to get in touch with us. We would love building 
 incredible solutions with you for real world problems.

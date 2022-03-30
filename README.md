@@ -2,7 +2,7 @@
 |:--------------------------------------------------------------------------------------------------------- |
 | [![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://JuliusTechCo.github.io/JuliusGraph/dev/) |
 
-# Welcome to Julius Graph Engine! 👋
+# Welcome to Graph Computing! 👋
 
 We are a group of researchers and engineers passionate about graph computing. We believe
 graph technology is the future for solving the most challenging problems in computing. We 

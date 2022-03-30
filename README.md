@@ -8,7 +8,7 @@ We are a group of researchers and engineers passionate about graph computing. We
 graph technology is the future for solving the most challenging problems in computing. We 
 spent the past few years at [Julius Technologies](https://www.juliustech.co/) building 
 a truly innovative graph computing solution: the Julius Graph Engine. We are excited to offer 
-free access for developers to our online development environment, where you can learn and test 
+developers free access to Julius' online development environment, where you can learn and test 
 drive graph computing and graph programming on Julius Graph Engine.
 
 In this repository, you will find instructions to 
@@ -26,9 +26,9 @@ any issues or have any questions or inquiries.
 
 Our tutorials are available in two formats:
 
-- As interactive jupyter notebooks hosted in our development environment. It is the best format 
-for you to learn and experiment with graph computing interactively. To gain access to these 
-online tutorials notebooks, please follow the instructions below to [register for developer
+- As interactive jupyter notebooks hosted in Julius' development environment. It is the best 
+format for you to learn and experiment with graph computing interactively. To gain access to 
+these online tutorials notebooks, please follow the instructions below to [register for developer
   access](https://github.com/JuliusTechCo/JuliusGraph#register-for-developer-access), it only
   takes a minute to register and it is free!
 
@@ -81,7 +81,7 @@ Clicking *Sign in with Google* will land in a standard Jupyter Hub/Juypter Lab s
 Once you have completed all previous steps, you can come back at any time using the lab
 route (try [this](https://backendgraph.com/lab) link).
 
-### General Details
+### General Layout
 
 In your Jupyter Hub session you should see a couple of folders and a `README.md` file at the
 left panel. Proceed to the `README.md` to checkout some useful suggestions.
@@ -101,7 +101,7 @@ time!. In that case, we recommend reading (at least):
 * [MapReduce](https://JuliusTechCo.github.io/JuliusGraph/dev/pages/t003_mapreduce.html) and
 * [Distributed Machine Learning Pipeline](https://JuliusTechCo.github.io/JuliusGraph/dev/pages/t004_bagging.html).
 
-Those tutorials should give you some good ideas on the power of graph computing on 
+Those tutorials should give you the key ideas on the power of graph computing on 
 Julius' Graph Engine.
 
 ### Running a Tutorial
@@ -135,5 +135,5 @@ already included, so enjoy it! The following are some snapshots for your referen
 ![WebUI for a distributed computation case.](assets/webui_2.png)
 
 Thank you for reading up to this point 🙌. If you are interested in our technology, don't
-hesitate to get in touch. We would love building incredible solutions with you for real life
-problems.
+hesitate to get in touch with us. We would love building incredible solutions with you for 
+real world problems.

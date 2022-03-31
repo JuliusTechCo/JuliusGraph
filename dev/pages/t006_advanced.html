@@ -10,7 +10,7 @@ using GraphIO
 # start data server for web UI
 gss = Dict{String,RuleDSL.AbstractGraphState}()
 port = GraphVM.drawdataport()
-@async GraphVM.startresponder(gss, port)</code></pre><pre><code class="language-none">Task (runnable) @0x00007f292ff687f0</code></pre><p>The following few rules defines the Fibonacci sequence using the rule syntax.</p><pre><code class="language-julia">@addrules series begin
+@async GraphVM.startresponder(gss, port)</code></pre><pre><code class="language-none">Task (runnable) @0x00007f20928c8940</code></pre><p>The following few rules defines the Fibonacci sequence using the rule syntax.</p><pre><code class="language-julia">@addrules series begin
     fib(x::Float64) = Alias(fib(Int(floor(x))))
     fib(n::Int) = RuleDSL.Alias(fib(n, Val(n &lt;= 1)))
     fib(n::Int, isend::Val{false}) = begin
@@ -54,7 +54,7 @@ println(&quot;dfib5_dfib1 =&quot;, dydx1[1])</code></pre><pre><code class="langu
 dfib5_dfib0 =[3.0]
 dfib5_dfib1 =[5.0]
 </code></pre><p>The corresponding computation graph is shown below, and you can click the link below to see it in an interactive web UI.</p><pre><code class="language-julia">svg = GraphIO.postlocalgraph(gss, deepcopy(gs), port, true; key=&quot;fib5&quot;);
-GraphIO.postsvg(svg, &quot;adv_1.svg&quot;)</code></pre><pre><code class="language-none">view graph data at http://127.0.0.1:8080/depgraph.html?dataurl=127.0.0.1:7140_fib5
+GraphIO.postsvg(svg, &quot;adv_1.svg&quot;)</code></pre><pre><code class="language-none">view graph data at http://127.0.0.1:8080/depgraph.html?dataurl=127.0.0.1:7994_fib5
 </code></pre><p align = "center">
 <img src="../assets/adv_1.svg" alt="" title="Fib 5"/>
 </p>
@@ -74,7 +74,7 @@ println(&quot;dfib10_dfib1 =&quot;, df10df1[1])</code></pre><pre><code class="la
 dfib10_dfib0 =[34.0]
 dfib10_dfib1 =[55.0]
 </code></pre><p>The corresponding computation graph is shown below:</p><pre><code class="language-julia">svg = GraphIO.postlocalgraph(gss, deepcopy(gs), port, true; key=&quot;fib10&quot;);
-GraphIO.postsvg(svg, &quot;adv_2.svg&quot;)</code></pre><pre><code class="language-none">view graph data at http://127.0.0.1:8080/depgraph.html?dataurl=127.0.0.1:7140_fib10
+GraphIO.postsvg(svg, &quot;adv_2.svg&quot;)</code></pre><pre><code class="language-none">view graph data at http://127.0.0.1:8080/depgraph.html?dataurl=127.0.0.1:7994_fib10
 </code></pre><p align = "center">
 <img src="../assets/adv_2.svg" alt="" title="Fib 10"/>
 </p>
@@ -88,44 +88,16 @@ end</code></pre><pre><code class="language-julia">vfib10 = @ref vecs.fib(10)
 @time GraphVM.calcfwd!(gs, Set([vfib10]));
 
 y = RuleDSL.getys(gs, hash(vfib10))
-println(&quot;vfib10 =&quot;, y[1])</code></pre><pre><code class="language-none">  0.349831 seconds (358.83 k allocations: 20.063 MiB, 99.51% compilation time)
-vfib10 =[-0.7783191893421139, -117.94264388389712, -31.238338190453632, -102.16013199504734, -125.94628360800748, -85.58616658653082, 88.40834726735042, 5.77002976282221, 59.85026239039285, -5.740059205113482]
+println(&quot;vfib10 =&quot;, y[1])</code></pre><pre><code class="language-none">  0.375400 seconds (358.83 k allocations: 20.063 MiB, 99.17% compilation time)
+vfib10 =[2.6821065635997137, -9.752920522180291, 67.00767981533625, -180.61229753869526, -98.15785191364712, -31.38089486784925, 16.14566898463345, 26.089751537012038, -30.74767314404143, 97.26246315854101]
 </code></pre><p>We can show a side by side comparison of the two versions of the calculation, before and after changing the initial values to random vectors. You can compare the before and afer values of individual node in the interactive web UI, by clicking the URL below.</p><pre><code class="language-julia">svg = GraphIO.postlocalgraph(gss, deepcopy(gs), port, true; key=&quot;vecs&quot;);
-GraphIO.postsvg(svg, &quot;adv_3.svg&quot;)</code></pre><pre><code class="language-none">view graph data at http://127.0.0.1:8080/depgraph.html?dataurl=127.0.0.1:7140_vecs
+GraphIO.postsvg(svg, &quot;adv_3.svg&quot;)</code></pre><pre><code class="language-none">view graph data at http://127.0.0.1:8080/depgraph.html?dataurl=127.0.0.1:7994_vecs
 </code></pre><p align = "center">
 <img src="../assets/adv_3.svg" alt="" title="Comparisons"/>
 </p>
 <p align = "center">
 Figure 3 - Override & Compare
-</p><p>Julius AAD implementation supoorts multiple sensitivity views from the same primal calculation. A sensitivity view is a Jacobian matrix <span>$\frac{\partial \vec y}{\partial \vec x}$</span> where <span>$\vec y$</span> and <span>$\vec x$</span> can be any dependent node in the graph. For the same primal calculation, different sensitivity views can be computed without repeating the primal calculations.</p><p>The following few cells shows the results of different sensitivity views. Please note that the AAD output of the vectorized version of Fibonacci sequence is a full Jacobian matrix.</p><pre><code class="language-julia">v10 = @ref vecs.fib(10)
-v0 = @ref vecs.fib(0, Val(true))
-v1 = @ref vecs.fib(1, Val(true))
-
-RuleDSL.calcback!(gs, Set(hash.([v10])), Set([v0; v1]));
-
-dv10_dv0 = RuleDSL.getyds(gs, hash(v0), hash(v10))
-dv10_dv1 = RuleDSL.getyds(gs, hash(v1), hash(v10))
-
-println(&quot;fib_v10 = &quot;, RuleDSL.getys(gs, hash(v10))[1])
-println(&quot;dv10_dv0 = &quot;, dv10_dv0[1])
-println(&quot;dv10_dv1 = &quot;, dv10_dv1[1])</code></pre><pre><code class="language-none">fib_v10 = [-0.7783191893421139, -117.94264388389712, -31.238338190453632, -102.16013199504734, -125.94628360800748, -85.58616658653082, 88.40834726735042, 5.77002976282221, 59.85026239039285, -5.740059205113482]
-dv10_dv0 = [34.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0; 0.0 34.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0; 0.0 0.0 34.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0; 0.0 0.0 0.0 34.0 0.0 0.0 0.0 0.0 0.0 0.0; 0.0 0.0 0.0 0.0 34.0 0.0 0.0 0.0 0.0 0.0; 0.0 0.0 0.0 0.0 0.0 34.0 0.0 0.0 0.0 0.0; 0.0 0.0 0.0 0.0 0.0 0.0 34.0 0.0 0.0 0.0; 0.0 0.0 0.0 0.0 0.0 0.0 0.0 34.0 0.0 0.0; 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 34.0 0.0; 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 34.0]
-dv10_dv1 = [55.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0; 0.0 55.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0; 0.0 0.0 55.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0; 0.0 0.0 0.0 55.0 0.0 0.0 0.0 0.0 0.0 0.0; 0.0 0.0 0.0 0.0 55.0 0.0 0.0 0.0 0.0 0.0; 0.0 0.0 0.0 0.0 0.0 55.0 0.0 0.0 0.0 0.0; 0.0 0.0 0.0 0.0 0.0 0.0 55.0 0.0 0.0 0.0; 0.0 0.0 0.0 0.0 0.0 0.0 0.0 55.0 0.0 0.0; 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 55.0 0.0; 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 55.0]
-</code></pre><pre><code class="language-julia">v8 = @ref vecs.fib(8, Val(false))
-v2 = @ref vecs.fib(2, Val(false))
-v3 = @ref vecs.fib(3, Val(false))
-
-RuleDSL.calcback!(gs, Set(hash.([v8])), Set([v2; v3]));
-
-dv8_dv2 = RuleDSL.getyds(gs, hash(v2), hash(v8))
-dv8_dv3 = RuleDSL.getyds(gs, hash(v3), hash(v8))
-
-println(&quot;fib_v8 =&quot;, RuleDSL.getys(gs, hash(v8))[1])
-println(&quot;dv8_dv0 =&quot;, dv8_dv2[1])
-println(&quot;dv8_dv1 =&quot;, dv8_dv3[1])</code></pre><pre><code class="language-none">fib_v8 =[-0.2716780179347317, -45.04888865659727, -11.925411795165287, -39.021081089012526, -48.0944729708843, -32.662867966376695, 33.76508325264897, 2.191742578524601, 22.88003866501493, -2.188692442315215]
-dv8_dv0 =[5.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0; 0.0 5.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0; 0.0 0.0 5.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0; 0.0 0.0 0.0 5.0 0.0 0.0 0.0 0.0 0.0 0.0; 0.0 0.0 0.0 0.0 5.0 0.0 0.0 0.0 0.0 0.0; 0.0 0.0 0.0 0.0 0.0 5.0 0.0 0.0 0.0 0.0; 0.0 0.0 0.0 0.0 0.0 0.0 5.0 0.0 0.0 0.0; 0.0 0.0 0.0 0.0 0.0 0.0 0.0 5.0 0.0 0.0; 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 5.0 0.0; 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 5.0]
-dv8_dv1 =[8.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0; 0.0 8.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0; 0.0 0.0 8.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0; 0.0 0.0 0.0 8.0 0.0 0.0 0.0 0.0 0.0 0.0; 0.0 0.0 0.0 0.0 8.0 0.0 0.0 0.0 0.0 0.0; 0.0 0.0 0.0 0.0 0.0 8.0 0.0 0.0 0.0 0.0; 0.0 0.0 0.0 0.0 0.0 0.0 8.0 0.0 0.0 0.0; 0.0 0.0 0.0 0.0 0.0 0.0 0.0 8.0 0.0 0.0; 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 8.0 0.0; 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 8.0]
-</code></pre><p>A warning is generated if the <span>$\vec x$</span> specification does not capture the sensitivities to all the factors that affects <span>$\vec y$</span>. In the following example, knowing term fib(2) is not adequate to uniquely determine fib(8), therefore a warning is produced.</p><pre><code class="language-julia">RuleDSL.calcback!(gs, Set(hash.([v8])), Set([v2]))</code></pre><pre><code class="language-none">0</code></pre><h2 id="Packaging-1"><a class="docs-heading-anchor" href="#Packaging-1">Packaging</a><a class="docs-heading-anchor-permalink" href="#Packaging-1" title="Permalink"></a></h2><p>When the computation graph becomes large, it can be difficult for a user to navigate and visualize. Julius supports packaged atoms, which is to use a set of Rules to define an atom with its internal computational graph. The packaged atom can then be subsequently referred to by other rules. The iterative layering of rules and packaged atoms allows easy composition of complicated logic and analytics.</p><p>The following code cell shows how to create and use a pacakged atom, using the macro <code>RuleDSL.@combonquantom</code>. A similar <code>RuleDSL.@combodatom</code> is also provided to create packaged <code>Dataom</code> object.</p><pre><code class="language-julia">using GraphEngine.RuleDSL: Source
+</p><h2 id="Packaging-1"><a class="docs-heading-anchor" href="#Packaging-1">Packaging</a><a class="docs-heading-anchor-permalink" href="#Packaging-1" title="Permalink"></a></h2><p>When the computation graph becomes large, it can be difficult for a user to navigate and visualize. Julius supports packaged atoms, which is to use a set of Rules to define an atom with its internal computational graph. The packaged atom can then be subsequently referred to by other rules. The iterative layering of rules and packaged atoms allows easy composition of complicated logic and analytics.</p><p>The following code cell shows how to create and use a pacakged atom, using the macro <code>RuleDSL.@combonquantom</code>. A similar <code>RuleDSL.@combodatom</code> is also provided to create packaged <code>Dataom</code> object.</p><pre><code class="language-julia">using GraphEngine.RuleDSL: Source
 
 # the first argument must be the config
 @comboquantom function Fib[config::RuleDSL.Config, m::Int](fac.xarg(0), fac.xarg(1))
@@ -155,11 +127,11 @@ dp10dp1 = RuleDSL.getyds(gs, hash(p1), hash(p20))
 
 println(&quot;fib20 =&quot;, RuleDSL.getys(gs, hash(p20)))
 println(&quot;dfib20_dfib0 =&quot;, dp20dp0[1])
-println(&quot;dfib20_dfib1 =&quot;, dp20dp0[1])</code></pre><pre><code class="language-none">fib20 =[[6105.784515200829, -12451.437400523875, 6785.885220022449, 16889.628577006937, -8442.692611540399, -2068.9430046014413, -7835.99923595585, -2509.632991250609, 2121.811351675762, 6472.164427784572]]
+println(&quot;dfib20_dfib1 =&quot;, dp20dp0[1])</code></pre><pre><code class="language-none">fib20 =[[10989.955244945893, -12762.879560542298, -7997.779911317155, 4242.053745725465, -10651.431292103074, -12863.651274903375, -126.35751358623125, 8728.817745071457, 2816.7167613612964, 14612.00250568001]]
 dfib20_dfib0 =[4181.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0; 0.0 4181.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0; 0.0 0.0 4181.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0; 0.0 0.0 0.0 4181.0 0.0 0.0 0.0 0.0 0.0 0.0; 0.0 0.0 0.0 0.0 4181.0 0.0 0.0 0.0 0.0 0.0; 0.0 0.0 0.0 0.0 0.0 4181.0 0.0 0.0 0.0 0.0; 0.0 0.0 0.0 0.0 0.0 0.0 4181.0 0.0 0.0 0.0; 0.0 0.0 0.0 0.0 0.0 0.0 0.0 4181.0 0.0 0.0; 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 4181.0 0.0; 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 4181.0]
 dfib20_dfib1 =[4181.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0; 0.0 4181.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0; 0.0 0.0 4181.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0; 0.0 0.0 0.0 4181.0 0.0 0.0 0.0 0.0 0.0 0.0; 0.0 0.0 0.0 0.0 4181.0 0.0 0.0 0.0 0.0 0.0; 0.0 0.0 0.0 0.0 0.0 4181.0 0.0 0.0 0.0 0.0; 0.0 0.0 0.0 0.0 0.0 0.0 4181.0 0.0 0.0 0.0; 0.0 0.0 0.0 0.0 0.0 0.0 0.0 4181.0 0.0 0.0; 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 4181.0 0.0; 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 4181.0]
 </code></pre><p>The AAD works automatically across the packaged atoms, as shown in the cell above. The follow cell shows that the top level graph is much simpler using the packaged atom. A user can drill down to the full detail of the inner graph of packaged atom from the interactive web UI by clicking on the URL below.</p><pre><code class="language-julia">svg = GraphIO.postlocalgraph(gss, deepcopy(gs), port, true; key=&quot;pack&quot;);
-GraphIO.postsvg(svg, &quot;adv_4.svg&quot;)</code></pre><pre><code class="language-none">view graph data at http://127.0.0.1:8080/depgraph.html?dataurl=127.0.0.1:7140_pack
+GraphIO.postsvg(svg, &quot;adv_4.svg&quot;)</code></pre><pre><code class="language-none">view graph data at http://127.0.0.1:8080/depgraph.html?dataurl=127.0.0.1:7994_pack
 </code></pre><p align = "center">
 <img src="../assets/adv_4.svg" alt="" title="Packaged Atom"/>
 </p>
@@ -184,7 +156,7 @@ try
 catch e
     println(&quot;error caught: $e&quot;)
 end</code></pre><pre><code class="language-none">0</code></pre><p>The node with error are highlighed automatically in the interactive web UI under the section &quot;errors in graph&quot;.</p><pre><code class="language-julia">svg = GraphIO.postlocalgraph(gss, deepcopy(gs), port, true; key=&quot;err&quot;);
-GraphIO.postsvg(svg, &quot;adv_5.svg&quot;)</code></pre><pre><code class="language-none">view graph data at http://127.0.0.1:8080/depgraph.html?dataurl=127.0.0.1:7140_err
+GraphIO.postsvg(svg, &quot;adv_5.svg&quot;)</code></pre><pre><code class="language-none">view graph data at http://127.0.0.1:8080/depgraph.html?dataurl=127.0.0.1:7994_err
 </code></pre><p align = "center">
 <img src="../assets/adv_5.svg" alt="" title="Error Handling"/>
 </p>
@@ -202,7 +174,7 @@ gs = RuleDSL.createlocalgraph(config, RuleDSL.NumericalData(Set{UInt}()))
 └ @ Main.##262 /home/julius/dev/Julius/GraphEngine/src/RuleDSL/rulepiler.jl:186
 ┌ Warning: rule series.fib warning: deprecated, please use vecs.fib instead
 └ @ Main.##262 /home/julius/dev/Julius/GraphEngine/src/RuleDSL/rulepiler.jl:186
-  0.126431 seconds (292.76 k allocations: 16.505 MiB, 99.11% compilation time)
+  0.123981 seconds (292.76 k allocations: 16.505 MiB, 98.97% compilation time)
 </code></pre><p>After the migration period has ended, we can change the old rules to throw an error and force users to upgrade.</p><pre><code class="language-julia">@addrules series begin
     fib(n::Int, isend::Val{true}; error=&quot;deprecated, please use vecs.fib instead&quot;) = begin
         RuleDSL.Constant[[fill(Float64(n), 1)]]()
@@ -215,4 +187,4 @@ try
 catch e
     println(&quot;error caught $e&quot;)
 end</code></pre><pre><code class="language-none">error caught rule series.fib: deprecated, please use vecs.fib instead
-</code></pre><hr/><p><em>This page was generated using <a href="https://github.com/fredrikekre/Literate.jl">Literate.jl</a>.</em></p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="t005_aad.html">« 5 Adjoint Algorithmic Differentiation (AAD)</a><a class="docs-footer-nextpage" href="t007_persist.html">7 MLOps: ML Experiment Tracking and Persisting »</a></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> on <span class="colophon-date" title="Tuesday 29 March 2022 15:50">Tuesday 29 March 2022</span>. Using Julia version 1.6.3.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+</code></pre><hr/><p><em>This page was generated using <a href="https://github.com/fredrikekre/Literate.jl">Literate.jl</a>.</em></p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="t005_aad.html">« 5 Adjoint Algorithmic Differentiation (AAD)</a><a class="docs-footer-nextpage" href="t007_persist.html">7 MLOps: ML Experiment Tracking and Persisting »</a></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> on <span class="colophon-date" title="Thursday 31 March 2022 13:28">Thursday 31 March 2022</span>. Using Julia version 1.6.3.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>

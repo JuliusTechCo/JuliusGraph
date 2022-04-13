@@ -96,7 +96,7 @@ on time!. In that case, we recommend reading (at least):
 
 * [Quick Start](https://JuliusTechCo.github.io/JuliusGraph/dev/pages/t001_quickstart.html),
 * [MapReduce](https://JuliusTechCo.github.io/JuliusGraph/dev/pages/t003_mapreduce.html) and
-* [Distributed Machine Learning Pipeline](https://JuliusTechCo.github.io/JuliusGraph/dev/pages/t004_bagging.html).
+* [Distributed Machine Learning Pipeline](https://JuliusTechCo.github.io/JuliusGraph/dev/pages/t004_distributedml.html).
 
 Those tutorials should give you the key ideas on graph computing and graph programming on
 Julius' Graph Engine.

@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>4 Distributed Machine Learning · Julius GraphEngine Tutorials</title><link href="https://fonts.googleapis.com/css?family=Lato|Roboto+Mono" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL=".."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="../assets/documenter.js"></script><script src="../siteinfo.js"></script><script src="../../versions.js"></script><link href="../assets/theme.css" rel="stylesheet" type="text/css"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/documenter-dark.css" data-theme-name="documenter-dark"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="../assets/themeswap.js"></script></head><body><div id="documenter"><nav class="docs-sidebar"><div class="docs-package-name"><span class="docs-autofit">Julius GraphEngine Tutorials</span></div><form class="docs-search" action="../search.html"><input class="docs-search-query" id="documenter-search-query" name="q" type="text" placeholder="Search docs"/></form><ul class="docs-menu"><li><a class="tocitem" href="../index.html">Introduction</a></li><li><a class="tocitem" href="t001_quickstart.html">1 Quick Start</a></li><li><a class="tocitem" href="t002_machinelearning.html">2 Machine Learning</a></li><li><a class="tocitem" href="t003_mapreduce.html">3 MapReduce</a></li><li class="is-active"><a class="tocitem" href="t004_distributedml.html">4 Distributed Machine Learning</a><ul class="internal"><li><a class="tocitem" href="#How-to-use-this-tutorial-1"><span>How to use this tutorial</span></a></li><li><a class="tocitem" href="#.-Introduction-1"><span>0. Introduction</span></a></li><li><a class="tocitem" href="#.-Simple-ML-Pipeline-1"><span>1. Simple ML Pipeline</span></a></li><li><a class="tocitem" href="#.-ML-Pipeline-with-Batching-1"><span>2. ML Pipeline with Batching</span></a></li><li><a class="tocitem" href="#.-Distributed-ML-Pipeline-1"><span>3. Distributed ML Pipeline</span></a></li><li><a class="tocitem" href="#.-Streaming-1"><span>4. Streaming</span></a></li><li><a class="tocitem" href="#.-Conclusions-1"><span>5. Conclusions</span></a></li></ul></li><li><a class="tocitem" href="t005_aad.html">5 Adjoint Algorithmic Differentiation (AAD)</a></li><li><a class="tocitem" href="t006_advanced.html">6 Advanced Features</a></li><li><a class="tocitem" href="t007_persist.html">7 ML Experiment Tracking and Persisting</a></li><li><a class="tocitem" href="t008_benchmark.html">8 Graph Creation Benchmark</a></li></ul><div class="docs-version-selector field has-addons"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><nav class="breadcrumb"><ul class="is-hidden-mobile"><li class="is-active"><a href="t004_distributedml.html">4 Distributed Machine Learning</a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href="t004_distributedml.html">4 Distributed Machine Learning</a></li></ul></nav><div class="docs-right"><a class="docs-edit-link" href="https://github.com/JuliusTechCo/Tutorials/blob/main/src/distributedml.jl" title="Edit on GitHub"><span class="docs-icon fab"></span><span class="docs-label is-hidden-touch">Edit on GitHub</span></a><a class="docs-settings-button fas fa-cog" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-sidebar-button fa fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a></div></header><article class="content" id="documenter-page"><h1 id="Tutorial-4:-Distributed-Machine-Learning-1"><a class="docs-heading-anchor" href="#Tutorial-4:-Distributed-Machine-Learning-1">Tutorial 4: Distributed Machine Learning</a><a class="docs-heading-anchor-permalink" href="#Tutorial-4:-Distributed-Machine-Learning-1" title="Permalink"></a></h1><h2 id="How-to-use-this-tutorial-1"><a class="docs-heading-anchor" href="#How-to-use-this-tutorial-1">How to use this tutorial</a><a class="docs-heading-anchor-permalink" href="#How-to-use-this-tutorial-1" title="Permalink"></a></h2><ul><li>This tutorial is also available in Jupyter notebook format. To access and run the Jupyter notebook version of the tutorial, please sign up for free developer access at <a href="https://juliusgraph.com/user/signup">https://juliusgraph.com/user/signup</a>, then go to Julius&#39; developer environment at <a href="https://juliusgraph.com">https://juliusgraph.com</a>.</li><li>Additional resources (video demos &amp; blogs) are available at <a href="http://juliustech.co">http://juliustech.co</a>.</li><li>To report bugs or request new features, please raise an issue <a href="https://github.com/JuliusTechCo/JuliusGraph/issues">here</a>. To schedule a live demo, please go to <a href="http://juliustech.co">http://juliustech.co</a>. Please email us at info@juliustech.co for other general inquiries.</li></ul><p>In this tutorial, we use the Julius GraphEngine and its Domain Specific Language (RuleDSL) to build a distributed Machine Learning (ML) pipeline that can process a large volume of data in parallel for model training and inference.</p><h2 id=".-Introduction-1"><a class="docs-heading-anchor" href="#.-Introduction-1">0. Introduction</a><a class="docs-heading-anchor-permalink" href="#.-Introduction-1" title="Permalink"></a></h2><p>In the real world, the ML training or inference data can be too large to fit into the memory of a single computer. It is a common challenge that ML engineers often face when productionizing an ML model. There is a popular blog post, <a href="https://gdmarmerola.github.io/big-data-ml-training/">Training models when data doesn&#39;t fit in memory</a>, describing how to use <a href="https://dask.org/">Dask</a> (a popular python distribution package) to build distributed ML pipelines that can process large training and inference data in batches.</p><p>In this tutorial, we are going to replicate the functionality described in the blog post using the Julius GraphEngine instead of using Dask or Dagger.jl (which is a Julia package inspired by Dask). We will show how to achieve better results versus the original Dask blog with considerably fewer lines of code. Here, we will re-use the generic MapReduce pipeline developed in a previous tutorial. At the end of this tutorial, we will compare Julius with Dask, and summarize the key differences.</p><p>We use the same fraud detection dataset as the Dask blog, which originated from <a href="https://www.kaggle.com/ealaxi/paysim1/version/2">Kaggle</a>. The realization of fraud is indicated by the column <code>isFraud</code>, which is the outcome the ML model tries to predict.</p><h2 id=".-Simple-ML-Pipeline-1"><a class="docs-heading-anchor" href="#.-Simple-ML-Pipeline-1">1. Simple ML Pipeline</a><a class="docs-heading-anchor-permalink" href="#.-Simple-ML-Pipeline-1" title="Permalink"></a></h2><p>As a baseline solution, we first build a simple ML pipeline in Julius without batching or distribution. We will then describe step by step how to adapt it to support batching and distribution. This is practical as it matches a typical ML model development workflow, where a data scientist first builds an ML model using a simple data pipeline, and then a data engineer parallelizes the implementation to handle large volumes of data. To productionize an ML model, it often takes multiple iterations between data scientists and data engineers which is one of the most time-consuming and costly steps of a ML model&#39;s life cycle. By repeating the exact process in this tutorial, we illustrate how easy it is to move an ML pipeline from development to production using Julius.</p><p>In order to match the numbers in the original Dask blog, we chose to use the same Python ML models in sklearn. Julius can interop and integrate with any major programming languages such as Python, C/C++, Java, R, .Net, Julia, etc.</p><p>The fraud detection ML pipeline, as described in the Dask blog, consists of the following steps:</p><ul><li>read datasets,</li><li>separate the features from the target variable from the data,</li><li>train a ML model (a <code>ExtraTreesClassifier</code> model),</li><li>infer using test data,</li><li>compute the AUC score.</li></ul><p>We now proceed to the implementation. First, we import the required Julia and Julius packages:</p><pre><code class="language-julia">using GraphEngine: RuleDSL, GraphVM
+using DataFrames, DataScience, StatsBase
+using AtomExt</code></pre><p>The following are the few rules to define the entire ML pipeline, which are self-explanatory and roughly follow the steps mentioned above.</p><pre><code class="language-julia">RuleDSL.@addrules ml begin
+
+    # selects columns `cols` from a DataFrame
+    select(
+        ref::RuleDSL.NodeRef, cols::Any;
+        label=&quot;$(isa(cols, InvertedIndex) ? &quot;col != $(cols.skip)&quot; : &quot;col == $(cols)&quot;)&quot;
+    ) = begin
+        DataScience.ApplyFn[x::DataFrame -&gt; DataFrames.select(x, cols; copycols=false)](ref...)
+    end
+
+    # any `sklearn` ML model can be easily handled by overloading the `classifiertrain`
+    # rule, as follows
+    classifiertrain(
+        model::Val{:ExtraTreesClassifier},
+        options::Dict,
+        trainxs::RuleDSL.NodeRef,
+        trainy::RuleDSL.NodeRef;
+        label=&quot;$model train&quot;
+    ) = begin
+        DataScience.PyTrain[&quot;sklearn.ensemble.ExtraTreesClassifier&quot;, options](trainxs..., trainy...)
+    end
+
+    # this rule makes the predictions
+    classify(
+        train_data::RuleDSL.NodeRef, target::Symbol, model::Val, options::Dict, testx::RuleDSL.NodeRef;
+        label=&quot;$model inference&quot;
+    ) = begin
+        train_data_X = RuleDSL.@ref ml.select(train_data, Not(target))
+        train_data_y = RuleDSL.@ref ml.select(train_data, target)
+        trained = RuleDSL.@ref ml.classifiertrain(model, options,  train_data_X, train_data_y )
+        DataScience.PyPredict(trained..., testx...)
+    end
+
+    # makes predictions and selects the `:proba` column for the resulting DataFrame
+    classifyprob(
+        train_data::RuleDSL.NodeRef,
+        target::Symbol,
+        model::Val,
+        options::Dict,
+        test_data::RuleDSL.NodeRef;
+        label=&quot;prob&quot;
+    ) = begin
+        testx = RuleDSL.@ref ml.select(test_data, Not(target))
+        DataScience.ApplyFn[
+            x::DataFrame -&gt; DataFrames.select(x, :proba; copycols=false)
+        ](classify(train_data, target, model, options, testx))
+    end
+
+    # computes the AUC score
+    score(realized::RuleDSL.NodeRef, probs::RuleDSL.NodeRef) = begin
+        DataScience.PyScore(realized..., probs...)
+    end
+ end</code></pre><p>The <code>PyTrain</code>, <code>PyPredict</code>, <code>PyScore</code> are three useful atoms provided by the <code>DataScience</code> package that wraps up the training, inference and <code>roc_auc_score</code> method from the sklearn Python package. The <code>PyTrain</code> atom is generic, it can instantiate any Python ML model using its name and parameters as shown at the <code>ml.classifiertrain</code> rule. Using this set of rules, we can create a simple ML pipeline as:</p><pre><code class="language-julia"># we use existing rules in ds namespace to read CSV files from a shared drive
+train_data_file = joinpath(@__DIR__, &quot;..&quot;, &quot;data/train_fraud.csv&quot;)
+test_data_file = joinpath(@__DIR__, &quot;..&quot;, &quot;data/test_fraud.csv&quot;)
+train_data = RuleDSL.@ref ds.csvsrc(train_data_file, true; label=&quot;train data&quot;)
+test_data  = RuleDSL.@ref ds.csvsrc(test_data_file, true; label=&quot;test data&quot;)
+
+target = :isFraud
+model = Val(:ExtraTreesClassifier)
+options = Dict(:n_estimators =&gt; 10, :min_samples_leaf =&gt; 10)
+
+pred = RuleDSL.@ref ml.classifyprob(train_data, target, model, options, test_data)
+test_data_y = RuleDSL.@ref ml.select(test_data, target)
+mlscore = RuleDSL.@ref ml.score(test_data_y, pred);</code></pre><pre><code class="language-julia">config = RuleDSL.Config()
+gs1 = GraphVM.createlocalgraph(config, RuleDSL.GenericData())
+GraphVM.calcfwd!(gs1, Set([mlscore]));</code></pre><p>We have now created a simple ML training and inference pipeline without using any batching or distribution. Julius provides an easy-to-use web UI for users to navigate and visualize the resulting data and logic in the computation graph. The following code block starts a local server for the web UI so that we can retrieve the resulting data from the graph.</p><pre><code class="language-julia">using GraphIO
+
+# a container of graphs
+gss = Dict{String,RuleDSL.AbstractGraphState}()
+
+# used for WebUI display purposes
+port = GraphVM.drawdataport()
+@async GraphVM.startresponder(gss, port);</code></pre><p>The Julius package <code>GraphIO</code> provides several convenience functions for retrieving and displaying graphs in SVG format. Users can also view the graph data interactively by clicking on the url below to bring up the full web UI.</p><pre><code class="language-julia">svg = GraphIO.postlocalgraph(gss, gs1, port, true; key=&quot;single&quot;);
+GraphIO.postsvg(svg, &quot;ml_pipeline_1.svg&quot;)</code></pre><pre><code class="language-none">view graph data at http://127.0.0.1:8080/ui/depgraph.html?dataurl=127.0.0.1:7849_single
+</code></pre><p align = "center">
+<img src="../assets/ml_pipeline_1.svg" alt="" title="simple pipeline"/>
+</p>
+<p align = "center">
+Figure 1 - Simple ML Pipeline.
+</p><p>Then, the AUC score value obtained using the complete dataset is:</p><pre><code class="language-julia">RuleDSL.getdata(gs1, mlscore, 1)</code></pre><pre><code class="language-none">0.9971087271111272</code></pre><h3 id=".1-Down-Sampling-1"><a class="docs-heading-anchor" href="#.1-Down-Sampling-1">1.1 Down Sampling</a><a class="docs-heading-anchor-permalink" href="#.1-Down-Sampling-1" title="Permalink"></a></h3><p>Downsampling is a common technique used to reduce the training data size so that the training can run faster. The Dask blog implemented a 5% downsampling while maintaining a constant fraction of real fraud. We replicate the same downsampling scheme using a single Julia function and a single rule in Julius:</p><pre><code class="language-julia">using Random
+using StatsBase
+
+function downsample(ycol::Symbol, frac::Float64, df::DataFrame)
+    # get filtered DataFrames with true/false cases for isFraud
+    positive = DataFrames.filter(row -&gt; isequal(row[ycol], true), df)
+    negative = DataFrames.filter(row -&gt; isequal(row[ycol], false), df)
+
+    # sample with replacement each DataFrame
+    dspositive = positive[sample(1:nrow(positive), round(Int, frac * nrow(positive)), replace=true), :]
+    dsnegative = negative[sample(1:nrow(negative), round(Int, frac * nrow(negative)), replace=true), :]
+
+    # concatenate both sampled DataFrames
+    merged = vcat(dspositive, dsnegative)
+
+    # shuffle rows before returning
+    return merged[shuffle(1:nrow(merged)), :]
+end
+
+@addrules ml begin
+    downsample(
+        raw::RuleDSL.NodeRef, ycol::Symbol, frac::Float64
+    ) = begin
+        DataScience.ApplyFn[downsample, ycol, frac](raw...)
+    end
+end</code></pre><p>Let&#39;s test the downsampling:</p><pre><code class="language-julia">sampleratio = 0.05
+downsamples = RuleDSL.@ref ml.downsample(train_data, target, sampleratio)</code></pre><pre><code class="language-none">ml:downsample/ds:csvsrc/train data</code></pre><pre><code class="language-julia">gs2 = GraphVM.createlocalgraph(config, RuleDSL.GenericData())
+GraphVM.calcfwd!(gs2, Set([downsamples]))
+
+svg = GraphIO.postlocalgraph(gss, gs2, port; key=&quot;downsample&quot;);
+GraphIO.postsvg(svg, &quot;ml_pipeline_2.svg&quot;)</code></pre><pre><code class="language-none">view graph data at http://127.0.0.1:8080/ui/depgraph.html?dataurl=127.0.0.1:7849_downsample
+</code></pre><p align = "center">
+<img src="../assets/ml_pipeline_2.svg" alt="" title="ml training tutorial"/>
+</p>
+<p align = "center">
+Figure 2 - Down Sample
+</p><p>We can verify that the fraud frequency remains unchanged, with the minor remaining difference due to rounding.</p><pre><code class="language-julia">sample_df = RuleDSL.getdata(gs2, downsamples, 1)
+sum(sample_df.isFraud) / size(sample_df, 1) * 100</code></pre><pre><code class="language-none">0.12966091705630425</code></pre><pre><code class="language-julia"># use full data set to verify
+using CSV
+df = CSV.read(train_data_file, DataFrames.DataFrame)
+sum(df.isFraud) / size(df, 1) * 100</code></pre><pre><code class="language-none">0.12828849784581414</code></pre><p>It is easy to modify the existing ML pipeline to include downsampling, we just replace the <code>train_data</code> with <code>downsamples</code>:</p><pre><code class="language-julia">downproba = RuleDSL.@ref ml.classifyprob(downsamples, target, model, options, test_data)
+downscore = RuleDSL.@ref ml.score(test_data_y, downproba)
+
+gs3 = GraphVM.createlocalgraph(config, RuleDSL.GenericData())
+GraphVM.calcfwd!(gs3, Set([downscore]))
+
+svg = GraphIO.postlocalgraph(gss, gs3, port, true; key=&quot;downscore&quot;);
+GraphIO.postsvg(svg, &quot;ml_pipeline_3.svg&quot;)</code></pre><pre><code class="language-none">view graph data at http://127.0.0.1:8080/ui/depgraph.html?dataurl=127.0.0.1:7849_downscore
+</code></pre><p align = "center">
+<img src="../assets/ml_pipeline_3.svg" alt="" title="ml training tutorial"/>
+</p>
+<p align = "center">
+Figure 3 - ML with Down Sample
+</p><p>Here, the AUC score obtained using downsampling is slightly less than that from using the full training data, as expected.</p><pre><code class="language-julia">RuleDSL.getdata(gs3, downscore, 1)</code></pre><pre><code class="language-none">0.9692225267951755</code></pre><p>We have now built the baseline ML pipeline where the entire training and inference data is processed all at once. An obvious downside of this implementation is that it can&#39;t handle large training or inference data; if they do not fit into the computer&#39;s memory. Now let&#39;s proceed to productionize the pipeline by adding batching and distribution.</p><h2 id=".-ML-Pipeline-with-Batching-1"><a class="docs-heading-anchor" href="#.-ML-Pipeline-with-Batching-1">2. ML Pipeline with Batching</a><a class="docs-heading-anchor-permalink" href="#.-ML-Pipeline-with-Batching-1" title="Permalink"></a></h2><p>It is a common strategy to break the training data into multiple batches and train a separate ML model for each batch. Once we have multiple trained ML models, we can average their inferences for better accuracy. This strategy of boosting accuracy from multiple trained models is commonly called &quot;bagging&quot;. Batching and bagging are often used together to allow large training data to be split across multiple machines to be processed in parallel.</p><h3 id=".1-Training-Data-Batching-1"><a class="docs-heading-anchor" href="#.1-Training-Data-Batching-1">2.1 Training Data Batching</a><a class="docs-heading-anchor-permalink" href="#.1-Training-Data-Batching-1" title="Permalink"></a></h3><p>We use a convenience type <code>DDataFrame</code> provided by Julius <code>DataScience</code> package to create a vector of <code>RuleDSL.NodeRef</code> that represents roughly equal-sized chunks from the large input CSV file.</p><pre><code class="language-julia">train_ddf = DataScience.DDataFrame(train_data_file, blocksize=&quot;5 MB&quot;)
+train_batches = train_ddf.chunks
+down_batches = RuleDSL.@ref(ml.downsample(b, target, sampleratio) for b in train_batches)</code></pre><pre><code class="language-none">8-element Vector{NodeRef}:
+ ml:downsample/dd:read_csv_blocks//home/runner/work/Tutorials/Tutorials/docs/../data/train_fraud.csv
+ ml:downsample/dd:read_csv_blocks//home/runner/work/Tutorials/Tutorials/docs/../data/train_fraud.csv
+ ml:downsample/dd:read_csv_blocks//home/runner/work/Tutorials/Tutorials/docs/../data/train_fraud.csv
+ ml:downsample/dd:read_csv_blocks//home/runner/work/Tutorials/Tutorials/docs/../data/train_fraud.csv
+ ml:downsample/dd:read_csv_blocks//home/runner/work/Tutorials/Tutorials/docs/../data/train_fraud.csv
+ ml:downsample/dd:read_csv_blocks//home/runner/work/Tutorials/Tutorials/docs/../data/train_fraud.csv
+ ml:downsample/dd:read_csv_blocks//home/runner/work/Tutorials/Tutorials/docs/../data/train_fraud.csv
+ ml:downsample/dd:read_csv_blocks//home/runner/work/Tutorials/Tutorials/docs/../data/train_fraud.csv</code></pre><p>Training data batching and bagging can be easily implemented using the following single rule, which just re-uses the previous <code>ml.classifyprob</code> for each input batch and averages their output.</p><pre><code class="language-julia"># compute the average of multiple dataframes
+function dfmean(dfs::DataFrame...)
+    df = reduce(.+, dfs)
+    df ./ (length(dfs))
+end
+
+RuleDSL.@addrules ml begin
+    bagpred(
+        test::RuleDSL.NodeRef,
+        model::Val,
+        options::Dict,
+        train_batches::Vector{RuleDSL.NodeRef},
+        target::Symbol
+    ) = begin
+        refs = RuleDSL.@ref((ml.classifyprob(b, target, model, options, test) for b in train_batches))
+        DataScience.ApplyFn[dfmean](refs...)
+    end
+end
+
+bagpred = RuleDSL.@ref ml.bagpred(test_data, model, options, down_batches, target)
+bagscore = RuleDSL.@ref ml.score(test_data_y, bagpred)
+
+gs4 = GraphVM.createlocalgraph(config, RuleDSL.GenericData())
+GraphVM.calcfwd!(gs4, Set([bagscore]))
+
+svg = GraphIO.postlocalgraph(gss, gs4, port; key=&quot;ml&quot;);
+GraphIO.postsvg(svg, &quot;ml_pipeline_4.svg&quot;)</code></pre><pre><code class="language-none">view graph data at http://127.0.0.1:8080/ui/depgraph.html?dataurl=127.0.0.1:7849_ml
+</code></pre><p align = "center">
+<img src="../assets/ml_pipeline_4.svg" alt="" title="ml training tutorial"/>
+</p>
+<p align = "center">
+Figure 4 - Batching & Bagging in Training Data
+</p><p>The AUC score obtained using multiple samples of the data is:</p><pre><code class="language-julia">RuleDSL.getdata(gs4, bagscore, 1)</code></pre><pre><code class="language-none">0.9658017250682338</code></pre><h3 id=".2-Batching-both-Training-and-Prediction-Data-1"><a class="docs-heading-anchor" href="#.2-Batching-both-Training-and-Prediction-Data-1">2.2 Batching both Training and Prediction Data</a><a class="docs-heading-anchor-permalink" href="#.2-Batching-both-Training-and-Prediction-Data-1" title="Permalink"></a></h3><p>In the previous implementation, the training data is batched but not the inference data. In practice, the inference data could also be too large to fit into the memory of a single machine. In that case, we will also need to batch the inference data. In practice, it is a much more complex process to batch both training and inference data. But in Julius, we can leverage the generic MapReduce pattern to easily define this complicated pipeline with very little coding.</p><p>We first use <code>DataScience.DDataFrame</code> to create a vector of <code>NodeRef.RuleDSL</code> for the inference data.</p><pre><code class="language-julia">test_ddf = DataScience.DDataFrame(test_data_file, blocksize=&quot;2.5 MB&quot;)
+test_batches = test_ddf.chunks</code></pre><pre><code class="language-none">4-element Vector{NodeRef}:
+ dd:read_csv_blocks//home/runner/work/Tutorials/Tutorials/docs/../data/test_fraud.csv
+ dd:read_csv_blocks//home/runner/work/Tutorials/Tutorials/docs/../data/test_fraud.csv
+ dd:read_csv_blocks//home/runner/work/Tutorials/Tutorials/docs/../data/test_fraud.csv
+ dd:read_csv_blocks//home/runner/work/Tutorials/Tutorials/docs/../data/test_fraud.csv</code></pre><p>The doubly batched training and inference ML pipeline naturally maps to a MapReduce pipeline as following:</p><ul><li>mapper: compute the bagged inference of a single test batch from multiple trained models. This stage already includes training data batching.</li><li>shuffler/reducer: move the individual batch inference and concatenate them to form the entire inference.</li></ul><p>The following <code>batchpred</code> rule extracts the realization and inference from the same test batch file in a DataFrame, and assigns a unique key using the hash of the batch file&#39;s <code>NodeRef</code>.</p><pre><code class="language-julia">RuleDSL.@addrules ml begin
+    # extract both realization and prob predictions
+    batchpred(
+        test::RuleDSL.NodeRef,
+        model::Val,
+        options::Dict,
+        train_batches::Vector{RuleDSL.NodeRef},
+        target::Symbol
+    ) = begin
+        DataScience.ApplyFn[
+            (ind, prob)-&gt;[hash(test) =&gt; hcat(ind, prob)]
+        ](select(test, target), bagpred(test, model, options, train_batches, target))
+    end
+end
+
+# extracts the DataFrames from `batchpred` from all batches and concatenates them
+function valcat(xs::Vector...)
+    agg = DataFrame()
+    for (_, v) in vcat(xs...)
+        agg = vcat(agg, v)
+    end
+    return agg
+end</code></pre><pre><code class="language-none">valcat (generic function with 1 method)</code></pre><p>The following is the entire definition of the doubly batched ML pipeline using the MapReduce pattern:</p><pre><code class="language-julia">mapper = RuleDSL.@ref ml.batchpred(model, options, down_batches, target)
+
+# map all batches to 3 pipelines before reducing
+shuffler = RuleDSL.@ref mr.shuffler(first, 4)
+
+# simply concatenates all the vectors in a given pipeline
+reducer = RuleDSL.@ref mr.reducer(vcat)
+
+# valcat extracts the DataFrame from each batch, and concatenate them together
+mrpred = RuleDSL.@ref mr.mapreduce(test_batches, mapper, shuffler, reducer, valcat)</code></pre><pre><code class="language-none">mr:mapreduce/NodeRef[4]</code></pre><p>The last step in MapReduce is to aggregate the results from the mapper/shuffler results of the individual test batches. The generic <code>mr.mapreduce</code> rule can take an optional function as the last parameter to customize this aggregation. The function <code>valcat</code> is used for the aggregation, which concatenates individual batches&#39; fraud realization and inference into a single DataFrame.</p><pre><code class="language-julia">mrscore = RuleDSL.@ref ml.score(RuleDSL.@ref(ml.select(mrpred, :isFraud)), RuleDSL.@ref(ml.select(mrpred, :proba)))
+
+gs5 = GraphVM.createlocalgraph(config, RuleDSL.GenericData())
+GraphVM.calcfwd!(gs5, Set([mrscore]))
+
+svg = GraphIO.postlocalgraph(gss, gs5, port; key=&quot;mapred&quot;);
+GraphIO.postsvg(svg, &quot;ml_pipeline_5.svg&quot;)</code></pre><pre><code class="language-none">view graph data at http://127.0.0.1:8080/ui/depgraph.html?dataurl=127.0.0.1:7849_mapred
+</code></pre><p align = "center">
+<img src="../assets/ml_pipeline_5.svg" alt="" title="ml training tutorial"/>
+</p>
+<p align = "center">
+Figure 5 - Doubly Batching in Training and Inference
+</p><p>The corresponding AUC score from the doubly batched pipeline is similar:</p><pre><code class="language-julia">RuleDSL.getdata(gs5, mrscore, 1)</code></pre><pre><code class="language-none">0.977866884258031</code></pre><h2 id=".-Distributed-ML-Pipeline-1"><a class="docs-heading-anchor" href="#.-Distributed-ML-Pipeline-1">3. Distributed ML Pipeline</a><a class="docs-heading-anchor-permalink" href="#.-Distributed-ML-Pipeline-1" title="Permalink"></a></h2><p>We have now adapted the simple ML pipeline to support doubly data batching in both the training and inference. However, the real benefits of batching come from distributing the data and computation to multiple computers, so that we can process large volumes of data and computation in parallel.</p><p>Using Julius, it is effortless to distribute the batched pipeline to multiple computers and run it in parallel. Let&#39;s use the doubly batched ML pipeline as an example to show how easy it is to distribute. We first connect to a remote cluster with 4 worker instances, and import the necessary packages on the remote cluster:</p><pre><code class="language-julia">using GraphEngine: RuleDSL, GraphVM
+
+config = RuleDSL.newconfig(RuleDSL.Config(), :project =&gt; &quot;MapReduce&quot;)
+balancer = GraphVM.GlobalUnique()
+my_domain = GraphVM.mydomain()
+
+# draw a port number to start the local cluster esrvice
+remoteport = GraphVM.drawdataport()</code></pre><pre><code class="language-none">7473</code></pre><pre><code class="language-julia"># start a local master service at the given port, which mimic the effects of a remote cluster
+
+gs0 = GraphVM.RemoteGraphProxy(my_domain =&gt; 7225)
+GraphVM.rpccall(gs0, :startlocalmasterservice, remoteport, 4)
+gs = GraphVM.RemoteGraphProxy(config, my_domain =&gt; remoteport, balancer, GraphVM.GenericData())
+GraphVM.wait4clusterinit(gs)</code></pre><pre><code class="language-none">Dict{UInt64, Pair{Float64, GraphEngine.GraphVM.WorkerStatus}} with 4 entries:
+  0x2e5c4797ffd2c6a6 =&gt; 1.64981e9=&gt;Ready
+  0xb81a6f11134ed022 =&gt; 1.64981e9=&gt;Ready
+  0x8d5bbc583dd1d72d =&gt; 1.64981e9=&gt;Ready
+  0x3ac608e618a65d02 =&gt; 1.64981e9=&gt;Ready</code></pre><pre><code class="language-julia">GraphVM.@remote_eval gs begin
+    using GraphEngine: RuleDSL, GraphVM
+    using DataScience, Random, AtomExt, GraphIO
+    using StatsBase, DataFrames
+end
+
+GraphVM.waitcheckstatus(gs, RuleDSL.getconfig(config, :project));</code></pre><p>We now load the entire doubly batched ML pipeline to the remote cluster, by sending the code we have written so far to the remote cluster. The following is the full list of code to replicate the Dask blog in Julius. There are only 8 rules, and about 50 lines of code in total.</p><pre><code class="language-julia">GraphVM.@remote_eval gs  begin
+    function downsample(ycol::Symbol, frac::Float64, df::DataFrame)
+        positive = DataFrames.filter(row -&gt; isequal(row[ycol], true), df)
+        negative =  DataFrames.filter(row -&gt; isequal(row[ycol], false), df)
+        dspositive = positive[sample(1:nrow(positive), round(Int, frac * nrow(positive)), replace=true), :]
+        dsnegative = negative[sample(1:nrow(negative), round(Int, frac * nrow(negative)), replace=true), :]
+        merged = vcat(dspositive, dsnegative)
+        return merged[shuffle(1:nrow(merged)), :]
+    end
+
+    function dfmean(dfs::DataFrame...)
+        df = reduce(.+, dfs)
+        return df ./ (length(dfs))
+    end
+
+    function valcat(xs::Vector...)
+        agg = DataFrame()
+        for (_, v) in vcat(xs...)
+            agg = vcat(agg, v)
+        end
+        return agg
+    end
+end
+
+GraphVM.waitcheckstatus(gs, RuleDSL.getconfig(config, :project));
+
+GraphVM.@addrules gs ml begin
+    select(ref::RuleDSL.NodeRef, cols::Any; label=&quot;$(isa(cols, InvertedIndex) ? &quot;col != $(cols.skip)&quot; : &quot;col == $(cols)&quot;)&quot;) = DataScience.ApplyFn[x::DataFrame-&gt;DataFrames.select(x, cols; copycols=false)](ref...)
+    classifiertrain(model::Val{:ExtraTreesClassifier}, options::Dict, trainxs::RuleDSL.NodeRef, trainy::RuleDSL.NodeRef; label=&quot;$model train&quot;) = DataScience.PyTrain[&quot;sklearn.ensemble.ExtraTreesClassifier&quot;, options](trainxs..., trainy...)
+    classify(train_data::RuleDSL.NodeRef, target::Symbol, model::Val, options::Dict, testx::RuleDSL.NodeRef; label=&quot;$model inference&quot;) = begin
+        train_data_X = RuleDSL.@ref ml.select(train_data, Not(target))
+        train_data_y = RuleDSL.@ref ml.select(train_data, target)
+        trained = RuleDSL.@ref ml.classifiertrain(model, options,  train_data_X, train_data_y )
+        DataScience.PyPredict(trained..., testx...)
+    end
+    classifyprob(train_data::RuleDSL.NodeRef, target::Symbol, model::Val, options::Dict, test_data::RuleDSL.NodeRef; label=&quot;prob&quot;) = begin
+        testx = RuleDSL.@ref ml.select(test_data, Not(target))
+        DataScience.ApplyFn[x::DataFrame-&gt;DataFrames.select(x, :proba; copycols=false)](classify(train_data, target, model, options, testx))
+    end
+    score(realized::RuleDSL.NodeRef, probs::RuleDSL.NodeRef)=DataScience.PyScore(realized..., probs...)
+    downsample(raw::RuleDSL.NodeRef, ycol::Symbol, frac::Float64)=DataScience.ApplyFn[Main.downsample, ycol, frac](raw...)
+    bagpred(test::RuleDSL.NodeRef, model::Val, options::Dict, train_batches::Vector{RuleDSL.NodeRef}, target::Symbol) = DataScience.ApplyFn[Main.dfmean](RuleDSL.@ref((ml.classifyprob(b, target, model, options, test) for b = train_batches))...)
+    batchpred(test::RuleDSL.NodeRef, model::Val, options::Dict, train_batches::Vector{RuleDSL.NodeRef}, target::Symbol) = DataScience.ApplyFn[(ind, prob)-&gt;[hash(test) =&gt; hcat(ind, prob)]](select(test, target), bagpred(test, model, options, train_batches, target))
+end
+
+GraphVM.waitcheckstatus(gs, RuleDSL.getconfig(config, :project));</code></pre><p>Afterwards, we can create and run the doubly batched pipeline on the cluster.</p><pre><code class="language-julia">mrpred = RuleDSL.@ref mr.mapreduce(test_batches, mapper, shuffler, reducer, Main.valcat)
+mrscore = RuleDSL.@ref ml.score(RuleDSL.@ref(ml.select(mrpred, :isFraud)), RuleDSL.@ref(ml.select(mrpred, :proba)))
+
+# select all the nodes with rule name classifiertrain, splitbykey and reducer in alljobs
+keyjobs, ds = RuleDSL.jobdeps(config, [mrscore], [:classifiertrain, :splitbykey, :reducer]);
+GraphVM.initgraph!(gs)
+
+# distribute the nodes in alljobs to workers
+GraphVM.dispatchjobs!(gs, keyjobs; nocopy=Set([:splitbykey]))
+GraphVM.waitcheckstatus(gs, RuleDSL.getconfig(config, :project));</code></pre><p>In the code block above, we first find the <code>keyjobs</code>, which is a vector of <code>NodeRef</code> that holds all the nodes in the graph that are associated with rule name classifertrain, splitbykey and reducer. These nodes are the main points of computation and data aggregation. A developer can use his domain knowledge about the specific workload in selecting the best set of rule names for the key jobs. The last key job is always the final node that the user wants to compute, which is <code>mrscore</code> in the cell above. Once these key jobs (or key nodes) are determined, we send them to the workers by calling <code>GraphVM.dispatchjobs!</code>. The optional <code>nocopy</code> parameter specifies rule names whose nodes shall not be copied over the network, it is meant for rules/nodes holding a large amount of data thus expensive for copying. If a node is designated as nocopy, the Julius Rule Engine automatically places its immediate dependencies on the same worker to avoid data copy. In the example above, the nodes <code>splitbykey</code> was flagged as <code>nocopy</code> to ensure the <code>mapping</code> results from a given input batch only exists on one worker, in order to conserve memory usage.</p><p>The way Julius distributes the jobs to workers is fundamentally different from Dask or Dagger.jl. In Dask or Dagger.jl, every node in their graphs represents a separate task that must be sent to a worker for execution individually. In Julius, since every worker holds the entire graph logic as defined by the <code>RuleDSL</code>, the dispatcher does not need to send every node to the worker, instead only a few key nodes are sent as a list of <code>NodeRef</code> objects. Once a worker receives a job definition in <code>NodeRef</code>, it can create any dependent nodes from the shared <code>RuleDSL</code> definitions. As a result, the Julius distribution requires much less communication between the dispather and the workers, thus incurring much less overhead.</p><p>The following cell shows that only 17 nodes need to be sent to the workers amongst all 156 nodes in the graph.</p><pre><code class="language-julia">gstats = GraphVM.rpccall(gs, GraphIO.graphstats, UInt(1), UInt(1))
+println(&quot;length of keyjobs = &quot;, length(keyjobs))
+println(&quot;graph node cnt = &quot;, gstats[:cnt])</code></pre><pre><code class="language-none">length of keyjobs = 17
+graph node cnt = 156
+</code></pre><p>By creating dependent nodes at workers, Julius also achieves much better locality for graph execution as all the dependent nodes created by the worker are local. Therefore the Julius graph distribution and execution are much more efficient than Dask or Dagger.jl. Julius can easily distribute graphs as large as hundreds of millions of nodes, and even in these cases, the number of key nodes to distribute is rarely more than a few thousand. In comparison, Dask or Dagger.jl suffer from significant overhead when dealing with large graphs because of the need to distribute every single node. As a result, developers are advised to &quot;avoid large graphs&quot; when using Dask, while Julius does not suffer from such limitations.</p><pre><code class="language-julia">svg = GraphIO.postremotegraph(gs, remoteport; maxnode=UInt(200));
+GraphIO.postsvg(svg, &quot;ml_pipeline_6.svg&quot;)</code></pre><p align = "center">
+<img src="../assets/ml_pipeline_6.svg" alt="" title="ml training tutorial"/>
+</p>
+<p align = "center">
+Figure 6 - Distributed ML Pipeline.
+</p><p>Data from the remote cluster is easily accessible using Julius&#39; remote RPC interface.</p><pre><code class="language-julia">GraphVM.rpccall(gs, :onnode, :getdata, UInt[0], hash(mrscore), 1)</code></pre><pre><code class="language-none">0.9748217480076918</code></pre><p>The resulting graph uses different colors to indicate the placement of nodes to individual worker instances, where a single color represents a given physical worker instance. There is a network data transfer for every arrow connecting two nodes of different colors. The entire graph distribution is handled by Julius automatically without the need for the developer to change a single line of code in RuleDSL or Atom definitions.</p><p>Upon close examination, we observe that the resulting MapReduce distribution is optimal in that the work load is evenly distributed amongst 4 workers, and there is no unnecessary data transfer between different physical computers (represented by different colors) in the resulting graph distribution.</p><p>Neither training nor inference input data were ever aggregated onto a single computer, so that we can stay within an individual worker&#39;s memory limit. Only the realization and inference outputs were aggregated to a single machine, which are only two columns of data; a tiny fraction compared to the entire inference input data set.</p><h2 id=".-Streaming-1"><a class="docs-heading-anchor" href="#.-Streaming-1">4. Streaming</a><a class="docs-heading-anchor-permalink" href="#.-Streaming-1" title="Permalink"></a></h2><p>Besides batching, streaming is another effective strategy to minimize memory usage. Instead of processing the entire data set at once, we could break it into multiple batches and process them sequentially in time. Streaming was not implemented in the original Dask blog, as the DAG created by Dask does not support streaming.</p><p>In contrast, any pipeline created in Julius can be easily run in streaming mode with few lines of code changes. In the streaming mode, the <code>RuleDSL.fwddata!</code> method will be called multiple times with different streaming inputs. Here, we implement a few generic <code>Atom</code> types that act as the source, running average and cumulator, so that we can express the rich logic and behaviors in stream processing.</p><pre><code class="language-julia"># records the streaming value x
+RuleDSL.@datom Record begin
+    values::Vector = []
+
+    function fwddata!(x::Any)
+        push!(values, x)
+    end
+end
+
+# computes the running average of all the value being streamed
+RuleDSL.@datom RunningAverage begin
+    sum::DataFrame = DataFrame()
+    cnt::Vector = [0]
+
+    function fwddata!(x::DataFrame)
+        if cnt[1] == 0
+            append!(sum, x)
+        else
+            sum .+= x
+        end
+
+        cnt[1] += 1
+        [ sum ./ cnt[1] ]
+    end
+end
+
+# sequentially return values as represented in batchsrc, for each fwddata! call
+# this only work for a source node, i.e., NodeRef without any further dependencies
+RuleDSL.@datom StreamSrc begin
+    config::RuleDSL.Config
+    batchsrc::Vector{RuleDSL.NodeRef}
+    idx::Vector = [0]
+
+    function fwddata!()
+        thissrc = batchsrc[idx[1] % length(batchsrc) + 1]
+        atom = RuleDSL.calcop(config, thissrc)
+        idx[1] += 1
+        RuleDSL.fwddata!(atom)
+    end
+end</code></pre><pre><code class="language-none">fwddata! (generic function with 93 methods)</code></pre><p>We then add a few generic high level rules to connect these Atoms for streaming source, running average and cumulator:</p><pre><code class="language-julia">RuleDSL.@addrules ml begin
+    streamsrc(refs::Vector{RuleDSL.NodeRef}) = StreamSrc[RuleDSL.@config, refs]()
+    runningaverage(ref::RuleDSL.NodeRef) = RunningAverage(ref...)
+    record(ref::RuleDSL.NodeRef) = Record(ref...)
+end</code></pre><p>You might be curious how the ML performance improves as more training data is added in the bagging process. The following is a streaming pipeline that can answer this kind of question. The streaming ML pipeline receives individual training data: for each of which a new ML model is trained, then its inference is used to compute a running average of model inferences. The ML scores computed from the running average inference are then recorded, which shows how AUC score improves with more training data.</p><pre><code class="language-julia">stream_ddf = DataScience.DDataFrame(train_data_file, blocksize=&quot;2 MB&quot;)
+stream_batches = stream_ddf.chunks
+
+stream_src = RuleDSL.@ref ml.streamsrc(stream_batches)
+down_stream = RuleDSL.@ref ml.downsample(stream_src, target, sampleratio)
+
+# change the mapper to use the streaming data source for training
+streammapper = RuleDSL.@ref ml.batchpred(model, options, [down_stream], target)
+
+# the shuffler/reducer remains the same as before
+shuffler = RuleDSL.@ref mr.shuffler(first, 4)
+reducer = RuleDSL.@ref mr.reducer(vcat)
+
+streampred = RuleDSL.@ref mr.mapreduce(test_batches, streammapper, shuffler, reducer, valcat)
+
+# we use the running average to compute the ML score
+streamprob = RuleDSL.@ref ml.select(streampred, :proba)
+streamprobavg = RuleDSL.@ref ml.runningaverage(streamprob)
+streamscore = RuleDSL.@ref ml.score(RuleDSL.@ref(ml.select(streampred, :isFraud)), streamprobavg)
+
+# finally we record all the ML score history
+streamrecord = RuleDSL.@ref ml.record(streamscore)</code></pre><pre><code class="language-none">ml:record/ml:score/ml:select/mr:mapreduce/NodeRef[4]</code></pre><pre><code class="language-julia"># create a local graph with the default pipeline
+gs7 = RuleDSL.createlocalgraph(config, RuleDSL.GenericData(), Set([streamrecord]));
+
+# this single line of code turns the regular batch pipeline into a streaming pipeline,
+# by specifying the source and sink of the stream processing
+RuleDSL.initstream!(gs7, Set(hash(stream_src)), Set(hash(streamrecord)));</code></pre><pre><code class="language-julia">svg = GraphIO.postlocalgraph(gss, gs7, port, true; key=&quot;stream&quot;);
+GraphIO.postsvg(svg, &quot;ml_pipeline_7.svg&quot;)</code></pre><pre><code class="language-none">view graph data at http://127.0.0.1:8080/ui/depgraph.html?dataurl=127.0.0.1:7849_stream
+</code></pre><p align = "center">
+<img src="../assets/ml_pipeline_7.svg" alt="" title="ml training tutorial"/>
+</p>
+<p align = "center">
+Figure 7 - Local Streaming.
+</p><pre><code class="language-julia"># stream all the training batches data through
+RuleDSL.pushpullcalc!(gs7, length(stream_batches))
+
+# stop any further streaming, and persist the state
+RuleDSL.stopstream!(gs7);</code></pre><p>The recorded history of ML score clearly shows the improvements in model inference, and it is quite interesting to see how much the quality of inference improves with more training data.</p><pre><code class="language-julia">GraphVM.getdata(gs7, hash(streamrecord))</code></pre><pre><code class="language-none">20-element Vector{Any}:
+ 0.8522807280823632
+ 0.8475945231575366
+ 0.8549490513211361
+ 0.9644420132315934
+ 0.9594908214064638
+ 0.9663931505371026
+ 0.965336668959863
+ 0.9600822937134944
+ 0.9639974722380847
+ 0.9641699771879416
+ 0.9640750596530829
+ 0.9650197151190587
+ 0.9684072383320518
+ 0.9714094005689524
+ 0.9720130273789664
+ 0.9714141780614547
+ 0.9713918830964445
+ 0.9749462672607994
+ 0.9734001395402516
+ 0.9726041249807025</code></pre><p>Julius streaming is fully pipelined, in that each node in the graph processes a different input data batch simultaneously, which is a lot faster than the mini-batching approach in Spark. Julius streaming also works for distributed graphs across multiple computers, again without any code changes in RuleDSL or Atoms. The developer just needs to make a different API calls for distributed streaming.</p><pre><code class="language-julia">gs = GraphVM.RemoteGraphProxy(config, my_domain =&gt; remoteport, balancer, GraphVM.GenericData())
+GraphVM.rpccall(gs, GraphVM.workerstatus)</code></pre><pre><code class="language-none">Dict{UInt64, Pair{Float64, GraphEngine.GraphVM.WorkerStatus}} with 4 entries:
+  0x2e5c4797ffd2c6a6 =&gt; 1.64981e9=&gt;Ready
+  0xb81a6f11134ed022 =&gt; 1.64981e9=&gt;Ready
+  0x8d5bbc583dd1d72d =&gt; 1.64981e9=&gt;Ready
+  0x3ac608e618a65d02 =&gt; 1.64981e9=&gt;Ready</code></pre><pre><code class="language-julia">GraphVM.@remote_eval gs begin
+
+    RuleDSL.@datom Record begin
+        values::Vector = []
+
+        function fwddata!(x::Any)
+            push!(values, x)
+        end
+    end
+
+    RuleDSL.@datom RunningAverage begin
+        sum::DataFrame = DataFrame()
+        cnt::Vector = [0]
+
+        function fwddata!(x::DataFrame)
+            if cnt[1] == 0
+                append!(sum, x)
+            else
+                sum .+= x
+            end
+
+            cnt[1] += 1
+            [ sum ./ cnt[1] ]
+        end
+    end
+
+    RuleDSL.@datom StreamSrc begin
+        config::RuleDSL.Config
+        batchsrc::Vector{RuleDSL.NodeRef}
+        idx::Vector = [0]
+
+        function fwddata!()
+            thissrc = batchsrc[idx[1] % length(batchsrc) + 1]
+            atom = RuleDSL.calcop(config, thissrc)
+            idx[1] += 1
+            RuleDSL.fwddata!(atom)
+        end
+    end
+end
+
+GraphVM.waitcheckstatus(gs, RuleDSL.getconfig(config, :project));
+
+GraphVM.@addrules gs ml begin
+    streamsrc(refs::Vector{RuleDSL.NodeRef})=StreamSrc[@config, refs]()
+    runningaverage(ref::RuleDSL.NodeRef)=RunningAverage(ref...)
+    record(ref::RuleDSL.NodeRef)=Record(ref...)
+end</code></pre><pre><code class="language-julia">GraphVM.waitcheckstatus(gs, RuleDSL.getconfig(config, :project));
+
+streampred = RuleDSL.@ref mr.mapreduce(test_batches, streammapper, shuffler, reducer, Main.valcat)
+streamprob = RuleDSL.@ref ml.select(streampred, :proba)
+streamprobavg = RuleDSL.@ref ml.runningaverage(streamprob)
+streamscore = RuleDSL.@ref ml.score(RuleDSL.@ref(ml.select(streampred, :isFraud)), streamprobavg)
+streamrecord = RuleDSL.@ref ml.record(streamscore)
+
+# create a regular batch piepline
+GraphVM.createremotegraph(gs, Set([streamrecord]), Set([:bagpred, :splitbykey, :reducer]))
+
+# turns it into streaming mode by specifying data source and sink
+GraphVM.initstream!(gs, UInt(0), Set(hash(stream_src)), Set(hash(streamrecord)))
+
+# stream data through
+RuleDSL.pushpullcalc!(gs, Set(UInt(0)), length(stream_batches))
+GraphVM.waitcheckstatus(gs, RuleDSL.getconfig(config, :project));
+
+# finalize, no longer accept future streaming data
+RuleDSL.stopstream!(gs);
+
+svg = GraphIO.postremotegraph(gs, remoteport, true);
+GraphIO.postsvg(svg, &quot;ml_pipeline_8.svg&quot;)</code></pre><p align = "center">
+<img src="../assets/ml_pipeline_8.svg" alt="" title="ml training tutorial"/>
+</p>
+<p align = "center">
+Figure 6 - Distributed Streaming.
+</p><p>We can retrieve the distributed streaming results:</p><pre><code class="language-julia">GraphVM.rpccall(gs, :onnode, :getdata, UInt[0], hash(streamrecord))</code></pre><pre><code class="language-none">20-element Vector{Any}:
+ 0.8399117999943045
+ 0.9330728569480105
+ 0.9320426047413709
+ 0.9281334683396509
+ 0.9392140191114688
+ 0.9357931939654461
+ 0.951981399441839
+ 0.9517939999565344
+ 0.9494654641624363
+ 0.9508717565509728
+ 0.9491610395299097
+ 0.9508940749350636
+ 0.9510250812735783
+ 0.9492262148320346
+ 0.9485622370505598
+ 0.9491187212507364
+ 0.954139631679684
+ 0.9531065457642565
+ 0.9515995747469616
+ 0.9496786012176422</code></pre><pre><code class="language-julia">GraphVM.rpccall(gs, :endcluster);</code></pre><h2 id=".-Conclusions-1"><a class="docs-heading-anchor" href="#.-Conclusions-1">5. Conclusions</a><a class="docs-heading-anchor-permalink" href="#.-Conclusions-1" title="Permalink"></a></h2><p>This tutorial shows how to productionize an ML model by adding batching and distribution capabilities in Julius step by step. It only takes two additional rules <code>ml.bagpred</code>, <code>ml.batchpred</code> and one additional function <code>valcat</code> to turn a simple ML pipeline into a doubly batched and fully distributed ML pipeline. This is astonishing considering the fact that the doubly batched pipeline is quite complex with 156 nodes, which is a big increase from the 13 nodes in the original ML pipeline.</p><p>We explained in section 3 that Julius graph distribution and execution is much more efficient than Dask or Dagger.jl, because Julius only needs to communicate a few key nodes to the workers.</p><p>Using Julius, it becomes effortless to move an ML model from development to production, since it requires no code changes and the distribution is fully automatic. In comparison, to productionize an ML model using Dask, developers have to modify the code base heavily and manually using the Dask specific API. Then they have to go through extensive testing and performance tuning as shown in the original Dask blog.</p><p>Furthermore, Julius&#39; web UI offers a much easier and more intuitive visualization and navigation of all the data, logic and distribution in the computatoinal graph, with every intermediate result fully visible to the user. In comparison, it is quite difficult to access intermediate data and distribution results from Dask; as the individual tasks in Dask are transient and their states are not persisted. Yes, one can manually record and persist intermediate results from Dask, but that requires additional coding and manual efforts.</p><p>Julius is also more flexible, as the ML pipeline can run in batch, streaming or distributed modes without additional coding. Dask, on the other hand, only supports batch processing, but not the streaming use cases.</p><hr/><p><em>This page was generated using <a href="https://github.com/fredrikekre/Literate.jl">Literate.jl</a>.</em></p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="t003_mapreduce.html">« 3 MapReduce</a><a class="docs-footer-nextpage" href="t005_aad.html">5 Adjoint Algorithmic Differentiation (AAD) »</a></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> on <span class="colophon-date" title="Tuesday 12 April 2022 23:27">Tuesday 12 April 2022</span>. Using Julia version 1.6.3.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>

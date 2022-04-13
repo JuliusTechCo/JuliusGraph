@@ -9,71 +9,71 @@
 <g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 448)">
 <title>dg_6</title>
 <polygon fill="white" stroke="transparent" points="-4,4 -4,-448 564.6,-448 564.6,4 -4,4"/>
-<!-- 5080164458961340296 -->
+<!-- 2761769091619388733 -->
 <g id="node1" class="node">
-<title>5080164458961340296</title>
-<path fill="#e6fbfb" stroke="black" d="M544.24,-136C544.24,-136 398.7,-136 398.7,-136 392.7,-136 384.87,-130.29 383.04,-124.57 383.04,-124.57 346.76,-11.43 346.76,-11.43 344.93,-5.71 349.09,0 355.09,0 355.09,0 500.62,0 500.62,0 506.62,0 514.46,-5.71 516.29,-11.43 516.29,-11.43 552.57,-124.57 552.57,-124.57 554.4,-130.29 550.24,-136 544.24,-136"/>
+<title>2761769091619388733</title>
+<path fill="#e6fbfb" stroke="black" d="M548.53,-136C548.53,-136 396.17,-136 396.17,-136 390.17,-136 382.27,-130.31 380.37,-124.62 380.37,-124.62 342.6,-11.38 342.6,-11.38 340.7,-5.69 344.8,0 350.8,0 350.8,0 503.16,0 503.16,0 509.16,0 517.06,-5.69 518.96,-11.38 518.96,-11.38 556.73,-124.62 556.73,-124.62 558.63,-130.31 554.53,-136 548.53,-136"/>
 <text text-anchor="middle" x="449.66" y="-86.8" font-family="Times,serif" font-size="14.00">mr.mapper</text>
 <text text-anchor="middle" x="449.66" y="-71.8" font-family="Times,serif" font-size="14.00">[&quot;Deer&quot;=&gt;1</text>
-<text text-anchor="middle" x="449.66" y="-56.8" font-family="Times,serif" font-size="14.00">&quot;Car&quot;=&gt;1</text>
-<text text-anchor="middle" x="449.66" y="-41.8" font-family="Times,serif" font-size="14.00">&quot;Bear&quot;=&gt;1]</text>
+<text text-anchor="middle" x="449.66" y="-56.8" font-family="Times,serif" font-size="14.00">&quot;Bear&quot;=&gt;1</text>
+<text text-anchor="middle" x="449.66" y="-41.8" font-family="Times,serif" font-size="14.00">&quot;River&quot;=&gt;1]</text>
 </g>
-<!-- 16977194057837295751 -->
+<!-- 9311483566452984894 -->
 <g id="node2" class="node">
-<title>16977194057837295751</title>
-<path fill="#e6fbfb" stroke="black" d="M548.53,-290C548.53,-290 396.17,-290 396.17,-290 390.17,-290 382.27,-284.31 380.37,-278.62 380.37,-278.62 342.6,-165.38 342.6,-165.38 340.7,-159.69 344.8,-154 350.8,-154 350.8,-154 503.16,-154 503.16,-154 509.16,-154 517.06,-159.69 518.96,-165.38 518.96,-165.38 556.73,-278.62 556.73,-278.62 558.63,-284.31 554.53,-290 548.53,-290"/>
+<title>9311483566452984894</title>
+<path fill="#e6fbfb" stroke="black" d="M544.24,-290C544.24,-290 398.7,-290 398.7,-290 392.7,-290 384.87,-284.29 383.04,-278.57 383.04,-278.57 346.76,-165.43 346.76,-165.43 344.93,-159.71 349.09,-154 355.09,-154 355.09,-154 500.62,-154 500.62,-154 506.62,-154 514.46,-159.71 516.29,-165.43 516.29,-165.43 552.57,-278.57 552.57,-278.57 554.4,-284.29 550.24,-290 544.24,-290"/>
 <text text-anchor="middle" x="449.66" y="-240.8" font-family="Times,serif" font-size="14.00">mr.mapper</text>
 <text text-anchor="middle" x="449.66" y="-225.8" font-family="Times,serif" font-size="14.00">[&quot;Deer&quot;=&gt;1</text>
-<text text-anchor="middle" x="449.66" y="-210.8" font-family="Times,serif" font-size="14.00">&quot;Bear&quot;=&gt;1</text>
-<text text-anchor="middle" x="449.66" y="-195.8" font-family="Times,serif" font-size="14.00">&quot;River&quot;=&gt;1]</text>
+<text text-anchor="middle" x="449.66" y="-210.8" font-family="Times,serif" font-size="14.00">&quot;Car&quot;=&gt;1</text>
+<text text-anchor="middle" x="449.66" y="-195.8" font-family="Times,serif" font-size="14.00">&quot;Bear&quot;=&gt;1]</text>
 </g>
-<!-- 9316633123385748507 -->
+<!-- 13547952230877393105 -->
 <g id="node3" class="node">
-<title>9316633123385748507</title>
+<title>13547952230877393105</title>
 <path fill="#e6fbfb" stroke="black" d="M548.53,-444C548.53,-444 396.17,-444 396.17,-444 390.17,-444 382.27,-438.31 380.37,-432.62 380.37,-432.62 342.6,-319.38 342.6,-319.38 340.7,-313.69 344.8,-308 350.8,-308 350.8,-308 503.16,-308 503.16,-308 509.16,-308 517.06,-313.69 518.96,-319.38 518.96,-319.38 556.73,-432.62 556.73,-432.62 558.63,-438.31 554.53,-444 548.53,-444"/>
 <text text-anchor="middle" x="449.66" y="-394.8" font-family="Times,serif" font-size="14.00">mr.mapper</text>
 <text text-anchor="middle" x="449.66" y="-379.8" font-family="Times,serif" font-size="14.00">[&quot;Car&quot;=&gt;1</text>
 <text text-anchor="middle" x="449.66" y="-364.8" font-family="Times,serif" font-size="14.00">&quot;Car&quot;=&gt;1</text>
 <text text-anchor="middle" x="449.66" y="-349.8" font-family="Times,serif" font-size="14.00">&quot;River&quot;=&gt;1]</text>
 </g>
-<!-- 3778223598481588802 -->
+<!-- 15738442310417480425 -->
 <g id="node4" class="node">
-<title>3778223598481588802</title>
-<path fill="#e6fbfb" stroke="black" d="M277.14,-106C277.14,-106 81.97,-106 81.97,-106 75.97,-106 66.4,-101.18 62.82,-96.36 62.82,-96.36 20.74,-39.64 20.74,-39.64 17.16,-34.82 19.59,-30 25.59,-30 25.59,-30 220.76,-30 220.76,-30 226.76,-30 236.34,-34.82 239.91,-39.64 239.91,-39.64 281.99,-96.36 281.99,-96.36 285.57,-101.18 283.14,-106 277.14,-106"/>
+<title>15738442310417480425</title>
+<path fill="#e6fbfb" stroke="black" d="M290.6,-106C290.6,-106 74.02,-106 74.02,-106 68.02,-106 58.23,-101.35 54.44,-96.69 54.44,-96.69 7.71,-39.31 7.71,-39.31 3.92,-34.65 6.13,-30 12.13,-30 12.13,-30 228.71,-30 228.71,-30 234.71,-30 244.5,-34.65 248.29,-39.31 248.29,-39.31 295.02,-96.69 295.02,-96.69 298.81,-101.35 296.6,-106 290.6,-106"/>
 <text text-anchor="middle" x="151.37" y="-71.8" font-family="Times,serif" font-size="14.00">mr.batch</text>
-<text text-anchor="middle" x="151.37" y="-56.8" font-family="Times,serif" font-size="14.00">&quot;Deer Car Bear&quot;</text>
+<text text-anchor="middle" x="151.37" y="-56.8" font-family="Times,serif" font-size="14.00">&quot;Deer Bear River&quot;</text>
 </g>
-<!-- 3778223598481588802&#45;&gt;5080164458961340296 -->
+<!-- 15738442310417480425&#45;&gt;2761769091619388733 -->
 <g id="edge1" class="edge">
-<title>3778223598481588802&#45;&gt;5080164458961340296</title>
-<path fill="none" stroke="black" d="M261.01,-68C291.6,-68 324.6,-68 354.28,-68"/>
-<polygon fill="black" stroke="black" points="354.63,-71.5 364.63,-68 354.63,-64.5 354.63,-71.5"/>
+<title>15738442310417480425&#45;&gt;2761769091619388733</title>
+<path fill="none" stroke="#7f7f7f" d="M272.03,-68C298.28,-68 325.78,-68 351.05,-68"/>
+<polygon fill="#7f7f7f" stroke="#7f7f7f" points="351.36,-71.5 361.36,-68 351.36,-64.5 351.36,-71.5"/>
+</g>
+<!-- 3778223598481588802 -->
+<g id="node5" class="node">
+<title>3778223598481588802</title>
+<path fill="#e6fbfb" stroke="black" d="M277.14,-260C277.14,-260 81.97,-260 81.97,-260 75.97,-260 66.4,-255.18 62.82,-250.36 62.82,-250.36 20.74,-193.64 20.74,-193.64 17.16,-188.82 19.59,-184 25.59,-184 25.59,-184 220.76,-184 220.76,-184 226.76,-184 236.34,-188.82 239.91,-193.64 239.91,-193.64 281.99,-250.36 281.99,-250.36 285.57,-255.18 283.14,-260 277.14,-260"/>
+<text text-anchor="middle" x="151.37" y="-225.8" font-family="Times,serif" font-size="14.00">mr.batch</text>
+<text text-anchor="middle" x="151.37" y="-210.8" font-family="Times,serif" font-size="14.00">&quot;Deer Car Bear&quot;</text>
+</g>
+<!-- 3778223598481588802&#45;&gt;9311483566452984894 -->
+<g id="edge2" class="edge">
+<title>3778223598481588802&#45;&gt;9311483566452984894</title>
+<path fill="none" stroke="#7f7f7f" d="M261.01,-222C291.6,-222 324.6,-222 354.28,-222"/>
+<polygon fill="#7f7f7f" stroke="#7f7f7f" points="354.63,-225.5 364.63,-222 354.63,-218.5 354.63,-225.5"/>
 </g>
 <!-- 5357306032861111069 -->
-<g id="node5" class="node">
+<g id="node6" class="node">
 <title>5357306032861111069</title>
 <path fill="#e6fbfb" stroke="black" d="M272.28,-414C272.28,-414 84.85,-414 84.85,-414 78.85,-414 69.35,-409.12 65.86,-404.24 65.86,-404.24 25.44,-347.76 25.44,-347.76 21.95,-342.88 24.46,-338 30.46,-338 30.46,-338 217.89,-338 217.89,-338 223.89,-338 233.38,-342.88 236.87,-347.76 236.87,-347.76 277.29,-404.24 277.29,-404.24 280.78,-409.12 278.28,-414 272.28,-414"/>
 <text text-anchor="middle" x="151.37" y="-379.8" font-family="Times,serif" font-size="14.00">mr.batch</text>
 <text text-anchor="middle" x="151.37" y="-364.8" font-family="Times,serif" font-size="14.00">&quot;Car Car River&quot;</text>
 </g>
-<!-- 5357306032861111069&#45;&gt;9316633123385748507 -->
-<g id="edge2" class="edge">
-<title>5357306032861111069&#45;&gt;9316633123385748507</title>
-<path fill="none" stroke="black" d="M257.25,-376C287.76,-376 320.95,-376 351,-376"/>
-<polygon fill="black" stroke="black" points="351.06,-379.5 361.06,-376 351.06,-372.5 351.06,-379.5"/>
-</g>
-<!-- 15738442310417480425 -->
-<g id="node6" class="node">
-<title>15738442310417480425</title>
-<path fill="#e6fbfb" stroke="black" d="M290.6,-260C290.6,-260 74.02,-260 74.02,-260 68.02,-260 58.23,-255.35 54.44,-250.69 54.44,-250.69 7.71,-193.31 7.71,-193.31 3.92,-188.65 6.13,-184 12.13,-184 12.13,-184 228.71,-184 228.71,-184 234.71,-184 244.5,-188.65 248.29,-193.31 248.29,-193.31 295.02,-250.69 295.02,-250.69 298.81,-255.35 296.6,-260 290.6,-260"/>
-<text text-anchor="middle" x="151.37" y="-225.8" font-family="Times,serif" font-size="14.00">mr.batch</text>
-<text text-anchor="middle" x="151.37" y="-210.8" font-family="Times,serif" font-size="14.00">&quot;Deer Bear River&quot;</text>
-</g>
-<!-- 15738442310417480425&#45;&gt;16977194057837295751 -->
+<!-- 5357306032861111069&#45;&gt;13547952230877393105 -->
 <g id="edge3" class="edge">
-<title>15738442310417480425&#45;&gt;16977194057837295751</title>
-<path fill="none" stroke="black" d="M272.03,-222C298.28,-222 325.78,-222 351.05,-222"/>
-<polygon fill="black" stroke="black" points="351.36,-225.5 361.36,-222 351.36,-218.5 351.36,-225.5"/>
+<title>5357306032861111069&#45;&gt;13547952230877393105</title>
+<path fill="none" stroke="#7f7f7f" d="M257.25,-376C287.76,-376 320.95,-376 351,-376"/>
+<polygon fill="#7f7f7f" stroke="#7f7f7f" points="351.06,-379.5 361.06,-376 351.06,-372.5 351.06,-379.5"/>
 </g>
 </g>
 </svg>

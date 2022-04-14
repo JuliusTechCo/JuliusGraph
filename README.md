@@ -40,7 +40,7 @@ Our tutorials are available in two formats:
 ## Register for Developer Access
 
 Register for developer access is super easy and it only takes a minute. Please proceed to
-this [link](https://backendgraph.com/user/signup). The web site uses Google authentication,
+this [link](https://juliusgraph.com/user/signup). The web site uses Google authentication,
 you will be prompted to log in using your Google account credentials if you are not already
 signed in with Google:
 
@@ -76,7 +76,7 @@ Clicking *Sign in with Google* will land in a standard Jupyter Hub/Juypter Lab s
 ![Jupyter Hub landing page.](assets/jupyter_landing.png)
 
 Once you have completed the steps, next time you can directly access our developer
-environment using this [url](https://backendgraph.com/lab).
+environment using this [url](https://juliusgraph.com/lab).
 
 ### General Layout
 

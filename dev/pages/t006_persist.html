@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>6 ML Experiment Tracking and Persisting · Julius GraphEngine Tutorials</title><link href="https://fonts.googleapis.com/css?family=Lato|Roboto+Mono" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL=".."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="../assets/documenter.js"></script><script src="../siteinfo.js"></script><script src="../../versions.js"></script><link href="../assets/theme.css" rel="stylesheet" type="text/css"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/documenter-dark.css" data-theme-name="documenter-dark"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="../assets/themeswap.js"></script></head><body><div id="documenter"><nav class="docs-sidebar"><div class="docs-package-name"><span class="docs-autofit">Julius GraphEngine Tutorials</span></div><form class="docs-search" action="../search.html"><input class="docs-search-query" id="documenter-search-query" name="q" type="text" placeholder="Search docs"/></form><ul class="docs-menu"><li><a class="tocitem" href="../index.html">Introduction</a></li><li><a class="tocitem" href="t001_quickstart.html">1 Quick Start</a></li><li><a class="tocitem" href="t002_machinelearning.html">2 Machine Learning</a></li><li><a class="tocitem" href="t003_mapreduce.html">3 MapReduce</a></li><li><a class="tocitem" href="t004_distributedml.html">4 Distributed Machine Learning</a></li><li><a class="tocitem" href="t005_aad.html">5 Adjoint Algorithmic Differentiation (AAD)</a></li><li class="is-active"><a class="tocitem" href="t006_persist.html">6 ML Experiment Tracking and Persisting</a><ul class="internal"><li><a class="tocitem" href="#How-to-use-this-tutorial-1"><span>How to use this tutorial</span></a></li><li><a class="tocitem" href="#Introduction-1"><span>Introduction</span></a></li><li><a class="tocitem" href="#.-Model-Development-and-Experiment-1"><span>1. Model Development &amp; Experiment</span></a></li><li><a class="tocitem" href="#.-Record-a-ML-Experiment-1"><span>2. Record a ML Experiment</span></a></li><li><a class="tocitem" href="#.-Reproduce-a-ML-Experiment-1"><span>3. Reproduce a ML Experiment</span></a></li></ul></li><li><a class="tocitem" href="t007_benchmark.html">7 Graph Creation Benchmark</a></li></ul><div class="docs-version-selector field has-addons"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><nav class="breadcrumb"><ul class="is-hidden-mobile"><li class="is-active"><a href="t006_persist.html">6 ML Experiment Tracking and Persisting</a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href="t006_persist.html">6 ML Experiment Tracking and Persisting</a></li></ul></nav><div class="docs-right"><a class="docs-edit-link" href="https://github.com/JuliusTechCo/Tutorials/blob/main/src/persist.jl" title="Edit on GitHub"><span class="docs-icon fab"></span><span class="docs-label is-hidden-touch">Edit on GitHub</span></a><a class="docs-settings-button fas fa-cog" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-sidebar-button fa fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a></div></header><article class="content" id="documenter-page"><h1 id="Tutorial-6:-ML-Experiment-Tracking-and-Persisting-1"><a class="docs-heading-anchor" href="#Tutorial-6:-ML-Experiment-Tracking-and-Persisting-1">Tutorial 6: ML Experiment Tracking and Persisting</a><a class="docs-heading-anchor-permalink" href="#Tutorial-6:-ML-Experiment-Tracking-and-Persisting-1" title="Permalink"></a></h1><h2 id="How-to-use-this-tutorial-1"><a class="docs-heading-anchor" href="#How-to-use-this-tutorial-1">How to use this tutorial</a><a class="docs-heading-anchor-permalink" href="#How-to-use-this-tutorial-1" title="Permalink"></a></h2><ul><li>This tutorial is also available in Jupyter notebook format. To access and run the Jupyter notebook version of the tutorial, please sign up for free developer access by following instructions at <a href="https://github.com/juliustechco/juliusgraph">https://github.com/juliustechco/juliusgraph</a>.</li><li>Additional resources (video demos &amp; blogs) are available at <a href="http://juliustech.co">http://juliustech.co</a>.</li><li>To report bugs or request new features, please raise an issue <a href="https://github.com/JuliusTechCo/JuliusGraph/issues">here</a>. To schedule a live demo, please go to <a href="http://juliustech.co">http://juliustech.co</a>. Please email us at info@juliustech.co for other general inquiries.</li></ul><h2 id="Introduction-1"><a class="docs-heading-anchor" href="#Introduction-1">Introduction</a><a class="docs-heading-anchor-permalink" href="#Introduction-1" title="Permalink"></a></h2><p>ML model experiment tracking is a common challenge for data scientists and engineers. We hear the following story too often:</p><p>”My team spent months training a massive ML model and we got excellent results at some point. But unfortunately we can&#39;t reproduce it any more because a number of things have changed, the data, the underlying python library versions and hyperparameters, etc. We are just not sure which combination have worked ...&quot;.</p><p>This highlights the serious issues around ML experiment tracking. In order to reproduce a past ML run exactly, three things have to be persisted and recovered,</p><ol><li>the runtime environment, including hardware, OS, software libraries etc</li><li>the input data</li><li>the entire code, parameters and configurations, to be able to re-build the entire data/analytical pipeline</li></ol><p>Experiment tracking becomes much more challenging if the model runs on a distributed environment. To guarantee reproducibility, each ML experiment should run from a fresh environment, otherwise the data, setting or environment could change between runs. For example, some data files could be added or modified as part of the runs. However, a complete refresh of a complex distributed data and analytical pipeline is often out of the question, as it consists of many software components, parameters and configurations. This is why most existing experiment tracking solutions only persist the parts of the pipeline that are most relevant for the ML models. The downside of this approach is that the stored ML runs can often fail to recover the exact results.</p><p>Leveraging its distributed graph computing engine, Julius offers an experiment tracking solution that can persist and recover an entire distributed data and analytical pipeline, as well as the full runtime data and environment. Julius is the only solution on the market with such capabilities.</p><p>Julius persists the model experiment with its entire data &amp; analytical pipeline using the following simple steps:</p><ol><li>spin up a fresh virtual distributed environment, which only takes a few seconds</li><li>run the ML experiment and then record the entire session on the Julius server side, and  persist the recorded session onto long term storage. The recorded session contains the  step by step instructions to recreate the entire runtime environment, including the  entire data and distributed pipeline to recover the exact state of the experiment.</li><li>the recorded ML experiment can be easily recovered by replaying it in another fresh  environment.</li></ol><p>In this notebook, we follow a typical workflow of a data scientist to show Julius&#39; experiment tracking capabilities. We use an ML fraud detection model from a previous tutorial as an example. Readers are referred to the &quot;Distributed Machine Learning pipeline&quot; tutorial for more details on the model itself.</p><h2 id=".-Model-Development-and-Experiment-1"><a class="docs-heading-anchor" href="#.-Model-Development-and-Experiment-1">1. Model Development &amp; Experiment</a><a class="docs-heading-anchor-permalink" href="#.-Model-Development-and-Experiment-1" title="Permalink"></a></h2><p>Data scientists usually develop ML models by running experiments interactively in a Jupyter notebook. This section shows the definition and pipeline of a distributed ML model.</p><pre><code class="language-julia">using GraphEngine: RuleDSL, GraphVM
+using AtomExt
+using DataFrames, DataScience, StatsBase, Random
+
+newfunctions = quote
+    function downsample(ycol::Symbol, frac::Float64, df::DataFrame)
+        positive = DataFrames.filter(row -&gt; isequal(row[ycol], true), df)
+        negative =  DataFrames.filter(row -&gt; isequal(row[ycol], false), df)
+        dspositive = positive[sample(1:nrow(positive), round(Int, frac * nrow(positive)), replace=true), :]
+        dsnegative = negative[sample(1:nrow(negative), round(Int, frac * nrow(negative)), replace=true), :]
+        merged = vcat(dspositive, dsnegative)
+        merged[shuffle(1:nrow(merged)), :]
+    end
+
+    function valcat(xs::Vector...)
+        agg = DataFrame()
+        for (k, v) in vcat(xs...)
+            agg = vcat(agg, v)
+        end
+        agg
+    end
+
+    function dfmean(dfs::DataFrame...)
+        df = reduce(.+, dfs)
+        df ./ (length(dfs))
+    end
+end
+
+newrules = quote
+    select(ref::RuleDSL.NodeRef, cols::Any; label=&quot;$(isa(cols, InvertedIndex) ? &quot;col != $(cols.skip)&quot; : &quot;col == $(cols)&quot;)&quot;) =
+        DataScience.ApplyFn[x::DataFrame-&gt;DataFrames.select(x, cols; copycols=false)](ref...)
+
+    classifiertrain(model::Val{:ExtraTreesClassifier}, options::Dict, trainxs::RuleDSL.NodeRef, trainy::RuleDSL.NodeRef; label=&quot;$model train&quot;)=DataScience.PyTrain[&quot;sklearn.ensemble.ExtraTreesClassifier&quot;, options](trainxs..., trainy...)
+    classify(train_data::RuleDSL.NodeRef, target::Symbol, model::Val, options::Dict, testx::RuleDSL.NodeRef; label=&quot;$model inference&quot;)=begin
+        train_data_X = RuleDSL.@ref ml.select(train_data, Not(target))
+        train_data_y = RuleDSL.@ref ml.select(train_data, target)
+        trained = RuleDSL.@ref ml.classifiertrain(model, options,  train_data_X, train_data_y )
+        DataScience.PyPredict(trained..., testx...)
+    end
+
+    classifyprob(train_data::RuleDSL.NodeRef, target::Symbol, model::Val, options::Dict, test_data::RuleDSL.NodeRef; label=&quot;prob&quot;)=begin
+        testx = RuleDSL.@ref ml.select(test_data, Not(target))
+        DataScience.ApplyFn[x::DataFrame-&gt;DataFrames.select(x, :proba; copycols=false)](classify(train_data, target, model, options, testx))
+    end
+
+    score(realized::RuleDSL.NodeRef, probs::RuleDSL.NodeRef)=DataScience.PyScore(realized..., probs...)
+
+    downsample(raw::RuleDSL.NodeRef, ycol::Symbol, frac::Float64)=DataScience.ApplyFn[Main.downsample, ycol, frac](raw...)
+
+    bagpred(test::RuleDSL.NodeRef, model::Val, options::Dict, train_batches::Vector{RuleDSL.NodeRef}, target::Symbol) =
+        DataScience.ApplyFn[dfmean](RuleDSL.@ref((ml.classifyprob(b, target, model, options, test) for b = train_batches))...)
+
+    batchpred(test::RuleDSL.NodeRef, model::Val, options::Dict, train_batches::Vector{RuleDSL.NodeRef}, target::Symbol) =
+        DataScience.ApplyFn[(ind, prob)-&gt;[hash(test) =&gt; hcat(ind, prob)]](select(test, target), bagpred(test, model, options, train_batches, target))
+end;</code></pre><p>we use existing rules in the ds namespace to read CSV files from a shared drive</p><pre><code class="language-julia">train_data_file = joinpath(@__DIR__, &quot;../data/train_fraud.csv&quot;)
+test_data_file = joinpath(@__DIR__, &quot;../data/test_fraud.csv&quot;)
+train_data = RuleDSL.@ref ds.csvsrc(train_data_file, true; label=&quot;train data&quot;)
+test_data  = RuleDSL.@ref ds.csvsrc(test_data_file, true; label=&quot;test data&quot;)
+
+target = :isFraud
+model = Val(:ExtraTreesClassifier)
+options = Dict(:n_estimators =&gt; 10, :min_samples_leaf =&gt; 10)
+
+test_data_y = RuleDSL.@ref ml.select(test_data, target)
+
+sampleratio = 0.05
+train_ddf = DataScience.DDataFrame(train_data_file, blocksize=&quot;5 MB&quot;)
+train_batches = train_ddf.chunks
+down_batches = RuleDSL.@ref(ml.downsample(b, target, sampleratio) for b in train_batches)
+
+test_ddf = DataScience.DDataFrame(test_data_file, blocksize=&quot;2.5 MB&quot;)
+test_batches = test_ddf.chunks
+
+mapper = RuleDSL.@ref ml.batchpred(model, options, down_batches, target)
+shuffler = RuleDSL.@ref mr.shuffler(first, 4)
+reducer = RuleDSL.@ref mr.reducer(vcat)</code></pre><pre><code class="language-none">mr:reducer/typeof(vcat):7555</code></pre><p>The model now runs with good results on a cluster for model development, as shown below:</p><pre><code class="language-julia">using GraphEngine: RuleDSL, GraphVM
+
+config = RuleDSL.newconfig(RuleDSL.Config(), :project =&gt; &quot;MapReduce&quot;)
+balancer = GraphVM.GlobalUnique()
+my_domain = GraphVM.mydomain()
+remoteport = GraphVM.drawdataport();</code></pre><pre><code class="language-julia">gs0 = GraphVM.RemoteGraphProxy(my_domain =&gt; 7225)
+GraphVM.rpccall(gs0, :startlocalmasterservice, remoteport, 4)
+gs = GraphVM.RemoteGraphProxy(config, my_domain =&gt; remoteport, balancer, GraphVM.GenericData())
+GraphVM.wait4clusterinit(gs)</code></pre><pre><code class="language-none">Dict{UInt64, Pair{Float64, GraphEngine.GraphVM.WorkerStatus}} with 4 entries:
+  0xfe454af11fa4d0e9 =&gt; 1.64994e9=&gt;Ready
+  0xc28827be282aa750 =&gt; 1.64994e9=&gt;Ready
+  0xf00f15f78337f6d6 =&gt; 1.64994e9=&gt;Ready
+  0x98cad32e54afcb09 =&gt; 1.64994e9=&gt;Ready</code></pre><pre><code class="language-julia">GraphVM.@remote_eval gs begin
+    using GraphEngine: RuleDSL, GraphVM
+    using AtomExt, GraphIO
+    using DataFrames, DataScience, StatsBase, Random
+end
+
+GraphVM.waitcheckstatus(gs, RuleDSL.getconfig(config, :project));
+
+GraphVM.@remote_eval gs $newfunctions
+GraphVM.waitcheckstatus(gs, RuleDSL.getconfig(config, :project));
+
+GraphVM.@addrules gs ml $newrules
+
+mrpred = RuleDSL.@ref mr.mapreduce(test_batches, mapper, shuffler, reducer, Main.valcat)
+mrscore = RuleDSL.@ref ml.score(RuleDSL.@ref(ml.select(mrpred, :isFraud)), RuleDSL.@ref(ml.select(mrpred, :proba)))
+
+alljobs, ds = RuleDSL.jobdeps(config, [mrscore], Set([:classifiertrain, :splitbykey, :reducer]));
+
+GraphVM.waitcheckstatus(gs, RuleDSL.getconfig(config, :project));
+GraphVM.initgraph!(gs)
+GraphVM.dispatchjobs!(gs, alljobs; nocopy=Set([:splitbykey]));</code></pre><pre><code class="language-julia">using GraphIO
+
+GraphVM.waitcheckstatus(gs, RuleDSL.getconfig(config, :project));
+svg = GraphIO.postremotegraph(gs, remoteport);</code></pre><pre><code class="language-julia">GraphIO.postsvg(svg, &quot;ml_persist_1.svg&quot;)
+GraphVM.rpccall(gs, :endcluster);</code></pre><p align = "center">
+<img src="../assets/ml_persist_1.svg" alt="" title="ml persist"/>
+</p>
+<p align = "center">
+Figure 1 - Original Distributed ML Pipeline.
+</p><h2 id=".-Record-a-ML-Experiment-1"><a class="docs-heading-anchor" href="#.-Record-a-ML-Experiment-1">2. Record a ML Experiment</a><a class="docs-heading-anchor-permalink" href="#.-Record-a-ML-Experiment-1" title="Permalink"></a></h2><p>Now that the data scientists are happy with the results, they will want to persist the experiment so that it can be reproduced later. They have made a number of choices in this ML model run including data sources, configurations, choice of model, and hyper parameters etc. Some experiment tracking tools are based on saving notebooks, but that is not an adequate and reliable solution, as some data or variables were not captured by the code in the notebook. For example, the developer might have read data from a local file, or rely upon the state or data of a remote server. Under those circumstances, just saving the notebook is not adequate to recover the ML run.</p><p>Julius takes a different approach. Instead of saving the notebook on the client side, we persist the entire state on the server side. This server side persisting process is easy and seamless. We first start a fresh virtual cluster at a new port, using the same docker image used by the development environment.</p><pre><code class="language-julia">remoteport2 = GraphVM.drawdataport()
+
+GraphVM.rpccall(gs0, :startlocalmasterservice, remoteport2, 4)
+gs2 = GraphVM.RemoteGraphProxy(config, my_domain =&gt; remoteport2, balancer, GraphVM.GenericData())
+GraphVM.wait4clusterinit(gs2)</code></pre><pre><code class="language-none">Dict{UInt64, Pair{Float64, GraphEngine.GraphVM.WorkerStatus}} with 4 entries:
+  0xbd6bb3529df13ae9 =&gt; 1.64994e9=&gt;Ready
+  0x697b5547f610714d =&gt; 1.64994e9=&gt;Ready
+  0x1e8de98b60358319 =&gt; 1.64994e9=&gt;Ready
+  0x871c9b1531533d7b =&gt; 1.64994e9=&gt;Ready</code></pre><p>The following line enables recording on this new cluster, all the subsequent actions will be recorded on the server side.</p><pre><code class="language-julia">GraphVM.rpccall(gs2, :clearrecording!)
+GraphVM.rpccall(gs2, :setrecording!, true);</code></pre><p>We now re-run the same ML model on this fresh server, where the existing local variables can be re-used to recreate the same data/analytics pipeline on the server. Only a few lines of codes are needed for server side recording, as shown below:</p><pre><code class="language-julia">GraphVM.@remote_eval gs2 begin
+    using GraphEngine: RuleDSL, GraphVM
+    using AtomExt, GraphIO
+    using DataFrames, DataScience, StatsBase, Random
+end
+
+GraphVM.waitcheckstatus(gs2, RuleDSL.getconfig(config, :project));
+
+GraphVM.@remote_eval gs2 $newfunctions
+GraphVM.waitcheckstatus(gs2, RuleDSL.getconfig(config, :project));
+
+GraphVM.@addrules gs2 ml $newrules
+
+GraphVM.waitcheckstatus(gs2, RuleDSL.getconfig(config, :project));
+GraphVM.initgraph!(gs2)
+GraphVM.dispatchjobs!(gs2, alljobs; nocopy=Set([:splitbykey]));</code></pre><p>Now we can retrieve the recording saved on the server side for this ML run. This an extremely compact representation of the entire run, including all the data and analytical logic to recreate the distributed pipeline. This recording can be persisted on long term storage like AWS S3. The version of the docker container being used can also be persisted along with the recording. The docker container captures the exact and complete run time environment.</p><pre><code class="language-julia">GraphVM.waitcheckstatus(gs2, RuleDSL.getconfig(config, :project));
+records = GraphVM.rpccall(gs2, :getrecording);
+
+# terminate the recording cluster
+GraphVM.rpccall(gs2, :endcluster);</code></pre><h2 id=".-Reproduce-a-ML-Experiment-1"><a class="docs-heading-anchor" href="#.-Reproduce-a-ML-Experiment-1">3. Reproduce a ML Experiment</a><a class="docs-heading-anchor-permalink" href="#.-Reproduce-a-ML-Experiment-1" title="Permalink"></a></h2><p>From the recording, the entire distributed pipeline can be easily recreated at a later time. To do so, we first spin up a fresh cluster using the same version of docker container, and then replay the recording on this new server. It only takes a single line of code to recover the stored pipeline:</p><pre><code class="language-julia">remoteport3 = GraphVM.drawdataport()
+GraphVM.rpccall(gs0, :startlocalmasterservice, remoteport3, 4)
+gs3 = GraphVM.RemoteGraphProxy(config, my_domain =&gt; remoteport3, balancer, GraphVM.GenericData())
+GraphVM.wait4clusterinit(gs3)</code></pre><pre><code class="language-none">Dict{UInt64, Pair{Float64, GraphEngine.GraphVM.WorkerStatus}} with 4 entries:
+  0x2b8e495c7a36f5ff =&gt; 1.64994e9=&gt;Ready
+  0x5d797b045e0d59c6 =&gt; 1.64994e9=&gt;Ready
+  0x9d4beddf5db1b0ab =&gt; 1.64994e9=&gt;Ready
+  0x335774aa89c91c53 =&gt; 1.64994e9=&gt;Ready</code></pre><pre><code class="language-julia">GraphVM.rpccall(gs3, :replayrecording, records)</code></pre><pre><code class="language-none">11</code></pre><p>Now the results are ready to be inspected:</p><pre><code class="language-julia">GraphVM.waitcheckstatus(gs3, RuleDSL.getconfig(config, :project));
+svg = GraphIO.postremotegraph(gs3, remoteport3);</code></pre><pre><code class="language-julia">GraphVM.rpccall(gs3, :endcluster)
+GraphIO.postsvg(svg, &quot;ml_persist_2.svg&quot;)</code></pre><p align = "center">
+<img src="../assets/ml_persist_2.svg" alt="" title="ml persist"/>
+</p>
+<p align = "center">
+Figure 2 - Recreate a Distributed ML Pipeline.
+</p><hr/><p><em>This page was generated using <a href="https://github.com/fredrikekre/Literate.jl">Literate.jl</a>.</em></p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="t005_aad.html">« 5 Adjoint Algorithmic Differentiation (AAD)</a><a class="docs-footer-nextpage" href="t007_benchmark.html">7 Graph Creation Benchmark »</a></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> on <span class="colophon-date" title="Thursday 14 April 2022 12:17">Thursday 14 April 2022</span>. Using Julia version 1.6.3.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>

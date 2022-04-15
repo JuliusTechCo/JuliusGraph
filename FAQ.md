@@ -25,14 +25,12 @@ This FAQ page answers some of the most common questions from our users and clien
     Please refer to Julius tutorials(https://juliustechco.github.io/JuliusGraph) for more detailed explaination and examples of using Atom and RuleDSL.
 
 2. How does Julius Graph Engine access data?  
-
-  Julius Graph Engine creates application or systems in two stages:  
-    * Build the data and analytical pipeline as a computational DAG (directed acyclic graph) from `RuleDSL` 
-    * Run the pipeline to process data and produce the results, this step can run either in batch or streaming mode.
+    Julius Graph Engine creates application or systems in two stages: 
+        * Build the data and analytical pipeline as a computational DAG (directed acyclic graph) from `RuleDSL` 
+        * Run the pipeline to process data and produce the results, this step can run either in batch or streaming mode.
+    Both stages can access data. The data in step 1 is fed through binding data to the rule parameters in `RuleDSL`. The data in stage 2 are fed through individual `Atom`s, which can read data from any source, such as database, web URL, static files etc.
     
-  Both stages can access data. The data in step 1 is fed through binding data to the rule parameters in `RuleDSL`. The data in stage 2 are fed through individual `Atom`s, which can read data from any source, such as database, web URL, static files etc.
-  
-  The key advantage of two stage data feeds is that the first stage usually require a very small amount of data for constructing the pipeline as a DAG. Once the pipeline is built, it can be distributed to multiple workers, so that the heavy lifting of data processing in stage 2 can be done in parallel, thus achieving much better performance in both graph creation and execution. A developer has full control over which types of data are fed at each stage through the `RuleDSL`. 
+    The key advantage of two stage data feeds is that the first stage usually require a very small amount of data for constructing the pipeline as a DAG. Once the pipeline is built, it can be distributed to multiple workers, so that the heavy lifting of data processing in stage 2 can be done in parallel, thus achieving much better performance in both graph creation and execution. A developer has full control over which types of data are fed at each stage through the `RuleDSL`. 
 
 1. How does `RuleDSL` differ from ordinary programming languages such as Python/C++/Java? 
 
@@ -49,10 +47,8 @@ This FAQ page answers some of the most common questions from our users and clien
 1. How to convert my Python/C++/Java/.Net/R/Julia/SQL applications to Julius, and get the benefits of Graph?
 
     The great news is that your existing data and analytical libraries built in these languages can be re-used. You don't have to abandon your battle tested production libraries and restart from scratch! The migration to Julius involves two easy steps:
-    
         * wrap the existing data and analytical classes and functions using the Julius' `Atom` base class. Julius offers generic wrappers that works out of box for modern programming languages that support reflection, such as Python, Java, .Net and Julia etc. These generic reflection based Atom wrapper works automatically for any classes and functions written in these languages. For older languages that do not support reflection, such as C/C++, additional manual effort is required to write these wrappers for individual functions and classes, however this additional work is largely machanical and can be done rather quickly. 
         * declare the entire data and analytical pipeline using Julius RuleDSL, which can reference and use the existing libaries via the `Atom` wrappers. This step only require minimal efforts and a small amount of coding, thanks to the low-code nature of RuleDSL. A complex data and analytical pipeline with hundreds or thousands of nodes can be built with a few dozen lines of rules in RuleDSL, as shown in Julius' [tutorials](https://juliustechco.github.io/JuliusGraph).
-  
    The conversion only require minimal efforts if the existing system is built in a modern language like Python, Java, .Net, R, Julia etc.  Our experience shows that a complex real world system can be fully converted in a few weeks, with help from those who are knowledgeable about the system's business logic. For C/C++ applications and systems, it would require more time and efforts for writing and testing the wrappers manually.
 
 1. How to integrate Julius Graph Engine with an existing system or application?

@@ -40,7 +40,7 @@ Our tutorials are available in two formats:
 ## Register for Developer Access
 
 Register for developer access is super easy and it only takes a minute. Please proceed to
-this [link](https://juliusgraph.com/user/signup). The web site uses Google authentication,
+[https://juliusgraph.com/user/signup](https://juliusgraph.com/user/signup). The web site uses Google authentication,
 you will be prompted to log in using your Google account credentials if you are not already
 signed in with Google:
 

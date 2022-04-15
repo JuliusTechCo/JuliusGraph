@@ -4,8 +4,8 @@
 
 # Welcome to the New World of Graph Computing! 👋
 
-We are a group of researchers and engineers passionate about graph computing. We believe
-graph technology solves some of the most challenging problems in computing. We spent the
+We are a group of researchers and engineers passionate about [graph computing](https://github.com/juliustechco/juliusgraph). 
+We believe graph technology solves some of the most challenging problems in computing. We spent the
 past few years at [Julius Technologies](https://www.juliustech.co/) building a truly
 innovative graph computing solution: the Julius Graph Engine. We are excited to offer
 developers free access to Julius' online development environment, where you can learn and

@@ -56,7 +56,7 @@ This FAQ page answers some of the most common questions from our users and clien
       * wrap the existing data and analytical classes and functions using the Julius' `Atom` base class. Julius offers generic wrappers that works out of box for modern programming languages that support reflection, such as Python, Java, R, .Net and Julia etc. These generic reflection based Atom wrapper works automatically for any classes and functions written in these languages. For older languages that do not support reflection, such as C/C++, additional manual effort is required to write these wrappers for individual functions and classes, however this additional work is largely machanical and can be done rather quickly. 
       * declare the entire data and analytical pipeline using Julius RuleDSL, which can reference and use the existing libaries via the `Atom` wrappers. This step only require minimal efforts and a small amount of coding, thanks to the low-code nature of RuleDSL. A complex data and analytical pipeline with hundreds or thousands of nodes can be built with a few dozen lines of rules in RuleDSL, as shown in Julius' [tutorials](https://juliustechco.github.io/JuliusGraph).
       
-   The conversion only require minimal efforts if the existing system is built in a modern language like Python, Java, .Net, R, Julia etc.  Our experience shows that a complex real world system can be fully converted in a few weeks, with help from those who are knowledgeable about the system's business logic. For C/C++ applications and systems, it would require more time and efforts for writing and testing the wrappers manually.
+   The conversion only require minimal efforts if the existing system is built in a modern language like Python, Java, .Net, R, Julia etc.  Our experience shows that a complex real world system can be fully converted in a few weeks, with the help from those who are knowledgeable about the system's business logic and code base. For C/C++ applications and systems, it would require more time and efforts for writing and testing the wrappers manually.
 
 1. How to integrate Julius Graph Engine with an existing system or application?
 
@@ -64,9 +64,9 @@ This FAQ page answers some of the most common questions from our users and clien
    
 1. What database and data sources Julius supports?
 
-   Julius comes with a rich set of data connectors out of box, including relational databases, NoSQL databases (Hadoop/Spark etc), data files, web data sources etc. If you need additional data connections that Julius does not yet support, you can write your own connectors as an Atom using Python, C++, Java or any other major programming language.
+   Julius comes with a rich set of data connectors out of box, including relational databases, NoSQL databases (Hadoop/Spark etc), data files, web data sources etc. If you need additional data connectors Julius does not yet support, you can write your own connectors using the Atom interface with any major programming languages.
    
-1. Can I use data visualization tools such Tableau and Qlik with Julius?
+2. Can I use data visualization tools such Tableau and Qlik with Julius?
 
    Absolutely. Results from Julius graph can be fed into Tableau and Qlik for visualization and reporting.
 

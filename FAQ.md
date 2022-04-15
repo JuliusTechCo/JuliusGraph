@@ -22,7 +22,7 @@ This FAQ page answers some of the most common questions from our users and clien
 
     `RuleDSL` is a high level declarative domain specific language (DSL) for creating computational DAGs. RuleDSL features an easy to use and low-code syntax that can connect individual `Atoms` (as nodes in the graph) to create the entire computational DAG.
 
-    Please refer to Julius tutorials(https://juliustechco.github.io/JuliusGraph) for more detailed explaination and examples of using Atom and RuleDSL.
+    Please refer to Julius [tutorials](https://juliustechco.github.io/JuliusGraph) for more detailed explaination and examples of using Atom and RuleDSL.
 
 2. How does Julius Graph Engine access data?
     Julius Graph Engine creates application or systems in two stages:

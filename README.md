@@ -4,8 +4,8 @@
 
 # Welcome to the New World of Graph Computing! 👋
 
-We are a group of researchers and engineers passionate about graph computing. We believe
-graph technology solves some of the most challenging problems in computing. We spent the
+We are a group of researchers and engineers passionate about [graph computing](https://www.juliustech.co/blog/why-graph-computing-is-stellar). 
+We believe graph technology solves some of the most challenging problems in computing. We spent the
 past few years at [Julius Technologies](https://www.juliustech.co/) building a truly
 innovative graph computing solution: the Julius Graph Engine. We are excited to offer
 developers free access to Julius' online development environment, where you can learn and
@@ -40,7 +40,7 @@ Our tutorials are available in two formats:
 ## Register for Developer Access
 
 Register for developer access is super easy and it only takes a minute. Please proceed to
-this [link](https://backendgraph.com/user/signup). The web site uses Google authentication,
+[https://juliusgraph.com/user/signup](https://juliusgraph.com/user/signup). The web site uses Google authentication,
 you will be prompted to log in using your Google account credentials if you are not already
 signed in with Google:
 
@@ -76,7 +76,7 @@ Clicking *Sign in with Google* will land in a standard Jupyter Hub/Juypter Lab s
 ![Jupyter Hub landing page.](assets/jupyter_landing.png)
 
 Once you have completed the steps, next time you can directly access our developer
-environment using this [url](https://backendgraph.com/lab).
+environment using this [url](https://juliusgraph.com/lab).
 
 ### General Layout
 
@@ -96,7 +96,7 @@ on time!. In that case, we recommend reading (at least):
 
 * [Quick Start](https://JuliusTechCo.github.io/JuliusGraph/dev/pages/t001_quickstart.html),
 * [MapReduce](https://JuliusTechCo.github.io/JuliusGraph/dev/pages/t003_mapreduce.html) and
-* [Distributed Machine Learning Pipeline](https://JuliusTechCo.github.io/JuliusGraph/dev/pages/t004_bagging.html).
+* [Distributed Machine Learning Pipeline](https://JuliusTechCo.github.io/JuliusGraph/dev/pages/t004_distributedml.html).
 
 Those tutorials should give you the key ideas on graph computing and graph programming on
 Julius' Graph Engine.

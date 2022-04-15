@@ -24,10 +24,12 @@ This FAQ page answers some of the most common questions from our users and clien
 
     Please refer to Julius tutorials(https://juliustechco.github.io/JuliusGraph) for more detailed explaination and examples of using Atom and RuleDSL.
 
-2. How does Julius Graph Engine access data?  
-    Julius Graph Engine creates application or systems in two stages: 
-        * Build the data and analytical pipeline as a computational DAG (directed acyclic graph) from `RuleDSL` 
-        * Run the pipeline to process data and produce the results, this step can run either in batch or streaming mode.
+2. How does Julius Graph Engine access data?
+    Julius Graph Engine creates application or systems in two stages:
+    
+      * Build the data and analytical pipeline as a computational DAG (directed acyclic graph) from `RuleDSL` 
+      * Run the pipeline to process data and produce the results, this step can run either in batch or streaming mode.
+    
     Both stages can access data. The data in step 1 is fed through binding data to the rule parameters in `RuleDSL`. The data in stage 2 are fed through individual `Atom`s, which can read data from any source, such as database, web URL, static files etc.
     
     The key advantage of two stage data feeds is that the first stage usually require a very small amount of data for constructing the pipeline as a DAG. Once the pipeline is built, it can be distributed to multiple workers, so that the heavy lifting of data processing in stage 2 can be done in parallel, thus achieving much better performance in both graph creation and execution. A developer has full control over which types of data are fed at each stage through the `RuleDSL`. 

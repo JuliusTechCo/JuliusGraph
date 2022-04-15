@@ -134,3 +134,6 @@ results. The following are some snapshots for your reference:
 Thank you for reading up to this point 🙌. If you are interested in using graph computing
 for your next project, please don't hesitate to get in touch with us. We would love building
 incredible solutions with you for real world problems.
+
+Questions? you may want to check out this Julius [FAQ](https://github.com/JuliusTechCo/JuliusGraph/blob/main/FAQ.md) page,
+or email us at info@juliustech.co .

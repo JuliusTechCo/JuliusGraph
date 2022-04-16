@@ -12,15 +12,15 @@ This FAQ page answers some of the most common questions from our users and clien
  
     Graph computing solves the most common and challenging problems for building complex data and analytical pipelines and systems. These challenges includes scalability, transparency, explainability, lineage, adaptability and reproducibility. The reason is that computational DAG is an ideal representation for building generic solutions for these common challenges.  Please refer to [this blog](https://www.juliustech.co/blog/why-graph-computing-is-stellar) for a full explanation.
 
-    Julius Graph Engine is the first solution that delivers the full benefits of graph computing in a low-code interface, allowing a small development team to build sophisticated, scalable and transparent systems with very little code. 
+    Julius Graph Engine is the first solution that delivers the full benefits of graph computing using a low-code RuleDSL, allowing a small development team to build sophisticated, scalable and transparent systems with very little code. 
 
 2. What are the `Atom` and `RuleDSL` in Julius?
 
-    `Atom` and `RuleDSL` are the two fundamental constructs Julius uses to create and execute computational DAGs.
+    `Atom` and `RuleDSL` are the two fundamental constructs in Julius for creating computational DAGs.
 
-    `Atom` stands for atomic operation, it encapsulates the functions being called at individual node in Julius' computational DAG. Atom is the minimal unit of distribution and caching in Julius' computational DAG, it cannot broken apart further for these purposes. Atom is a generic base interface that can be inherited in any major programming languages, such as C++, Pyton, Java, Julia, .Net and R etc. Existing libraries written in these languages can be easily wrapped up under the `Atom` interface.
+    `Atom` stands for atomic operation, it encapsulates the functions being performed at individual nodes in Julius' computational DAG. Atom is the minimal unit of distribution and caching in Julius' computational DAG. Atom is a generic base interface that can be inherited in any major programming languages, such as C++, Pyton, Java, Julia, .Net and R etc. Existing libraries written in these languages can be easily wrapped up under the `Atom` interface.
 
-    `RuleDSL` is a high level declarative domain specific language (DSL) for creating computational DAGs. RuleDSL features an easy to use and low-code syntax connects individual `Atoms` to create applications or systems as computational DAGs.
+    `RuleDSL` is a high level declarative domain specific language (DSL) for defining computational DAGs. RuleDSL features an easy to use and low-code syntax that connects individual Atoms to create the computational DAG, which captures the entire data and analytical pipeline for an applications or a system.
 
     Please refer to Julius [tutorials](https://juliustechco.github.io/JuliusGraph) for more detailed explanations and examples of using Atom and RuleDSL.
 
@@ -33,34 +33,36 @@ This FAQ page answers some of the most common questions from our users and clien
     
     Both stages can access data. The data in stage 1 is supplied by binding data to the rule parameters in `RuleDSL`. The data in stage 2 are sourced by individual Atoms, which can read data from any source, such as database, web URL, static files etc.
     
-    The key advantage of two stage data feeds is that the first stage usually require a small amount of data for constructing the DAG. Once the DAG is built, it can be distributed to multiple workers, so that the heavy lifting of data processing in stage 2 can be done in parallel, thus achieving much better performance for both graph creation and execution. A developer has full control over which types of data are fed at each stage through the `RuleDSL`. 
+    The key advantage of two stage data feeds is that the first stage usually require a small amount of data for constructing the DAG. Once the DAG is built, it can be distributed to multiple workers, so that the heavy lifting of data processing in stage 2 can be done in parallel. This two stage data feeds thus achieves much better performance for both graph creation and execution. A developer has full control over which types of data are fed at each stage through the `RuleDSL`. 
 
 4. How does `RuleDSL` differ from ordinary programming languages such as Python/C++/Java? 
 
-    General purpose programming languages like Python, C/C++ and Java are low-level and imperative, a developer has to specify the program's entire execution step by step, which is a lot of coding! In comparison, the RuleDSL is a high level declarative domain specific language (DSL) for constructing computational DAGs. Using RuleDSL, a developer doesn't need to explicitly specify every step of a program's execution, instead he/she only need to declare the key business concepts and their logical dependencies. The Julius Graph Engine then automatically create an executable computational DAG from the RuleDSL declarations. 
+    General purpose programming languages like Python, C/C++ and Java are low-level and imperative, a developer has to specify the program's entire execution step by step, which is a lot of coding. In comparison, the RuleDSL is a high level declarative domain specific language (DSL) for constructing computational DAGs. Using RuleDSL, a developer doesn't need to explicitly specify every step of a program's execution, instead he/she only need to declare the key business concepts and their logical dependencies. The Julius Graph Engine then automatically create an executable computational DAG from the RuleDSL declarations. 
     
-    Therefore, it requires much less code in RuleDSL to specify the same business logic compared to the traditional programming languages, as most of the boilerplate flow control code are automatically generated by the Julius Graph Engine. The RuleDSL therefore doesn't need any of the complex flow control syntax in the traditional programming languages, such as variables, loops, functions, classes, or branches etc. It is much easier for a non-programmers to learn and use. Furthermore, its declarative syntax gives the Julius Graph Engine a lot more freedom to optimize its execution, especially the parallel distribution over multiple machines. RuleDSL low-code syntax therefore facilitates much better scalability and performance.
+    Therefore, it requires much less code in RuleDSL to specify the same business logic compared to the traditional programming languages, as most of the boilerplate flow control code are automatically generated by the Julius Graph Engine. The RuleDSL therefore doesn't need any of the complex flow control syntax in the traditional programming languages, such as variables, loops, functions, classes, or branches etc. It is therefore much easier for a non-programmers to learn and use. Furthermore, its declarative syntax gives the Julius Graph Engine a lot more freedom to optimize its execution at run time, especially the parallel distribution over multiple machines. 
+    
+    Less is more: Julius RuleDSL gives you much better scalability and performance with much less coding.
 
 5. How can computational DAG, which is acyclic, handle loops? 
 
-    It is true that the computational DAG is acyclic, thus there can't be any loops in the DAG by construction. However, it doesn't mean that we can't use the DAG to express a looping logic. To the contrary, there are multiple ways to express looping logic in a computational DAG:
+    It is true that there can't be any loops in the DAG by construction. However, it doesn't mean that we can't use the DAG to express looping logic. To the contrary, there are multiple ways to express looping logic in a computational DAG:
 
-      * create loops inside an Atom
+      * loops can be created inside an Atom (i.e., within a single node in the DAG)
       * create a set of nodes, each represents a batch of iterations in the loop. For example, if a Monte Carlo simulation runs with 100,000 path, we can create 100 nodes, each runs 1000 MC paths. 
       * use recursion in RuleDSL if there are dependencies between iterations 
       * run the computational DAG multiple times or in streaming mode
 
-    Any of these options to be implemented easily using RuleDSL, without any special syntax for looping in the RuleDSL. There is an example of running Monte Carlo simulation by streaming a computational DAG in the [tutorials](https://juliustechco.github.io/JuliusGraph).
+    Any of these options can be implemented easily using RuleDSL, without the need for any special syntax for looping. There is an example of running Monte Carlo simulation by streaming a computational DAG in the [tutorials](https://juliustechco.github.io/JuliusGraph).
 
 6. How to express conditional branches in RuleDSL and computational DAGs?
 
-    Similar to looping, branch conditions can also be expressed in multiple ways:
+    Similar to looping, conditional branches can also be expressed in multiple ways:
 
-      * via rule polymorphism, where a different rule is invoked depending on the type or values of the rule parameter during DAG creation.
+      * via rule polymorphism in RuleDSL, where a different rule is invoked depending on the type or values of the rule parameter during DAG creation.
       * write an Atom with a select logic, where one of the input is selected as output according to certain conditions at run time.
 
     The first approach is more efficient as the branch condition is resolved during DAG construction. 
-    Either of these options can be implemented easily in RuleDSL, without the need for any special syntax.
+    Either of these options can be implemented easily in RuleDSL, without the need for any special branching syntax.
 
 ### Capabilities and Use Cases
 
@@ -70,32 +72,32 @@ This FAQ page answers some of the most common questions from our users and clien
 
 1. What are the best use cases for graph computing and Julius Graph Engine? 
 
-    The Julius Graph Engine is well suited for any data and analytical use case. Julius adds more value to enterprise systems with complex data and analytical pipelines, which often suffer from poor transparency, lineage, scalability and visibility. 
+    The Julius Graph Engine is well suited for any data and analytical use case. Julius adds more value to enterprise systems with complex data and analytical pipelines, which tend to suffer more from poor transparency, lineage, scalability and visibility. 
     
-1. Can I use Julius for building machine learning applications and systems?
+2. Can I use Julius for building machine learning applications and systems?
 
     Definitely, machine learning is a great use case for Julius. Julius' computational DAG offers tremendous transparency, explainability and auditability for building ML pipelines and applications. Julius computational DAG can incorporates all the steps in a typical ML pipeline, including data cleansing, feature engineering, training, inference and hyper parameter tuning. It aslo offers great MLOps support, such as easy persisting and recovery of ML experiments. Please refer to Julius [tutorials](https://juliustechco.github.io/JuliusGraph) for examples of ML use cases.
     
-1. Can Julius Graph Engine handle large data or heavy computations?
+3. Can Julius Graph Engine handle large data or heavy computations?
 
     Absolutely, Julius can automatically distribute the computational DAG to many computers, without the need for any code changes in RuleDSL or Atoms.  The ability to scale without code changes is a huge advantage of Julius, it allows efficient parallel processing of large data and heavy computation, and facilitating quick migration of a model from development to production. The distributed machine learning in Julius [tutorials](https://juliustechco.github.io/JuliusGraph) shows how easy it is to automatically distribute computational DAGs.
 
-1. How big can Julius' computational DAG be?
+4. How big can Julius' computational DAG be?
 
-    Julius Graph Engine can quickly create computational DAGs with tens of millions of nodes from a single computer. DAGs up to billions of nodes can be efficiently created in parallel by Julius. Once created, Julius can automatically distribute the computational DAGs to hundreds of computers for efficient parallel executions.
+    Julius Graph Engine can quickly create computational DAGs with tens of millions of nodes from a single computer. Julius also supports parallelism for DAG creation, DAGs up to billions of nodes can be efficiently created in parallel. Once created, Julius can automatically distribute the computational DAGs to hundreds of computers for efficient parallel executions.
 
-1. Are intermediate results in the computational DAG cached by Julius?
+5. Are intermediate results in the computational DAG cached by Julius?
 
-    Yes, Julius automatically cache the intermediate results for every nodes in memory. The cached results add great value for both developers and users. These node level results are tremendously useful for many purposes, such as:
+    Yes, Julius automatically cache the intermediate results for every node in the computational DAG. The cached results add great value for both developers and users. These node level results are tremendously useful for many purposes, such as:
 
-      * explain, audit and verify the results
+      * explain, audit and verify the final results
       * debug and tracking issues 
-      * enables fast scenario runs, as only dependent nodes needs to be re-computed for any input changes
+      * enables fast scenario runs, as only dependent nodes needs to be re-computed from any input changes
       * facilitate adjoint algorithmic differentiation (AAD)
 
-    In comparison, the cost to cache all intermediate node level results in memory is small. Julius can automatically distribute the computational DAG to a large number of computers, and access a large amount of memory.
+    In comparison, the cost to cache all intermediate node level results in memory is relatively small, as Julius can automatically distribute the computational DAG to a large number of computers, and access a large amount of memory.
 
-2. Can I access and visualize intermediate results in the computational DAG?
+6. Can I access and visualize intermediate results in the computational DAG?
 
     Julius comes with an intuitive and easy-to-use web UI, where a user can navigate the computational DAG, and visualize all the intermediate data by simply clicking on individual nodes in the DAG. All data are also accessible via Julius API. Please refer to the [tutorials](https://juliustechco.github.io/JuliusGraph) for examples of using the web UI and Julius API.
 

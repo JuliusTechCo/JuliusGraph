@@ -148,7 +148,7 @@ This FAQ page answers some of the most common questions from our users and clien
 
 1. How much does it cost to license Julius?
    
-   Developers can access and use Julius for free. The cost to commercial licenses depend on the use case and the level of support required, please email info@juliustech.co for licensing questions.
+   Developers can access and use Julius for free, the instructions to sign up for developer access is [here](https://github.com/JuliusTechCo/JuliusGraph). The cost of commercial licenses depend on the use case and the level of support required, please email info@juliustech.co for licensing questions.
 
 ### Comparables
 1. The Julius Graph Engine seems to be too good to be true, why hasn't anyone else done this before?

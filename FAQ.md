@@ -90,16 +90,20 @@ This FAQ page answers some of the most common questions from our users and clien
 
     Yes, Julius automatically cache the intermediate results for every node in the computational DAG. The cached results add great value for both developers and users. These node level results are tremendously useful for many purposes, such as:
 
-      * explain, audit and verify the final results
+      * explain, audit and verify the correctness of the entire process 
       * debug and tracking issues 
       * enables fast scenario runs, as only dependent nodes needs to be re-computed from any input changes
       * facilitate adjoint algorithmic differentiation (AAD)
 
-    In comparison, the cost to cache all intermediate node level results in memory is relatively small, as Julius can automatically distribute the computational DAG to a large number of computers, and access an unlimited amount of memory.
+    In comparison, the cost to cache all intermediate node level results in memory is relatively small, as Julius can automatically distribute the computational DAG to a large number of computers, and access an almost unlimited amount of memory.
 
 6. How do I access and visualize intermediate results in the computational DAG?
 
     Julius comes with an intuitive and easy-to-use web UI, where a user can navigate the computational DAG, and visualize all the intermediate data by simply clicking on individual nodes in the DAG. All data are also accessible via Julius API. Please refer to the [tutorials](https://juliustechco.github.io/JuliusGraph) for examples of using the web UI and Julius API.
+
+7. Does Julius Graph Engine support adjoint algorithmic differentiation (AAD) ?
+    
+    Yes, Julius computational DAG supports AAD. The best part is that it doesn't need a tape, as all the primal calculations results are already cached in the computational DAG. Please refer to the [tutorials](https://juliustechco.github.io/JuliusGraph) for more information and example on AAD.
 
 ### Integration
 
@@ -154,7 +158,7 @@ This FAQ page answers some of the most common questions from our users and clien
 
 3. How much does it cost to license Julius?
    
-   Developers can access and use Julius for free, the instructions to sign up for developer access is [here](https://github.com/JuliusTechCo/JuliusGraph). The cost of commercial licenses depend on the use case and the level of support required, please email info@juliustech.co for licensing questions.
+   Developers can access and use Julius for free, the instructions to sign up for developer access is [here](https://github.com/JuliusTechCo/JuliusGraph). The cost of commercial licenses depend on the use case and the level of support required, please email info@juliustech.co for licensing questions. Julius does offer educational discount for universities and other research institutions.
 
 ### Comparables
 1. The Julius Graph Engine seems to be too good to be true, why hasn't anyone else done this before?
@@ -179,7 +183,7 @@ This FAQ page answers some of the most common questions from our users and clien
 ### Development Environment
 1. What IDE does Julius support?
 
-    Since RuleDSL is just regular code, developers are free to their preferred IDEs. Jupyter lab/notebook and VScode are the most popular choices when working with Julius Graph Engine. 
+    Since RuleDSL is just regular code, developers are free to user their preferred IDEs. Jupyter lab/notebook and VScode are the most popular choices when working with Julius Graph Engine. 
 
 2. How do I debug a large computational DAG?
 

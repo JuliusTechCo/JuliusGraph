@@ -45,9 +45,9 @@ This FAQ page answers some of the most common questions from our users and clien
 
     It is true that the computational DAG is acyclic, thus there can't be any loops in the DAG. However, it doesn't mean that we can't use the DAG to express a loop logic. To the contrary, there are multiple ways to express loop logic in a computational DAG:
 
-        1. create loops inside an Atom
-        2. create a set of nodes, each represents a batch of iterations the loop. For example, if a Monte Carlo simulation runs with 100,000 path, we can create 100 nodes, each runs 1000 MC paths. 
-        3. the entire computational DAG can run in a streaming mode for multiple iterations
+      1. create loops inside an Atom
+      2. create a set of nodes, each represents a batch of iterations the loop. For example, if a Monte Carlo simulation runs with 100,000 path, we can create 100 nodes, each runs 1000 MC paths. 
+      3. the entire computational DAG can run in a streaming mode for multiple iterations
 
     The Julius RuleDSL allows any of these options to be implemented easily. There is an example of running Monte Carlo simulation by streaming a computational DAG in the [tutorials](https://juliustechco.github.io/JuliusGraph).
 
@@ -77,10 +77,10 @@ This FAQ page answers some of the most common questions from our users and clien
 
     Yes, Julius automatically cache the intermediate results for every nodes in memory. The cached results add great value for both developers and users. These node level results are tremendously useful for many purposes, such as:
 
-       * explain, audit and verify the results
-       * debug and tracking issues 
-       * enables fast scenario runs, as only dependent nodes needs to be re-computed for any input changes
-       * facilitate adjoint algorithmic differentiation (AAD)
+      * explain, audit and verify the results
+      * debug and tracking issues 
+      * enables fast scenario runs, as only dependent nodes needs to be re-computed for any input changes
+      * facilitate adjoint algorithmic differentiation (AAD)
 
     In comparison, the cost to cache all intermediate node level results in memory is small. Julius can automatically distribute the computational DAG to a large number of computers, and access a large amount of memory.
 

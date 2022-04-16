@@ -15,7 +15,7 @@ In this repository, you will find instructions to [register for free developer
 access](https://github.com/JuliusTechCo/JuliusGraph#register-for-developer-access) to
 Julius' development environment, and a number of tutorials that can help you get started.
 These tutorials illustrate the benefits of graph computing in solving real world problems.
-Once you go through these tutorials, you will appreciate the power and elegance of graph
+Once you go through these tutorials, you will appreciate the power, simplicity and elegance of graph
 computing and graph programming, you will never look at programming the same way again!
 
 Please raise a github issue in this repo, or email us at info@juliustech.co if you run into

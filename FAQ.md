@@ -10,7 +10,7 @@ This FAQ page answers some of the most common questions from our users and clien
 
 1. What are the benefits of graph computing and why do we need computational DAGs (directed acyclic graphs)? 
  
-    Graph computing solves the most funamental and challenging problems for building complex data and analytical pipelines and systems. These challenges include scalability, transparency, explainability, lineage, adaptability and reproducibility. DAGs are an ideal way to design and build generic workflows, as they describe a sequence of execution steps for any complex computation or transformation. In practice, any combination of pipelines can be represented and orchestrated as a DAG. Please refer to [this blog](https://www.juliustech.co/blog/why-graph-computing-is-stellar) for a full explanation.
+    Graph computing solves the most fundamental and challenging problems for building complex data and analytical pipelines and systems. These challenges include scalability, transparency, explainability, lineage, adaptability and reproducibility. DAGs are an ideal way to design and build generic workflows, as they describe a sequence of execution steps for any complex computation or transformation. In practice, any combination of pipelines can be represented and orchestrated as a DAG. Please refer to [this blog](https://www.juliustech.co/blog/why-graph-computing-is-stellar) for a full explanation.
 
     Julius Graph Engine is the first solution that delivers the full benefits of graph computing using a low-code RuleDSL, allowing a small development team to build sophisticated, scalable and transparent workflows and systems with very little code. 
 

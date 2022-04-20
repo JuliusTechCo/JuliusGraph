@@ -2,7 +2,7 @@
 
 By Julius Technologies Inc (email: info@juliustech.co)
 
-Julius is an auto-scaling, low-code and visual graph computing solution. It can build and run sophisticated data and analytical pipelines as directed acyclic graphs (DAG) with very little coding. Readers are referred to [this blog](https://www.juliustech.co/blog/why-graph-computing-is-stellar) for a high level overview of the benefits of graph computing, and [this repo](https://github.com/JuliusTechCo/JuliusGraph) for [tutorials](https://juliustechco.github.io/JuliusGraph) and instructions to sign up for free developer access.
+Julius Graph Engine is an auto-scaling, low-code and visual graph computing solution. It can build and run sophisticated data and analytical pipelines as directed acyclic graphs (DAG) with very little coding. Readers are referred to [this blog](https://www.juliustech.co/blog/why-graph-computing-is-stellar) for a high level overview of the benefits of graph computing, and [this repo](https://github.com/JuliusTechCo/JuliusGraph) for [tutorials](https://juliustechco.github.io/JuliusGraph) and instructions to sign up for free developer access.
 
 This FAQ page answers some of the most common questions from our users and clients. They are organized by subjects.
 
@@ -189,6 +189,7 @@ This FAQ page answers some of the most common questions from our users and clien
     The answer is twofold: the first is that there are a myriad of technological hurdles to overcome in order to design and implement such a generic and scalable graph computing solution; secondly the solution leverages many new technologies that have only become mature in recent years, such as cloud computing.
 
 ### Development Environment
+
 31. What IDE does Julius support?
 
     Since RuleDSL is just regular code in plain text, developers are free to user their preferred IDEs. Jupyter lab/notebook and VScode are the most popular choices when working with Julius Graph Engine. 

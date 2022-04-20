@@ -19,7 +19,7 @@ This FAQ page answers some of the most common questions from our users and clien
 
     Julius Graph Engine is the first solution that delivers the full benefits of graph computing using a low-code RuleDSL, allowing a small development team to build sophisticated, scalable and transparent pipelines and systems with very little code. 
 
-3. How does Julius build data and analytical pipelines as computational DAGs?
+1. How does Julius build data and analytical pipelines as computational DAGs?
 
     `Atom` and `RuleDSL` are the two fundamental constructs in Julius for creating computational DAGs.
 
@@ -29,7 +29,7 @@ This FAQ page answers some of the most common questions from our users and clien
 
     Please refer to Julius [tutorials](https://juliustechco.github.io/JuliusGraph) for more detailed explanations and examples of using Atom and RuleDSL.
 
-4. How does Julius Graph Engine access data?
+1. How does Julius Graph Engine access data?
    
     Julius Graph Engine creates and runs computational DAGs in two stages:
     
@@ -40,7 +40,7 @@ This FAQ page answers some of the most common questions from our users and clien
     
     The key advantage of the two stage data feeds is that the first stage usually requires a small amount of data for constructing the DAG. Once the DAG is built, it can be distributed to multiple computers, so that the heavy lifting of data processing in stage 2 can be done in parallel. This achieves much better performance for both graph creation and execution. A developer has full control over which types of data are fed at each stage through the `RuleDSL`. 
 
-5. How does `RuleDSL` differ from ordinary programming languages such as Python/C++/Java? 
+1. How does `RuleDSL` differ from ordinary programming languages such as Python/C++/Java? 
 
     General purpose programming languages like Python, C/C++ and Java are low-level and imperative, a developer has to specify the program's entire execution step by step, which requires a lot of coding. In comparison, the RuleDSL is a high level declarative domain specific language (DSL) for constructing computational DAGs. Using RuleDSL, a developer doesn't need to explicitly specify every step of a program's execution, instead they only need to declare the key data or analytical concepts and their logical dependencies. The Julius Graph Engine then automatically creates an executable computational DAG from the RuleDSL declarations. 
     
@@ -48,7 +48,7 @@ This FAQ page answers some of the most common questions from our users and clien
     
     Julius RuleDSL is an exemplification of how less can be more: less coding in RuleDSL actually facilitates much better scalability and performance.
 
-6. How can a computational DAG, which is acyclic, support loops? 
+1. How can a computational DAG, which is acyclic, support loops? 
 
     It is true that there can't be any loops in the DAG by construction. However, it doesn't mean that we can't express looping logic in a DAG. There are multiple ways to do so in a DAG:
 
@@ -59,7 +59,7 @@ This FAQ page answers some of the most common questions from our users and clien
 
     Any of these options can be implemented easily using RuleDSL, without the need for any special syntax for looping. There are examples of recursion and Monte Carlo via streaming in the [tutorials](https://juliustechco.github.io/JuliusGraph).
 
-7. How can you express conditional branches in RuleDSL and computational DAGs?
+1. How can you express conditional branches in RuleDSL and computational DAGs?
 
     Similar to looping, conditional branches can also be expressed in multiple ways:
 
@@ -72,27 +72,27 @@ This FAQ page answers some of the most common questions from our users and clien
 
 ### Capabilities and Use Cases
 
-2. What are the ideal use cases for graph computing and Julius Graph Engine? 
+8. What are the ideal use cases for graph computing and Julius Graph Engine? 
 
     The Julius Graph Engine is well suited for any data and analytical use case. Julius adds more value to enterprise systems with complex data and analytical pipelines which tend to suffer more from poor transparency, lineage, scalability and visibility. Business decisioning that requires complex rules, regular updates, and quick responses are ideal applications for Julius as well. Opaque processes that demand explainability and auditability to minimize operational risk are also applicable. In addition, Julius excels at processing large data sets and heavy workloads because of its auto-scaling capabilities.
     
-3. Can I use Julius for building machine learning applications and workflows?
+1. Can I use Julius for building machine learning applications and workflows?
 
     Definitely. A ML pipeline or workflow is by definition a DAG, and Julius can automatically create and execute them. Julius' computational DAG offers tremendous transparency, explainability and auditability for building ML pipelines and applications. It can incorporate all the steps in a typical ML pipeline, including data cleansing, feature engineering, training, inference and hyper parameter tuning. It also offers great ML Ops support, such as easy persisting and recovery of ML experiments. Please refer to Julius [tutorials](https://juliustechco.github.io/JuliusGraph) for examples of ML use cases.
     
-4. Can Julius Graph Engine handle large data sets and heavy computational loads?
+1. Can Julius Graph Engine handle large data sets and heavy computational loads?
 
     Absolutely, Julius can automatically distribute the computational DAG to many computers, without the need for any code changes.  The ability to scale without code change is a huge advantage of Julius, as it allows for efficient parallel processing of large data set and heavy computations. This can facilitate the quick migration of a model from development to production. The distributed machine learning in Julius [tutorials](https://juliustechco.github.io/JuliusGraph) shows how easy it is to automatically distribute computational DAGs.
 
-5. Does Julius Graph Engine support streaming and live use cases?
+1. Does Julius Graph Engine support streaming and live use cases?
 
     Absolutely, the same computation DAG can run in either batch or streaming mode, without much code change. Please see the [tutorials](https://juliustechco.github.io/JuliusGraph) for examples of streaming use cases.
 
-6. How big can Julius' computational DAG be?
+1. How big can Julius' computational DAG be?
 
     Julius Graph Engine can quickly create DAGs with tens of millions of nodes from a single computer. Julius also supports parallelism for DAG creation, so graphs with even billions of nodes can be efficiently created in parallel. Once created, Julius can automatically distribute the computations to hundreds of computers for efficient execution.
 
-7. Are the intermediate results in the computational DAG cached by Julius?
+1. Are the intermediate results in the computational DAG cached by Julius?
 
     Yes, Julius automatically cache the intermediate results for every node in the computational DAG. The cached results are tremendously useful to both developers and users. This includes the ability to:
 
@@ -103,17 +103,17 @@ This FAQ page answers some of the most common questions from our users and clien
 
     The storage cost to cache all intermediate node level results in memory is small, as Julius can automatically distribute the computational DAG to a large number of computers and access an almost unlimited amount of memory.
 
-8. How do I access and visualize intermediate results in the computational DAG?
+1. How do I access and visualize intermediate results in the computational DAG?
 
     Julius comes with an intuitive and easy-to-use web UI, where a user can navigate the computational DAG and visualize all the intermediate data by simply clicking on individual nodes. All the data is accessible via Julius API as well. Please refer to the [tutorials](https://juliustechco.github.io/JuliusGraph) for examples of using the web UI and Julius API.
 
-9. Does Julius Graph Engine support adjoint algorithmic differentiation (AAD) ?
+1. Does Julius Graph Engine support adjoint algorithmic differentiation (AAD) ?
     
     Yes, the Julius computational DAG supports AAD. The best part is that it doesn't need a tape, as all the primal calculations results are already cached in the DAG. Please refer to the [tutorials](https://juliustechco.github.io/JuliusGraph) for more information and examples on AAD.
 
 ### Integration
 
-1. What programming languages can I use with Julius Graph Engine?
+16. What programming languages can I use with Julius Graph Engine?
 
     Atoms can be written in any mainstream programming language such as C/C++, Python, Java, .Net, R and Julia etc. Existing data and analytical libraries written in these languages can be wrapped up as `Atoms` and used by Julius Graph Engine.
 
@@ -128,25 +128,25 @@ This FAQ page answers some of the most common questions from our users and clien
       
    The conversion is straight forward if the existing system is built in a modern programming language.  Our experience shows that a complex real world system can be fully converted in a few weeks by developers who are knowledgeable with the system's business logic and code base. For C/C++ applications and systems, it would require some more work for writing and testing the wrappers manually.
 
-2. Can I mix and match Atoms written in different programming languages in the same computational DAG?
+1. Can I mix and match Atoms written in different programming languages in the same computational DAG?
 
     Yes! Julius automatically takes care of the interop between them if these Atoms' inputs and outputs are all of standard types. Additional development work, such as serialization, is only required if you want to pass a non-standard object from one language to another.
 
-3. How do I integrate Julius Graph Engine with an existing system or application?
+1. How do I integrate Julius Graph Engine with an existing system or application?
 
     Existing systems and applications can access Julius' Graph Engine via Julius' easy-to-use APIs. Julius supports a low level API for Julia, C/C++ and Python clients, as well as a high level REST API that can be called from any programming language. The low-level API is faster and more granular, which is recommended for building high performing systems. The high-level API is easy to use and integrate, which is recommended for general use cases.
    
-4. What databases and data sources does Julius support?
+1. What databases and data sources does Julius support?
 
    Julius comes with a rich set of data connectors out of box, including relational databases, NoSQL databases (Hadoop/Spark etc), data files, web data sources etc. If you need additional data connectors Julius does not yet support, you can easily write your own connectors through the Atom interface, using any mainstream programming languages.
    
-5. Can I use data visualization tools such Tableau and Qlik with Julius?
+1. Can I use data visualization tools such Tableau and Qlik with Julius?
 
    Absolutely. Results from Julius graph can be fed into Tableau and Qlik for visualization and reporting.
 
 
 ### Installation
-1. How do I install Julius?
+22. How do I install Julius?
 
     Julius installation is super easy: Julius ships with a single docker image. A client can simply install this docker image on whatever number of computers he/she chooses to run, which can be on a public cloud or private on-premise cluster. Julius only requires minimal configurations after installation, as most of the orchestration and configuration is handled automatically within the Julius docker container.
     
@@ -160,17 +160,17 @@ This FAQ page answers some of the most common questions from our users and clien
 
     The Julius Graph Engine can be deployed to any cloud computer provider or private on-premise clusters in an organization.
 
-2. How can a client protect its intellectual property when running the Julius Graph Engine in the cloud?
+1. How can a client protect its intellectual property when running the Julius Graph Engine in the cloud?
 
     The Julius Graph Engine can be integrated to a client's internal authentication process, so that only authorized personnel have access. Julius can be deployed on premise or in a single tenant environment on the cloud, providing additional protection. 
 
-3. How much does it cost to license Julius?
+1. How much does it cost to license Julius?
    
    Developers can access and use Julius for free. The instructions to sign up for developer access is [here](https://github.com/JuliusTechCo/JuliusGraph). The cost of commercial licenses depend on the use case and the level of support required, please email info@juliustech.co for licensing questions. Julius does offer educational discounts for universities and other research institutions.
 
 ### Comparables
 
-1. What is the main difference between the Julius Graph Engine from a collaborative development platform like Beacon?
+27. What is the main difference between the Julius Graph Engine from a collaborative development platform like Beacon?
 
     Platforms like Beacon offer integrated and collaborative development/deployment environments so that firms can be more efficient in managing and deploying complex code bases. In contrast, Julius Graph Engine attacks the problem from its root by dramatically reducing the amount of coding and efforts required for building complex systems. Using Julius, there is much less need for sophisticated collaborative development tools, as there is much less code to write and manage.
 
@@ -180,7 +180,7 @@ This FAQ page answers some of the most common questions from our users and clien
 
     In addition, the Julius Graph Engine is much more performant and scalable than Excel, as it can handle large volume of data and computation by running in parallel on many computers. That allows Julius to be used as a production solution for enterprise systems, while Excel is mainly a personal and office application.
 
-2. How does Julius Graph Engine differ from other software packages that also use computational DAGs, such as Dask, Tensorflow and Dagger.jl?
+1. How does Julius Graph Engine differ from other software packages that also use computational DAGs, such as Dask, Tensorflow and Dagger.jl?
 
     Julius RuleDSL is specifically designed for efficient creation and execution of computational DAGs. It offers much better performance and scalability, as shown in our [tutorials](https://juliustechco.github.io/JuliusGraph) and [benchmark](https://juliustechco.github.io/JuliusGraph/dev/pages/t007_benchmark.html). In addition, Julius RuleDSL is low-code, and requires much less effort to implement the same functionality than other tools. This makes future adaptations and changes much easier as well.
 
@@ -189,15 +189,15 @@ This FAQ page answers some of the most common questions from our users and clien
     The answer is twofold: the first is that there are a myriad of technological hurdles to overcome in order to design and implement such a generic and scalable graph computing solution; secondly the solution leverages many new technologies that have only become mature in recent years, such as cloud computing.
 
 ### Development Environment
-1. What IDE does Julius support?
+31. What IDE does Julius support?
 
     Since RuleDSL is just regular code in plain text, developers are free to user their preferred IDEs. Jupyter lab/notebook and VScode are the most popular choices when working with Julius Graph Engine. 
 
-2. How do I debug a large computational DAG?
+1. How do I debug a large computational DAG?
 
     Julius offers efficient and easy-to-use tools for debugging. With the Julius web UI, a developer can quickly navigate and visualize every intermediate result in the DAG, allowing them to quickly track down bugs to individual nodes. Julius provides an API call for developers to download the entire state (including data and analytical logic) of any node in the distributed DAG, to recreate the error conditions on their local computer. Then the developer can use a debugger on a local computer to step through the execution to pin down the error. 
 
-3. What if there is an error in the computational DAG?
+1. What if there is an error in the computational DAG?
 
     Julius offers great error handling and recovery capabilities. When an error occurs, the web UI will highlight the affected node and bring the user directly there with one click. By default, the DAG execution will halt until the error is corrected. Julius also supports a trigger mechanism that allows errors to be automatically reported and handled, so that the DAG execution can proceed even with errors.
 

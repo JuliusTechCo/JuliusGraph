@@ -56,7 +56,7 @@ link on the right upper corner.
   <img width=50% src="assets/signup_1.png">
 </p>
 
-Once you filled in the form and accepted the term of services, please hit the *Request access* 
+Once you filled in the form and accepted the term and conditions, please hit the *Request access* 
 button, you will be directed to the following page:
 
 <p align="center">

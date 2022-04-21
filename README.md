@@ -18,8 +18,8 @@ These tutorials illustrate the benefits of graph computing in solving real world
 Once you go through these tutorials, you will appreciate the power, simplicity and elegance of graph
 computing and graph programming, you will never look at programming the same way again!
 
-Please raise a github issue in this repo, or email us at info@juliustech.co if you run into
-any issues or have any questions or inquiries.
+Please raise a github issue in this repo for bugs or feature requests, or email us at info@juliustech.co 
+for general questions or inquiries.
 
 ## Tutorials
 
@@ -56,8 +56,8 @@ link on the right upper corner.
   <img width=50% src="assets/signup_1.png">
 </p>
 
-Once you filled in the form and hit the *Request access* button, you will be directed to the
-following page:
+Once you filled in the form and accepted the term of services, please hit the *Request access* 
+button, you will be directed to the following page:
 
 <p align="center">
   <img width=50% src="assets/landingpage.png">

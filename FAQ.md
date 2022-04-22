@@ -189,12 +189,7 @@ This FAQ page answers some of the most common questions from our users and clien
     The answer is twofold: the first is that there are a myriad of technological hurdles to overcome in order to design and implement such a generic and scalable graph computing solution; secondly the solution leverages many new technologies that have only become mature in recent years, such as cloud computing.
 
 ### Development Environment
-<<<<<<< HEAD
-
-31. What IDE does Julius support?
-=======
 31. **What IDE does Julius support?**
->>>>>>> a58de6798ce8021315c96b61ae77490fc130285f
 
     Since RuleDSL is just regular code in plain text, developers are free to user their preferred IDEs. Jupyter lab/notebook and VScode are the most popular choices when working with Julius Graph Engine.
 

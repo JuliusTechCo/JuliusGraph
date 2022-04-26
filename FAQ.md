@@ -138,14 +138,14 @@ organized by subjects.
 
 8. **What are the ideal use cases for graph computing and Julius Graph Engine?**
 
-    The Julius Graph Engine is well suited for any data and analytical use case. Julius adds
-    more value to enterprise systems with complex data and analytical pipelines which tend
-    to suffer more from poor transparency, lineage, scalability and visibility. Business
-    decisioning that requires complex rules, regular updates, and quick responses are ideal
-    applications for Julius as well. Opaque processes that demand explainability and
-    auditability to minimize operational risk are also applicable. In addition, Julius
-    excels at processing large data sets and heavy workloads because of its auto-scaling
-    capabilities.
+    The Julius Graph Engine is well suited for building complex data transformation and ML
+    workflows. Julius adds more value to enterprise systems with complex data and analytical
+    pipelines which tend to suffer more from poor transparency, lineage, scalability and
+    visibility. Business decisioning that requires complex rules, regular updates, and quick
+    responses are ideal applications for Julius as well. Opaque processes that demand
+    explainability and auditability to minimize operational risk are also applicable. In
+    addition, Julius excels at processing large data sets and heavy workloads because of
+    its auto-scaling capabilities.
 
 1. **Can I use Julius for building machine learning applications and workflows?**
 

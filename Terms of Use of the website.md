@@ -1,6 +1,6 @@
 ## WEBSITE TERMS OF USE
 
-Last Updated: ______________
+Last Updated: May 4, 2022
 
 Julius Technologies (“Julius Technologies,” “we,” “us,” or “our”) welcomes you. We invite you to access and use our website located at https://juliusgraph.com/ (the “Website”), subject to the following terms and conditions (the “Terms of Use”).
 

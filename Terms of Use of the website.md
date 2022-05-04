@@ -8,7 +8,7 @@ By visiting the Website, you acknowledge that you have read, understood, and agr
 
 In addition, access to and use of our proprietary, auto-scaling, low-code, visual graph computing solution (the “Platform”) shall be governed by the Developer Terms of Service. If there is a conflict between these Terms of Use and the Developer Terms of Service, the Developer Terms of Service will take precedence with respect to your use of or access to the Platform.
 
-# THE SECTIONS BELOW TITLED “BINDING ARBITRATION” AND “CLASS ACTION WAIVER” CONTAIN A BINDING ARBITRATION AGREEMENT AND CLASS ACTION WAIVER.  THEY AFFECT YOUR LEGAL RIGHTS.  PLEASE READ THEM.
+### THE SECTIONS BELOW TITLED “BINDING ARBITRATION” AND “CLASS ACTION WAIVER” CONTAIN A BINDING ARBITRATION AGREEMENT AND CLASS ACTION WAIVER.  THEY AFFECT YOUR LEGAL RIGHTS.  PLEASE READ THEM.
 
 Capitalized terms not defined in these Terms of Use shall have the meaning set forth in our Privacy Policy.
 

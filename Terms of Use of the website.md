@@ -65,7 +65,7 @@ The Website is available only for individuals aged 18 years or older.  If you ar
 
 We welcome and encourage you to provide feedback, comments, and suggestions for improvements to the Website and our services (“Feedback”).  Although we encourage you to e-mail us, we do not want you to, and you should not, e-mail us any content that contains confidential information.  With respect to any Feedback you provide, we shall be free to use and disclose any ideas, concepts, know-how, techniques, or other materials contained in your Feedback for any purpose whatsoever, including, but not limited to, the development, production and marketing of products and services that incorporate such information, without compensation or attribution to you.  
 
-    6. NO WARRANTIES; LIMITATION OF LIABILITY
+### 6. NO WARRANTIES; LIMITATION OF LIABILITY
 
 THE WEBSITE AND OUR CONTENT IS PROVIDED ON AN “AS IS” AND “AS AVAILABLE” BASIS, AND NEITHER JULIUS TECHNOLOGIES NOR JULIUS TECHNOLOGIES’S SUPPLIERS MAKE ANY WARRANTIES WITH RESPECT TO THE SAME OR OTHERWISE IN CONNECTION WITH THIS AGREEMENT, AND JULIUS TECHNOLOGIES HEREBY DISCLAIMS ANY AND ALL EXPRESS, IMPLIED, OR STATUTORY WARRANTIES, INCLUDING, WITHOUT LIMITATION, ANY WARRANTIES OF NON-INFRINGEMENT, MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AVAILABILITY, ERROR-FREE OR UNINTERRUPTED OPERATION, AND ANY WARRANTIES ARISING FROM A COURSE OF DEALING, COURSE OF PERFORMANCE, OR USAGE OF TRADE.  TO THE EXTENT THAT JULIUS TECHNOLOGIES AND JULIUS TECHNOLOGIES’S SUPPLIERS MAY NOT AS A MATTER OF APPLICABLE LAW DISCLAIM ANY IMPLIED WARRANTY, THE SCOPE AND DURATION OF SUCH WARRANTY WILL BE THE MINIMUM PERMITTED UNDER SUCH LAW. 
 

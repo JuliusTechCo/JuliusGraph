@@ -1,5 +1,5 @@
 
-## WEBSITE TERMS OF USE
+## TERMS OF USE
 
 Last Updated: May 12, 2022
 

@@ -1,7 +1,7 @@
 
-## WEBSITE TERMS OF USE
+## TERMS OF USE
 
-Last Updated: May 12, 2022
+Last Updated: May 21, 2022
 
 Julius Technologies (“Julius Technologies,” “we,” “us,” or “our”) welcomes you. We invite you to access and use websites owned or controlled by Julius Technologies, including but not limited to, our website located at https://www.juliustech.co/ (collectively, the “Websites” and each, a “Website”), subject to the following terms and conditions (the “Terms of Use”).  
 

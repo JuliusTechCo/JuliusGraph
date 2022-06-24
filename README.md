@@ -4,7 +4,7 @@
 
 # Welcome to the New World of Graph Computing! 👋
 
-We are a group of researchers and engineers passionate about [graph computing](https://www.juliustech.co/blog/why-graph-computing-is-stellar). 
+We are a group of researchers and engineers passionate about [graph computing](https://www.juliustech.co/blog/why-graph-computing-is-stellar).
 We believe graph technology solves some of the most challenging problems in computing. We spent the
 past few years at [Julius Technologies](https://www.juliustech.co/) building a truly
 innovative graph computing solution: the Julius Graph Engine. We are excited to offer
@@ -18,7 +18,7 @@ These tutorials illustrate the benefits of graph computing in solving real world
 Once you go through these tutorials, you will appreciate the power, simplicity and elegance of graph
 computing and graph programming, you will never look at programming the same way again!
 
-Please raise a github issue in this repo for bugs or feature requests, or email us at info@juliustech.co 
+Please raise a github issue in this repo for bugs or feature requests, or email us at info@juliustech.co
 for general questions or inquiries.
 
 ## Tutorials
@@ -40,7 +40,7 @@ Our tutorials are available in two formats:
 ## Register for Developer Access
 
 Register for developer access is super easy and it only takes a minute. Please proceed to
-[https://juliusgraph.com/user/signup](https://juliusgraph.com/user/signup). The web site uses Google authentication,
+[www.juliusgraph.com/user/signup](www.juliusgraph.com/user/signup). The web site uses Google authentication,
 you will be prompted to log in using your Google account credentials if you are not already
 signed in with Google:
 
@@ -56,7 +56,7 @@ link on the right upper corner.
   <img width=50% src="assets/signup_1.png">
 </p>
 
-Once you filled in the form and accepted the term and conditions, please hit the *Request access* 
+Once you filled in the form and accepted the term and conditions, please hit the *Request access*
 button, you will be directed to the following page:
 
 <p align="center">
@@ -76,7 +76,7 @@ Clicking *Sign in with Google* will land in a standard Jupyter Hub/Juypter Lab s
 ![Jupyter Hub landing page.](assets/jupyter_landing.png)
 
 Once you have completed the steps, next time you can directly access our developer
-environment using this [url](https://juliusgraph.com/lab).
+environment using this [url](www.juliusgraph.com/lab).
 
 ### General Layout
 
